@@ -66,7 +66,6 @@ public with sharing class EmailMessageTriggerHandler{
 			}
 			cs.Additional_Email__c = String.join((Iterable<String>)emailMap.get(cs.Id), ';');
 			caseListToUpdate.add(cs);
-
 		}
 
 		if (caseListToUpdate.isEmpty()){
