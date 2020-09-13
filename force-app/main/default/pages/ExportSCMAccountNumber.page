@@ -1,0 +1,163 @@
+<apex:page controller="ExportSCMAccountNumberCtrl" readOnly="true" contenttype="application/vnd.ms-excel#SCM - Dispute Report.xls" >
+<!-- contenttype="application/vnd.ms-excel#SCM - Dispute Report.xls" -->
+ 	<style>
+    table {
+    	table-layout: fixed;
+    	width: 100%;
+    }
+    
+    table td {
+        word-wrap: break-word;         /* All browsers since IE 5.5+ */
+        overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
+    }
+    </style>
+    <table style="border-collapse: collapse;">
+    <tr style="border: 1px solid black;">
+        <td style="border: 1px solid black;">Organization Name</td>
+        <td style="border: 1px solid black;width: 100px;">Mail Out Validation of Debt Account #s</td>
+        <td style="border: 1px solid black;width: 100px;">Oral Dispute Account #s</td>
+        <td style="border: 1px solid black;width: 100px;">Written Dispute Account #s</td>
+        <td style="border: 1px solid black;">Answer Filed Account #s</td>
+        <td style="border: 1px solid black;">Cease And Desist Account #s</td>
+        <td style="border: 1px solid black;">Consumer Rep by Counsel Account #s</td>
+        <td style="border: 1px solid black;">Counter Claim Account #s</td>
+        <td style="border: 1px solid black;">Dismissed w/out Predudice Account #s</td>
+        <td style="border: 1px solid black;">Dismissed with Prejudice Account #s</td>
+        <td style="border: 1px solid black;">Do Not Call Account #s</td>
+        <td style="border: 1px solid black;">Hardship End Account #s</td>
+        <td style="border: 1px solid black;">Judgment Account #s</td>
+        <td style="border: 1px solid black;">Judgment Satisfied Account #s</td>
+        <td style="border: 1px solid black;">Judgment Vacated Account #s</td>
+        <td style="border: 1px solid black;">Return Mail on Disclosure Account #s</td>
+        <td style="border: 1px solid black;">Substantiation Request Account #s</td>
+        <td style="border: 1px solid black;">Suit Filed Account #s</td>
+        <td style="border: 1px solid black;">Temp Hardship Account #s</td>
+        
+    </tr>
+  <apex:repeat value="{!wrapperClassList}" var="wc">
+   
+    <tr style="border: 1px solid black;">
+        <td style="border: 1px solid black;">
+            <p>{!wc.accName}</p>
+        </td>
+        
+        <td style="border: 1px solid black;"> 
+                <apex:repeat value="{!wc.scmAccList}" var="acc" >
+                    <apex:outputPanel rendered="{!WC.DISPUTE}"> 
+                        {!acc.Mail_Out_Validation_of_Debt_Account_s__c}
+                    </apex:outputPanel>
+            	</apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.DISPUTE}">
+                {!acc.Oral_Dispute_Account_s__c }
+                </apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.DISPUTE}">
+                  {!acc.Written_Dispute_Account_s__c}
+                 </apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Answer_Filed_Account_s__c}</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Cease_Desist_Account_s__c}</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Consumer_Rep_by_Counsel_Account_s__c}</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Counter_Claim_Account_s__c }</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Dismissed_w_out_Predudice_Account_s__c}</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Dismissed_with_Prejudice_Account_s__c}</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Do_Not_Call_Account_s__c}</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Hardship_End_Account_s__c}</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Judgment_Account_s__c }</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Judgment_Satisfied_Account_s__c}</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Judgment_Vacated_Account_s__c }</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Return_Mail_on_Disclosure_Account_s__c }</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Substantiation_Request_Account_s__c }</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Suit_Filed_Account_s__c }</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+        <td style="border: 1px solid black;">
+            <apex:repeat value="{!wc.scmAccList}" var="acc">
+                 <apex:outputPanel rendered="{!WC.NONDISPUTE}">{!acc.Temp_Hardship_Account_s__c}</apex:outputPanel>
+            </apex:repeat>
+        </td>
+        
+    </tr>
+  </apex:repeat>
+ </table>
+</apex:page>

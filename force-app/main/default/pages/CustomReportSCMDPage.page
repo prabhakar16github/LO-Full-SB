@@ -1,0 +1,53 @@
+<apex:page cache="false" controller="CustomReportSCMDController">
+	<style>
+.buttonCss {
+	text-decoration: none;
+}
+
+.buttonCss:HOVER {
+	text-decoration: none;
+}
+</style>
+<script>
+	function exportExcel(){
+		var url = '{!$Page.CustomReportSCMDExcel}';
+		window.open(url, '_blank');
+	}
+</script>
+	<apex:form >
+		<apex:pageBlock title="SCMD Account Numbers">
+			
+			<apex:pageBlockButtons rendered="{!IF(pamRecordsList.size > 0, True, False)}">
+				<button styleClass="btn buttonCss" type="button" onclick="exportExcel();">Export Details</button>	
+			</apex:pageBlockButtons>
+
+			<apex:pageBlockTable value="{!pamRecordsList}" var="pam">
+
+				<apex:column headerValue="Organization Name: Organization Name">
+					<apex:outputField value="{!pam.Organization_Name__c}" />
+				</apex:column>
+				<apex:column headerValue="Process Adherence Monitoring: ID">
+	                {!pam.Id}
+	            </apex:column>
+				<!-- <apex:column headerValue="PCode Sent - Oral Dispute">
+	                {!pam.SCMD_PCode_Sent_Oral_Dispute__c}
+	            </apex:column> -->
+				<apex:column headerValue="Consumer Disputes Debt Orally">
+					<apex:outputField value="{!pam.SCMD_Oral_Dispute_Account_s__c}" />
+				</apex:column>
+				<!-- <apex:column headerValue="PCode Sent - Written Dispute">
+	                {!pam.SCMD_PCode_Sent_Written_Dispute__c}
+	            </apex:column> -->
+				<apex:column headerValue="Consumer Disputes Debt Writing">
+					<apex:outputField value="{!pam.SCMD_Written_Dispute_Account_s__c}" />
+				</apex:column>
+				<!-- <apex:column headerValue="PCode Sent - Mail Out Validation of Debt">
+	                {!pam.SCMD_PCodeSentMailOut_Validation_of_Debt__c}
+	            </apex:column> -->
+				<apex:column headerValue="Mail Out – Validation of Debt">
+					<apex:outputField value="{!pam.SCMD_MailOutValidation_of_Debt_Account_s__c}" />
+				</apex:column>
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

@@ -1,0 +1,83 @@
+<apex:page controller="CCMPDFReportController" readOnly="true" renderAs="pdf" applyBodyTag="false">
+    
+    <head>
+        <style type="text/css" media="print">
+            @page {
+                margin-top:200px;
+                margin-bottom:60px;
+                @top-center {
+                    content: element(header);
+                }
+               @bottom-left {
+                     content: element(footer);
+               }
+            }
+            div.header {
+                padding: 10px;
+                position: running(header);
+            }
+            div.footer {
+                display: block;
+                padding: 5px;
+                position: running(footer);
+            }
+            .pagenumber:before {
+                content: counter(page);
+            }
+            .pagecount:before {
+                content: counter(pages);
+            }
+            body{
+                font-family: SansSerif !important;
+                font-size: 13px;
+            }
+            table{
+                -fs-table-paginate: paginate;
+            }
+            hr {
+                border: none;
+                background-color: #ccc;
+                color: #ccc;
+                height: 1px;
+            }
+        </style>
+    </head>
+
+    <div class="header">
+        <div style="display:inline;width:100%;">
+            <apex:image width="180" height="120" value="{!$Resource.ENCORE_LOGO}" />
+            <h3 style="display:inline;float:right;">{!orgName}</h3>
+        </div>
+        <hr/>
+    </div>
+
+    <div class="footer">
+        <div>Page <span class="pagenumber"/> of <span class="pagecount"/></div>
+    </div>
+
+    <div class="content">
+        <apex:repeat value="{!keyList}" var="parentKey">
+            <h4>{!parentKey}</h4>
+            <table border="1" style="width:100%;border-spacing:0px;text-align:center;">
+                <tr>
+                    <th style="width:20%;">Account Number</th>
+                    <th style="width:20%;">Record Type</th>
+                    <th style="width:20%;">Exception Due Date</th>
+                </tr>
+                <apex:repeat value="{!pamRecordsMap[parentKey]}" var="index">
+                    <apex:repeat value="{!pamRecordsMap[parentKey][index]}" var="pamObj">
+                        <tr>
+                            <td>{!pamObj.Account_Number__c}</td>
+                            <td>{!pamObj.RecordType.Name}</td>
+                            <td>
+                                <apex:outputText value="{0,date,dd/MM/yyyy}">
+                                   <apex:param value="{!pamObj.Exception_Due_Date__c}" />
+                               </apex:outputText>
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                </apex:repeat>
+            </table>
+        </apex:repeat>
+    </div>
+</apex:page>

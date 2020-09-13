@@ -1,0 +1,409 @@
+<!---------------------------------------------------------------
+Page Name : PAM_UnmatchedBulkUpdate
+Description : To do the bulk update in 'Reason for discrepancy' field in 'Pam Unmatched' Records.
+Created By  : Prabhakar Joshi
+Created on  : 9 Sept 2019
+Last Modified By : Prabhakar Joshi on 11-Nov-2019
+------------------------------------------------------------------>
+
+<apex:page standardController="Process_Adherence_Monitoring__c" lightningStylesheets="false"
+           extensions="PAM_UnmatchedBulkUpdateController" docType="html-5.0" id="pg">
+    <apex:slds />
+    
+    <style>
+        .slds-scope input[type=checkbox]{
+        vertical-align: bottom;
+        }
+        
+        .heading{
+        font-size: 20px;
+        }
+        .subheading{
+        font-size: 10px;
+        }
+        
+        .slds-scope thead th a{
+        color:black
+        }
+        
+        .slds-scope .slds-button{
+        line-height:25px;
+        }
+        
+        
+    </style>
+    
+    <apex:form id="frm">
+        
+        <!------- Function for sorting the table by Pcode, RecordType and Account No.------------>
+        <apex:actionFunction name="sortFunc" action="{!init}" reRender="pb" status="sts" >
+            <apex:param assignTo="{!colName}" name="colName" value=""/>
+        </apex:actionFunction>
+        
+        <!------ Function for Search and Clear button ----------------->
+        <apex:actionFunction name="doSearch" action="{!init}" reRender="frm,tablePnl,blankpnl" status="sts" >
+            <apex:param assignTo="{!offSet}" value="0" name="offSetVal" />
+        </apex:actionFunction>
+        
+        <!------ Function for validate the selected value from descrepancy picklist ---------> 
+        <apex:actionFunction name="checkSelectedRecords" action="{!checkSelected}" reRender="updateBtn,errorSec"
+                             status="sts"/>
+        
+        <!------------------ Function for Update button --------------------->
+        <apex:actionFunction name="updateRecords" action="{!updateUMRecords}" reRender="errorSec,tablePnl,paginationPnl,pb" status="sts">
+            <apex:param name="correctPcode" assignTo="{!correctPcodeSelected}" value=""/>
+            <apex:param name="correctAccNo" assignTo="{!correctAccNo}" value=""/>
+            <apex:param name="comment" assignTo="{!descReasonComment}" value=""/>
+        </apex:actionFunction>
+       
+        <!-------------------------------- Header Panel ------------------------------------------------>
+        <apex:outputPanel id="headerPnl">
+            <div style="width: 20%;display: inline-block;">
+                <table >
+                    <tr>
+                        <td rowspan="2">
+                            <span class="slds-icon_container slds-icon-standard-opportunity" title="Description of icon when needed">
+                                <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+                                    <use 
+                                         xmlns:xlink="http://www.w3.org/1999/xlink"
+                                         xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/standard-sprite/svg/symbols.svg#opportunity')}"/>
+                                </svg>
+                            </span>
+                        </td>
+                        <td>
+                            <span claas="subheading">
+                                Related Unmatched 
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="heading">
+                                <apex:outputLink value="/{!pamRec.Id}" target="_blank">{!pamRec.Name}</apex:outputLink>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div style="width: 70%;display: inline-block;" >
+                <table >
+                    <tr>
+                        <td>
+                            
+                            <apex:outputPanel rendered="{!IF(CONTAINS(pamRec.RecordType.Name,'SCM Dispute'),true,false)}"
+                                               id="pcodePnl">
+                                <span style="font-weight:bold;padding:5px;"> PCode Sent</span>
+                                <apex:inputText value="{!pcodeStr}" id="pcodeField"/>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!IF(CONTAINS(pamRec.RecordType.Name,'IR'),true,false)}">
+                                <span style="font-weight:bold;padding:5px;">Record Type</span>
+                                <!--<apex:inputText value="{!recordTypeStr}" id="recodTypeField" />-->
+                                <apex:selectList size="1" value="{!recordTypeStr}" id="recodTypeField">
+                                    <apex:selectOptions value="{!RecordTypePickList}" />
+                                </apex:selectList>
+                            </apex:outputPanel>
+                            
+                            
+                        </td>
+                        <td>
+                            <span style="font-weight:bold;padding:5px;">
+                                Account Number
+                            </span>
+                            <apex:inputText value="{!accNoStr}" id="accNoField" />
+                        </td>
+                        <td>
+                            <div>
+                                <apex:commandButton value="Search" styleClass="slds-button slds-button_brand"
+                                                    onclick="doSearch();return false;" />
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <apex:commandButton value="Clear" onclick="clearAll();return false;"
+                                                    styleClass="slds-button slds-button_destructive"/>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </div>
+        </apex:outputPanel>
+        
+        <!------------------------------- Info Message -------------------------------------->
+        <div class = "slds-text-align_left" >
+            <apex:pageMessage severity="Info" summary="{!infoMsg}" strength="1"/>
+        </div>
+        
+        <!---------------------------- Panel for pagination Links ------------------------> 
+        <apex:outputPanel id="paginationPnl">
+            <div class="slds-text-align_right" >
+                <!--{!offSet}&nbsp;&nbsp;{!unMatchedWrapList.size}&nbsp;&nbsp;{!recordCount} &nbsp;&nbsp;-->
+                <span style="padding:5px;">
+                    Showing up to&nbsp; <b><apex:outputText value="{!(unMatchedWrapList.size + offSet)}" /></b> out of <b>{!recordCount}</b>
+                </span>
+                <span style="color:#b7b3b3;">
+                    <apex:outputText styleClass="disableLink" rendered="{!IF(offSet < recordLimit ,true,false)}">&lt; Previous Page</apex:outputText>   
+                </span>
+                
+                <apex:commandLink rendered="{!IF(offSet >= recordLimit ,true,false)}" action="{!showPrev}"
+                                  reRender="frm,tablePnl,blankpnl" status="sts">&lt; Previous Page</apex:commandLink>
+                &nbsp;|&nbsp;
+                
+                <apex:commandLink rendered="{!IF(and(offSet < 2000,showNext) ,true,false)}" action="{!showNext}"
+                                  reRender="frm,tablePnl,blankpnl" status="sts">Next Page &gt;</apex:commandLink>
+                <span style="color:#b7b3b3;">
+                    <apex:outputText styleClass="disableLink" rendered="{!IF(or(offSet >= 2000,showNext== false) ,true,false)}">Next Page &gt;</apex:outputText>
+                </span>
+            </div>
+        </apex:outputPanel>
+        
+        <!------------------------------ Discrepancy Panel ------------------------------------>
+        <apex:outputPanel id="discrepancyPnl" rendered="{!IF(unMatchedWrapList.size > 0,true,false)}">
+            <div class="slds-p-around_small " style="display:inline-block;">
+                <span class="slds-p-right_small">Reason for Discrepancy:</span>
+                <apex:selectList value="{!selectedDescStr}" multiselect="false" size="1"
+                                 id="picklist" onchange="selectedValJS(this.value);return false;">
+                    <apex:selectOptions value="{!Items}" />
+                </apex:selectList>
+                <apex:outputPanel id="accNoPnl" styleClass="slds-p-left_small" >
+                    
+                </apex:outputPanel>
+            </div>
+            <div class="slds-text-align_center" style="display:inline-block;">
+                <apex:commandButton value="Update" styleClass="slds-button slds-button_brand" 
+                                    onclick="updateRecordsJS();return false;" id="updateBtn"
+                                    disabled="{!IF(errorMsg != '',true,false)}" />
+            </div>
+        </apex:outputPanel>
+        
+        
+        <!------------------------ Page Block to hold the Table -------------------------->
+        <apex:pageBlock id="pb">
+            <apex:pageMessages id="errorSec"></apex:pageMessages>
+            
+            <apex:actionstatus id="sts">
+                <apex:facet name="start">
+                    <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height: 100%; opacity: 0.65; width: 100%;">
+                        <div class="waitingHolder" style="margin-left: 25%; position: fixed;">
+                            <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." /> 
+                            <span class="waitingDescription">Loading...</span>
+                        </div>
+                    </div>
+                </apex:facet>
+            </apex:actionstatus>
+            
+            
+            
+            
+            <apex:outputPanel id="tablePnl" rendered="{!IF(unMatchedWrapList.size > 0,true,false)}">
+                
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                <apex:inputCheckbox id="masterCB" value="{!chkAll}" >
+                                    <apex:actionSupport event="onclick" 
+                                                        onsubmit="checkAll(this.checked)"
+                                                        status="sts" reRender="pg" />
+                                </apex:inputCheckbox>
+                            </th>
+                            <th> 
+                                PAM-Unmatched Name
+                            </th>
+                            <th >
+                                Organization Name
+                            </th>
+                            <th>
+                                <apex:outputLink onclick="sortFunc('pcodeSent');return false;"
+                                                 rendered="{!IF(CONTAINS(pamRec.RecordType.Name,'SCM Dispute'),true,false)}">
+                                        PCode Sent&nbsp;&nbsp;
+                                    <apex:outputText rendered="{!IF(and(pcodeSortingNum > 0,mod(pcodeSortingNum , 2) != 0),true,false )}" >&#8679;</apex:outputText>
+                                    <apex:outputText rendered="{!IF(and(pcodeSortingNum > 0,mod(pcodeSortingNum , 2) == 0),true,false )}" >&#8681;</apex:outputText>
+                                </apex:outputLink>
+                                <apex:outputLink onclick="sortFunc('recordType');return false;"
+                                                 rendered="{!IF(CONTAINS(pamRec.RecordType.Name,'IR'),true,false)}">
+                                        Record Type&nbsp;&nbsp;
+                                    <apex:outputText rendered="{!IF(and(recordTypeSortingNum > 0,mod(recordTypeSortingNum , 2) != 0),true,false )}" >&#8679;</apex:outputText>
+                                    <apex:outputText rendered="{!IF(and(recordTypeSortingNum > 0,mod(recordTypeSortingNum , 2) == 0),true,false )}" >&#8681;</apex:outputText>
+                                </apex:outputLink>
+                            </th>
+                            <th>
+                                <apex:outputLink onclick="sortFunc('accountNo');return false;" >
+                                    Account Number Sent&nbsp;&nbsp;
+                                    <apex:outputText rendered="{!IF(and(accNoSortingNum > 0,mod(accNoSortingNum , 2) != 0),true,false )}" >&#8679;</apex:outputText>
+                                    <apex:outputText rendered="{!IF(and(accNoSortingNum > 0,mod(accNoSortingNum , 2) == 0),true,false )}" >&#8681;</apex:outputText>
+                                </apex:outputLink>
+                            </th>
+                            <th>
+                                Reason for Discrepancy 
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!unMatchedWrapList}" var="wrp" >
+                            <tr>
+                                <th>
+                                    <apex:inputCheckbox value="{!wrp.isSelected}" id="childCB" style="align:center;">
+                                        <apex:actionSupport event="onclick" onsubmit="checkMaster()"
+                                                            status="sts" reRender="pg" />
+                                    </apex:inputCheckbox>
+                                </th>
+                                <td>
+                                    <apex:outputLink value="/{!wrp.um.Id}" target="_blank">{!wrp.um.Name}</apex:outputLink>
+                                </td>
+                                <td>
+                                    <apex:outputLink value="/{!wrp.um.PAMUM_Organization_Name__c}" target="_blank">
+                                        {!wrp.um.PAMUM_Organization_Name__r.Name}
+                                    </apex:outputLink>
+                                </td>
+                                
+                                <td>
+                                    <apex:outputText value="{!wrp.um.SCMDUM_PCode_Sent__c}"
+                                                     rendered="{!IF(CONTAINS(pamRec.RecordType.Name,'SCM Dispute'),true,false)}"/>
+                                    <apex:outputText value="{!wrp.um.RecordType.Name}"
+                                                     rendered="{!IF(CONTAINS(pamRec.RecordType.Name,'IR'),true,false)}"/>
+                                </td>
+                                <td>
+                                    <apex:outputText value="{!wrp.um.PAMUM_Account_Number__c}" />
+                                </td>
+                                <td>
+                                    <apex:outputText value="{!wrp.um.SCMDUM_Reason_for_Discrepancy__c}"
+                                                     rendered="{!IF(wrp.um.SCMDUM_Reason_for_Discrepancy__c != '',true,false)}" />
+                                    <apex:outputPanel rendered="{!IF(wrp.um.SCMDUM_Reason_for_Discrepancy__c == '',true,false)}">
+                                        <div class="slds-text-align_center">-</div>
+                                    </apex:outputPanel>
+                                </td>
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+                
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!IF(unMatchedWrapList.size == 0,true,false)}" id="blankpnl" >
+                <div class="slds-box slds-text-align_center">
+                    No Record Found
+                </div>
+            </apex:outputPanel>
+            
+        </apex:pageBlock>
+    </apex:form>    
+    
+    <script>
+    
+    /*************************** Function for Master Checkbox *****************************/
+    function checkAll(val){
+        var allCheckBox = document.getElementsByTagName("input");
+        for(var i=0;i<allCheckBox.length;i++){
+            if(allCheckBox[i].id.indexOf("childCB") != -1){
+                allCheckBox[i].checked = val;
+            }
+        }
+        
+        var pickVal = document.getElementById('pg:frm:picklist').value;
+        
+        if(pickVal){
+            checkSelectedRecords();
+        }
+    }
+    
+    /***************************** Function for Child Checkboxes *********************************/
+    function checkMaster(){
+        var allCheckBox = document.getElementsByTagName("input");
+        var masterCheckBox;
+        var chkAll = true;
+        
+        for(var i=0;i<allCheckBox.length;i++){
+            if(allCheckBox[i].id.indexOf("masterCB") != -1){
+                masterCheckBox = allCheckBox[i];
+            }
+            if(allCheckBox[i].id.indexOf("childCB") != -1){
+                if(!allCheckBox[i].checked){
+                    chkAll = false;
+                    break;
+                }
+            }
+        }
+        masterCheckBox.checked = chkAll;
+        var pickVal = document.getElementById('pg:frm:picklist').value;
+        
+        if(pickVal){
+            checkSelectedRecords();
+        }
+    }
+    
+    /********************************* Function for Clear button ********************************/
+    function clearAll(){
+        if(document.getElementById("pg:frm:pcodeField") != null)
+            document.getElementById("pg:frm:pcodeField").value = '';
+        if(document.getElementById("pg:frm:accNoField") != null)
+            document.getElementById("pg:frm:accNoField").value = '';
+        if(document.getElementById("pg:frm:recodTypeField") != null)
+            document.getElementById("pg:frm:recodTypeField").value = '';
+        if(document.getElementById('pg:frm:picklist') != null)
+            document.getElementById('pg:frm:picklist').value = '';
+        doSearch();
+    }
+    
+    /******************************* Function for Discrepancy reason selection *************************/
+    function selectedValJS(val){  
+        var str = '';
+        var commentValues = ["Currently Open with Firm","Timing – Account closed same day as cut off",
+                             "Inactive close code used","Close code re-sent","Legal Obligation","Reopen Request sent",
+                             "Account is currently Closed","Process Error","Mapping or coding matrix error"];
+        if(val == 'Account submitted for wrong PCode'){
+            var pcodeMap = JSON.parse('{!jsonMap}');
+            var arr = [];
+            for(var key in pcodeMap){
+                arr.push(pcodeMap[key]);    
+            }
+            arr.sort();
+            
+            str = 'Select the correct PCode: &nbsp;&nbsp;<select id="correctPcodeId" >';
+            for(var i in arr){
+                if(arr[i] == ''){
+                    str += '<option value="'+arr[i]+'">--None--</option>';
+                }else{
+                    str += '<option value="'+arr[i]+'">'+arr[i]+'</option>';
+                }
+            }
+            str += '</select>';
+        }
+        else if(val == 'Incorrect Account Number'){
+            str = 'Correct Account Number: &nbsp;&nbsp;<input type="text" id="correctAccNoId" />';
+        }
+            else if(commentValues.includes(val)){
+                str = 'Comment: <textarea  style="vertical-align:top;" id="commentBoxId"/>';
+            }
+        
+        document.getElementById("pg:frm:accNoPnl").innerHTML = str;
+        checkSelectedRecords();
+    }
+    
+    /*************************** Function for Update Button *******************************/
+    function updateRecordsJS(){
+        var pcodeBox = document.getElementById("correctPcodeId");
+        var correctAccNoBox = document.getElementById("correctAccNoId");
+        var commentBox = document.getElementById("commentBoxId");
+        
+        if(pcodeBox != null){
+            updateRecords(pcodeBox.value,'','');
+            pcodeBox.value = '';
+        }
+        else if(correctAccNoBox != null){
+            updateRecords('',correctAccNoBox.value,'');
+            correctAccNoBox.value = '';
+        }
+            else if(commentBox != null){
+                updateRecords('','',commentBox.value);
+                commentBox.value = '';
+            }
+                else{
+                    updateRecords('','','');
+                }
+        if(document.getElementById('pg:frm:picklist') != null)
+            document.getElementById('pg:frm:picklist').value = '';
+    }
+    
+    </script>
+</apex:page>

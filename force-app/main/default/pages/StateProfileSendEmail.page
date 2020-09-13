@@ -1,0 +1,3 @@
+<apex:page standardcontroller="State_Profile__c" extensions="CT_SendEmailOverride" action="{!redirect}">
+
+</apex:page>

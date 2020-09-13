@@ -1,0 +1,664 @@
+<apex:page standardController="Consumer_Account_Details__c" extensions="LRMM_loadValues">
+ <apex:form >
+<apex:pageMessages id="msg"/>
+ <!-- CounterClaim Block Section  --> 
+   <apex:pageBlock title="New CounterClaim" rendered="{!showCC}" >
+    <apex:pageBlockButtons >
+     <apex:commandButton action="{!save}" value="Save"/>
+       
+     <apex:commandButton value="Cancel" action="{!Cancel}"/>
+    </apex:pageBlockButtons>
+    <apex:pageBlockSection title="General Matter Information"  collapsible="false"> 
+        <apex:repeat value="{!ccLIst}" var="cc"> 
+          <apex:outputfield value="{!cc.CC_Matter_Name__c}" rendered="{!IF(cc.CC_Matter_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!cc.CC_Matter_Name__c}" rendered="{!IF(cc.CC_Matter_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!cc.CC_State_Filed__c }" rendered="{!IF(cc.CC_State_Filed__c  <> null ,true,false)}"/>
+          <apex:inputfield value="{!cc.CC_State_Filed__c }" rendered="{!IF(cc.CC_State_Filed__c  = null ,true,false)}" required="true"/>
+          <apex:outputfield label="Organization Name" value="{!cc.CC_Organization_Name__c }" rendered="{!IF(cc.CC_Organization_Name__c <> null ,true,false)}"/>
+          <apex:inputfield label="Organization Name" value="{!cc.CC_Organization_Name__c }" rendered="{!IF(cc.CC_Organization_Name__c= null ,true,false)}"/>
+          <apex:outputfield value="{!cc.CC_Court_File__c}" rendered="{!IF(cc.CC_Court_File__c<> null ,true,false)}" />
+          <apex:inputfield value="{!cc.CC_Court_File__c}" rendered="{!IF(cc.CC_Court_File__c= null ,true,false)}" required="true"/>
+           <apex:outputfield value="{!cc.CC_Account_Number__c}" rendered="{!IF(cc.CC_Account_Number__c <> null ,true,false)}"/> 
+          <apex:inputfield value="{!cc.CC_Account_Number__c}" rendered="{!IF(cc.CC_Account_Number__c= null ,true,false)}" required="true" />
+          <apex:outputfield value="{!cc.CC_County_Court_Name__c }" rendered="{!IF(cc.CC_County_Court_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!cc.CC_County_Court_Name__c }" rendered="{!IF(cc.CC_County_Court_Name__c= null ,true,false)}" required="true"/>         
+          <apex:inputfield value="{!cc.CC_Date_Counterclaim_Filed__c}" required="true"/>          
+          <apex:outputfield value="{!cc.CC_Judge_Name__c }" rendered="{!IF(cc.CC_Judge_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!cc.CC_Judge_Name__c }" rendered="{!IF(cc.CC_Judge_Name__c = null ,true,false)}" required="true"/>
+          <apex:inputfield value="{!cc.CC_Date_Counterclaim_Response_Due_by__c}" required="true" />
+          <apex:outputfield value="{!cc.CC_Prior_Experience_with_Judge__c}" rendered="{!CounterclaimId <> null}"/>
+          <apex:inputfield value="{!cc.CC_Prior_Experience_with_Judge__c }" rendered="{!CounterclaimId = null}" required="true"/> 
+          <br/>        
+          <apex:outputfield value="{!cc.CC_IfPriorExperience_with_Judge_Comments__c}" rendered="{!CounterclaimId <> null}"/>
+          <apex:inputfield value="{!cc.CC_IfPriorExperience_with_Judge_Comments__c}" rendered="{!CounterclaimId = null}"/>
+        </apex:repeat>
+    </apex:pageBlockSection>
+    
+     <apex:pageBlockSection title="Assigned Attorney and Opposing Counsel"  collapsible="false"  >
+        <apex:repeat value="{!ccLIst}" var="cc">
+          <apex:outputfield value="{!cc.CC_Assigned_Attorney__c }" rendered="{!IF(cc.CC_Assigned_Attorney__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!cc.CC_Assigned_Attorney__c }" rendered="{!IF(cc.CC_Assigned_Attorney__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!cc.CC_Opposing_Counsel__c }" rendered="{!IF(cc.CC_Opposing_Counsel__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!cc.CC_Opposing_Counsel__c }" rendered="{!IF(cc.CC_Opposing_Counsel__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!cc.CC_Assigned_Attorney_Email__c }" rendered="{!IF(cc.CC_Assigned_Attorney_Email__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!cc.CC_Assigned_Attorney_Email__c }" rendered="{!IF(cc.CC_Assigned_Attorney_Email__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!cc.CC_Opposing_Counsel_Firm_Name__c }" rendered="{!IF(cc.CC_Opposing_Counsel_Firm_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!cc.CC_Opposing_Counsel_Firm_Name__c }" rendered="{!IF(cc.CC_Opposing_Counsel_Firm_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!cc.CC_Assigned_Attorney_Cell_Phone__c }" rendered="{!IF(cc.CC_Assigned_Attorney_Cell_Phone__c <> null ,true,false)}" />
+          <apex:inputfield value="{!cc.CC_Assigned_Attorney_Cell_Phone__c }" rendered="{!IF(cc.CC_Assigned_Attorney_Cell_Phone__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!cc.CC_Opposing_Counsel_Email__c}" rendered="{!IF(cc.CC_Opposing_Counsel_Email__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!cc.CC_Opposing_Counsel_Email__c}" rendered="{!IF(cc.CC_Opposing_Counsel_Email__c= null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!cc.CC_Assigned_Attorney_Direct_Line__c}" rendered="{!IF(cc.CC_Assigned_Attorney_Direct_Line__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!cc.CC_Assigned_Attorney_Direct_Line__c}" rendered="{!IF(cc.CC_Assigned_Attorney_Direct_Line__c= null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!cc.CC_Opposing_counsel_Phone__c }" rendered="{!IF(cc.CC_Opposing_counsel_Phone__c <> null ,true,false)}" />
+          <apex:inputfield value="{!cc.CC_Opposing_counsel_Phone__c }" rendered="{!IF(cc.CC_Opposing_counsel_Phone__c = null ,true,false)}" required="true"/>
+          <br/>
+          <apex:outputfield value="{!cc.CC_Opposing_Counsel_Comments__c }"  rendered="{!IF(cc.CC_Opposing_Counsel_Comments__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!cc.CC_Opposing_Counsel_Comments__c}" rendered="{!IF(cc.CC_Opposing_Counsel_Comments__c = null ,true,false)}" required="true"/>
+        </apex:repeat>
+    </apex:pageBlockSection>
+    
+     <apex:pageBlockSection title="Counterclaim Details"  collapsible="false"  >
+        <apex:repeat value="{!ccLIst}" var="cc">
+          <apex:inputfield value="{!cc.CC_Litigation_Type__c}" required="true"/>
+          <apex:inputfield value="{!cc.CC_Discovery_Propounded_on_MCM__c}" required="true"/>
+          <apex:inputfield value="{!cc.CC_Allegation_Summary_From_Firm__c}" required="true"/>
+          <apex:inputfield value="{!cc.CC_Discovery_Documents_Attached__c}" />
+          <apex:inputfield value="{!cc.CC_State_Suit_Theory__c}" required="true" />
+          <apex:inputfield value="{!cc.CC_If_Yes_Discovery_Propounded_Due_Date__c}"/>
+          <apex:inputfield value="{!cc.CC_Firm_Recommedation__c}" required="true"/>
+          <apex:inputHidden value="{!cc.CC_Chain_of_Title_Summary__c}"/>
+          <apex:inputfield value="{!cc.CC_Chain_of_Title_Summary__c}" required="true"/>
+          <apex:inputfield value="{!cc.CC_Motion_to_Compel_DEF_Filed__c}" required="true"/>    
+          <apex:inputfield value="{!cc.CC_NOA_Sent_to_Consumer_State_Dependent__c}" required="true"/>
+          <apex:inputfield value="{!cc.CC_Motion_to_Compel_PLTF_Filed__c}" required="true"/>    
+          <apex:inputfield value="{!cc.CC_Terms_Conditions__c}" required="true"/>   
+          <apex:inputHidden value="{!cc.CC_Business_Record_Affidavit_Requested__c}"/>
+          <apex:inputHidden value="{!cc.CC_Business_Record_Affidavit_Requested__c}" />
+          <apex:inputfield value="{!cc.CC_Business_Record_Affidavit_Requested__c}" required="true"/>
+          <apex:inputfield value="{!cc.CC_Statements_in_Possession__c}" required="true"/>
+          <apex:inputfield value="{!cc.CC_One_Off_Affidavit_Requested__c}" required="true"/>        
+          <apex:inputfield value="{!cc.CC_Additional_Statements_Requested__c}" required="true"/>     
+          <apex:inputHidden value="{!cc.CC_MSJ_Recommended__c}"/>
+          <apex:inputHidden value="{!cc.CC_MSJ_Recommended__c}"/>
+          <apex:inputfield value="{!cc.CC_MSJ_Recommended__c}" required="true"/>     
+          <apex:inputfield value="{!cc.CC_Media_Chain_of_Title_Notes__c}" required="true"/>     
+          <apex:inputfield value="{!cc.CC_If_Yes_MSJ_Due_Date__c}"/>     
+          <apex:inputfield value="{!cc.CC_Complaint_Attached__c}"/>
+          </apex:repeat>
+    </apex:pageBlockSection>
+ 
+    <apex:pageBlockSection title="System Information" columns="2" collapsible="false">
+        <apex:repeat value="{!ccLIst}" var="cc">
+           <apex:outputfield value="{!cc.CC_Consumer_Account_Detail_Name__c}" rendered="{!IF(cc.CC_Consumer_Account_Detail_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!cc.CC_Consumer_Account_Detail_Name__c}" rendered="{!IF(cc.CC_Consumer_Account_Detail_Name__c = null ,true,false)}"/>
+          
+          <apex:outputfield value="{!cc.CC_Counterclaim_Status__c}" rendered="{!IF(cc.CC_Counterclaim_Status__c <> null ,true,false)}"/>
+           <apex:inputfield value="{!cc.CC_Counterclaim_Status__c}" rendered="{!IF(cc.CC_Counterclaim_Status__c = null ,true,false)}"/>
+           <br/>
+          <apex:outputfield value="{!cc.OwnerId}" />
+        </apex:repeat>
+    </apex:pageBlockSection>
+    
+  </apex:pageBlock>
+  
+  <!--- Appeal BlockSection--> 
+     <apex:pageBlock title="New Appeal" rendered="{!Showappeal}" >
+    <apex:pageBlockButtons >
+     <apex:commandButton action="{!saveAppeal}" value="Save" />
+     
+     <apex:commandButton value="Cancel" action="{!Cancel}"/>
+    </apex:pageBlockButtons>
+    <apex:pageBlockSection title="General Matter Information"  collapsible="false"  > 
+        <apex:repeat value="{!appealLIst}" var="apl">
+          <apex:outputfield value="{!apl.AP_Matter_Name__c}" rendered="{!IF(apl.AP_Matter_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Matter_Name__c}" rendered="{!IF(apl.AP_Matter_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_Court_File__c}" rendered="{!IF(apl.AP_Court_File__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Court_File__c}" rendered="{!IF(apl.AP_Court_File__c = null ,true,false)}" required="true"/>
+          <apex:outputfield label="Organization Name" value="{!apl.AP_Organization_Name__c}" rendered="{!IF(apl.AP_Organization_Name__c <> null ,true,false)}"/>
+          <apex:inputfield label="Organization Name" value="{!apl.AP_Organization_Name__c}" rendered="{!IF(apl.AP_Organization_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_County_Court_Name__c}" rendered="{!IF(apl.AP_County_Court_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_County_Court_Name__c}" rendered="{!IF(apl.AP_County_Court_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_Account_Number__c}" rendered="{!IF(apl.AP_Account_Number__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Account_Number__c}" rendered="{!IF(apl.AP_Account_Number__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_Judge_Name__c}" rendered="{!IF(apl.AP_Judge_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Judge_Name__c}" rendered="{!IF(apl.AP_Judge_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_State_Filed__c}" rendered="{!IF(apl.AP_State_Filed__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_State_Filed__c}" rendered="{!IF(apl.AP_State_Filed__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_Prior_Experience_with_Judge__c}" rendered="{!appealid <> null}"/>
+          <apex:inputfield value="{!apl.AP_Prior_Experience_with_Judge__c}" rendered="{!appealid  = null}" required="true"/>
+          <apex:outputfield value="{!apl.AP_County_Filed__c}" rendered="{!IF(apl.AP_County_Filed__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_County_Filed__c}" rendered="{!IF(apl.AP_County_Filed__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_IfPriorExperience_with_Judge_Comments__c}" rendered="{!appealid <> null}"/>
+          <apex:inputfield value="{!apl.AP_IfPriorExperience_with_Judge_Comments__c}" rendered="{!appealid  = null}"/>
+        </apex:repeat>
+    </apex:pageBlockSection>
+    
+     <apex:pageBlockSection title="Assigned Attorney and Opposing Counsel"  collapsible="false"  >
+        <apex:repeat value="{!appealLIst}" var="apl">
+          <apex:outputfield value="{!apl.AP_Assigned_Attorney__c}" rendered="{!IF(apl.AP_Assigned_Attorney__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Assigned_Attorney__c}" rendered="{!IF(apl.AP_Assigned_Attorney__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_Opposing_Counsel__c}" rendered="{!IF(apl.AP_Opposing_Counsel__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Opposing_Counsel__c}" rendered="{!IF(apl.AP_Opposing_Counsel__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_Assigned_Attorney_Email__c}" rendered="{!IF(apl.AP_Assigned_Attorney_Email__c<> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Assigned_Attorney_Email__c}" rendered="{!IF(apl.AP_Assigned_Attorney_Email__c= null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_Opposing_Counsel_Firm_Name__c}"  rendered="{!IF(apl.AP_Opposing_Counsel_Firm_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Opposing_Counsel_Firm_Name__c}"  rendered="{!IF(apl.AP_Opposing_Counsel_Firm_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_Assigned_Attorney_Cell_Phone__c}"  rendered="{!IF(apl.AP_Assigned_Attorney_Cell_Phone__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Assigned_Attorney_Cell_Phone__c}"  rendered="{!IF(apl.AP_Assigned_Attorney_Cell_Phone__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_Opposing_Counsel_Email__c}" rendered="{!IF(apl.AP_Opposing_Counsel_Email__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Opposing_Counsel_Email__c}" rendered="{!IF(apl.AP_Opposing_Counsel_Email__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_Assigned_Attorney_Direct_Line__c}" rendered="{!IF(apl.AP_Assigned_Attorney_Direct_Line__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Assigned_Attorney_Direct_Line__c}" rendered="{!IF(apl.AP_Assigned_Attorney_Direct_Line__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!apl.AP_Opposing_counsel_Phone__c}"  rendered="{!IF(apl.AP_Opposing_counsel_Phone__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Opposing_counsel_Phone__c}"  rendered="{!IF(apl.AP_Opposing_counsel_Phone__c = null ,true,false)}" required="true"/>
+          <br/>
+          <apex:outputfield value="{!apl.AP_Opposing_Counsel_Comments__c}" rendered="{!IF(apl.AP_Opposing_Counsel_Comments__c<> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Opposing_Counsel_Comments__c}" rendered="{!IF(apl.AP_Opposing_Counsel_Comments__c= null ,true,false)}" required="true"/>
+        </apex:repeat>
+    </apex:pageBlockSection>
+    
+     <apex:pageBlockSection title="Appeal Information"  collapsible="false"  >
+        <apex:repeat value="{!appealLIst}" var="apl">
+          <apex:inputfield value="{!apl.AP_Type_of_Appeal__c}" required="true"/>
+          <apex:inputfield value="{!apl.AP_Could_this_Matter_Impact_Precedent__c}" required="true"/>
+          <apex:inputfield value="{!apl.AP_Date_Notice_of_Appeal_Filed__c}" />
+          <apex:inputHidden value="{!apl.AP_Summary_of_Precedential_Impact__c}"/>
+          <apex:inputHidden value="{!apl.AP_Summary_of_Precedential_Impact__c}"/>
+          <apex:inputfield value="{!apl.AP_Summary_of_Precedential_Impact__c}" required="true"/>
+          <apex:inputfield value="{!apl.AP_Name_of_Lower_Court__c}" required="true"/>
+          <br/>
+          <apex:inputfield value="{!apl.AP_Name_of_Higher_Court_for_this_Appeal__c}" required="true"/>          
+          <apex:inputfield value="{!apl.AP_Firm_Recommendation_for_Client__c}" required="true"/>
+          <apex:inputfield value="{!apl.AP_Amount_of_Judgement__c}" required="true"/>
+          <br/>
+          <apex:inputfield value="{!apl.AP_Judgment_Entered_in_Favor_of__c}" required="true"/>
+          
+        </apex:repeat>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="System Information" collapsible="false" >
+        <apex:repeat value="{!appealLIst}" var="apl">
+          <apex:outputfield value="{!apl.AP_Consumer_Account_Record__c}" rendered="{!IF(apl.AP_Consumer_Account_Record__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Consumer_Account_Record__c}" rendered="{!IF(apl.AP_Consumer_Account_Record__c = null ,true,false)}"/>
+          
+          <apex:outputfield value="{!apl.AP_Appeal_Status__c}" rendered="{!IF(apl.AP_Appeal_Status__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.AP_Appeal_Status__c}" rendered="{!IF(apl.AP_Appeal_Status__c = null ,true,false)}"/>
+          <br/>
+          <apex:outputfield value="{!apl.OwnerId}" rendered="{!IF(apl.OwnerId <> null ,true,false)}"/>
+          <apex:inputfield value="{!apl.OwnerId}" rendered="{!IF(apl.OwnerId = null ,true,false)}"/>          
+        </apex:repeat>
+    </apex:pageBlockSection>
+  </apex:pageBlock>
+  
+  <!--DiscoveryButton section-->
+  
+     <apex:pageBlock title="New Discovery" rendered="{!Showdiscvry}" >
+    <apex:pageBlockButtons >
+     <apex:commandButton action="{!saveDisc}" value="Save" />
+   
+     <apex:commandButton value="Cancel" action="{!Cancel}"/>
+    </apex:pageBlockButtons>
+    <apex:pageBlockSection title="General Matter Information"  collapsible="false"  > 
+        <apex:repeat value="{!discLIst}" var="dis">
+          <apex:outputfield value="{!dis.DY_Matter_Name__c}" rendered="{!IF(dis.DY_Matter_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_Matter_Name__c}" rendered="{!IF(dis.DY_Matter_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!dis.DY_State_Filed__c}" rendered="{!IF(dis.DY_State_Filed__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_State_Filed__c}" rendered="{!IF(dis.DY_State_Filed__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!dis.DY_Account_Number__c}" rendered="{!IF(dis.DY_Account_Number__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_Account_Number__c}" rendered="{!IF(dis.DY_Account_Number__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!dis.DY_Court_File__c}" rendered="{!IF(dis.DY_Court_File__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_Court_File__c}" rendered="{!IF(dis.DY_Court_File__c = null ,true,false)}" required="true"/>
+          <apex:outputfield label="Organization Name" value="{!dis.DY_Organization_Name__c}" rendered="{!IF(dis.DY_Organization_Name__c <> null ,true,false)}"/>     
+          <apex:inputfield label="Organization Name" value="{!dis.DY_Organization_Name__c}" rendered="{!IF(dis.DY_Organization_Name__c = null ,true,false)}" required="true"/> 
+          <apex:outputfield value="{!dis.DY_County_Court_Name__c}" rendered="{!IF(dis.DY_County_Court_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_County_Court_Name__c}" rendered="{!IF(dis.DY_County_Court_Name__c = null ,true,false)}" required="true"/>       
+          <apex:inputHidden value="{!dis.DY_Judge_Name__c}"/>        
+          <apex:outputfield value="{!dis.DY_Judge_Name__c}" rendered="{!IF(dis.DY_Judge_Name__c <> null ,true,false)}"/>        
+          <apex:inputfield value="{!dis.DY_Judge_Name__c}" rendered="{!IF(dis.DY_Judge_Name__c = null ,true,false)}" required="true"/>        
+          <apex:inputHidden value="{!dis.DY_Prior_Experience_with_Judge__c}"/>        
+          <apex:outputfield value="{!dis.DY_Prior_Experience_with_Judge__c}" rendered="{!DiscoveryId <> null}"/>
+          <apex:inputfield value="{!dis.DY_Prior_Experience_with_Judge__c}" rendered="{!DiscoveryId = null}" required="true"/>
+          <br/>
+          <apex:outputfield value="{!dis.DY_IfPriorExperience_with_Judge_Comments__c}" rendered="{!DiscoveryId <> null}"/>
+          <apex:inputfield value="{!dis.DY_IfPriorExperience_with_Judge_Comments__c}" rendered="{!DiscoveryId = null}"/>
+        </apex:repeat> 
+    </apex:pageBlockSection>
+      
+     <apex:pageBlockSection title="Assigned Attorney and Opposing Counsel"  collapsible="false"  >
+        <apex:repeat value="{!discLIst}" var="dis">
+          <apex:outputfield value="{!dis.DY_Assigned_Attorney__c}" rendered="{!IF(dis.DY_Assigned_Attorney__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_Assigned_Attorney__c}" rendered="{!IF(dis.DY_Assigned_Attorney__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!dis.DY_Opposing_Counsel__c}" rendered="{!IF(dis.DY_Opposing_Counsel__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_Opposing_Counsel__c}" rendered="{!IF(dis.DY_Opposing_Counsel__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!dis.DY_Assigned_Attorney_Email__c}" rendered="{!IF(dis.DY_Assigned_Attorney_Email__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_Assigned_Attorney_Email__c}" rendered="{!IF(dis.DY_Assigned_Attorney_Email__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!dis.DY_Opposing_Counsel_Firm_Name__c}" rendered="{!IF(dis.DY_Opposing_Counsel_Firm_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_Opposing_Counsel_Firm_Name__c}" rendered="{!IF(dis.DY_Opposing_Counsel_Firm_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!dis.DY_Assigned_Attorney_Cell_Phone__c}" rendered="{!IF(dis.DY_Assigned_Attorney_Cell_Phone__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_Assigned_Attorney_Cell_Phone__c}" rendered="{!IF(dis.DY_Assigned_Attorney_Cell_Phone__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!dis.DY_Opposing_Counsel_Email__c}" rendered="{!IF(dis.DY_Opposing_Counsel_Email__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_Opposing_Counsel_Email__c}" rendered="{!IF(dis.DY_Opposing_Counsel_Email__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!dis.DY_Assigned_Attorney_Direct_Line__c}" rendered="{!IF(dis.DY_Assigned_Attorney_Direct_Line__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_Assigned_Attorney_Direct_Line__c}" rendered="{!IF(dis.DY_Assigned_Attorney_Direct_Line__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!dis.DY_Opposing_counsel_Phone__c}" rendered="{!IF(dis.DY_Opposing_counsel_Phone__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_Opposing_counsel_Phone__c}" rendered="{!IF(dis.DY_Opposing_counsel_Phone__c = null ,true,false)}" required="true"/>
+          <br/>
+          <apex:outputfield value="{!dis.DY_Opposing_Counsel_Comments__c}" rendered="{!IF(dis.DY_Opposing_Counsel_Comments__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!dis.DY_Opposing_Counsel_Comments__c}" rendered="{!IF(dis.DY_Opposing_Counsel_Comments__c = null ,true,false)}" required="true"/>
+          
+        </apex:repeat>
+    </apex:pageBlockSection>
+    
+     <apex:pageBlockSection title="Type of Discovery" columns="2" collapsible="false"  >
+        <apex:repeat value="{!discLIst}" var="dis">
+          <apex:inputfield value="{!dis.DY_Request_For_Admissions__c}" />
+          <apex:inputfield value="{!dis.DY_Other__c}" />
+          <apex:inputfield value="{!dis.DY_Request_For_Production__c}" />
+          <apex:inputfield value="{!dis.DY_Other_Discovery_Type_Comments__c}" />
+          <apex:inputfield value="{!dis.DY_Interrogatories__c}"/>
+        </apex:repeat>
+    </apex:pageBlockSection>
+   <apex:pageBlockSection title="Discovery Details" columns="2" collapsible="false" >
+        <apex:repeat value="{!discLIst}" var="dis">
+          <apex:inputfield value="{!dis.DY_New_Request_or_for_Amendment__c}" />  
+          <apex:inputfield value="{!dis.DY_Date_Discovery_Served__c}" required="true"/>
+          <apex:inputfield value="{!dis.DY_Amended_Responses_Due_to_Court_Order__c}" />
+          <apex:inputfield value="{!dis.DY_Date_Discovery_Response_Due__c}" required="true"/>
+          <apex:inputfield value="{!dis.DY_Amended_Responses_Due_to_Stipulation__c}" />
+          <apex:inputfield value="{!dis.DY_Firm_Requested_Response_Date__c}" required="true"/>
+          <apex:inputfield value="{!dis.DY_Was_an_Extension_Requested__c}" required="true"/>
+          <apex:inputfield value="{!dis.DY_Date_Discovery_Responses_Served__c}" />
+          <apex:inputfield value="{!dis.DY_Extension_Granted__c}" required="true"/>
+          <apex:inputfield value="{!dis.DY_Discovery_Notes__c}" />
+          <apex:inputfield value="{!dis.DY_Extension_Date_Discovery_Response_Due__c}" />
+        </apex:repeat>
+    </apex:pageBlockSection>
+   
+    <apex:pageBlockSection title="System Information" columns="2" collapsible="false" >
+        <apex:repeat value="{!discLIst}" var="dis">
+          <apex:outputfield value="{!dis.DY_Consumer_Account_Details__c}"/>
+          
+          <apex:outputfield value="{!dis.DY_Discovery_Status__c}" rendered="{!IF(dis.DY_Discovery_Status__c <> null ,true,false)}" />
+          <apex:inputfield value="{!dis.DY_Discovery_Status__c}" rendered="{!IF(dis.DY_Discovery_Status__c = null ,true,false)}"/>
+          <br/>
+          <apex:outputfield value="{!dis.OwnerId}" />                 
+        </apex:repeat>
+    </apex:pageBlockSection>
+  </apex:pageBlock>
+  <!-- Live witness button section -->
+    
+     <apex:pageBlock title="New Live Witness" rendered="{!ShowLiveWitness}" >
+    <apex:pageBlockButtons >
+     <apex:commandButton action="{!saveLiveWitness}" value="Save" />
+     
+     <apex:commandButton value="Cancel" action="{!Cancel}"/>
+    </apex:pageBlockButtons>
+    <apex:pageBlockSection title="General Live Witness Information"  collapsible="false"  > 
+        <apex:repeat value="{!Trialist}" var="live">
+          <apex:outputfield value="{!live.LW_Matter_Name__c}" rendered="{!IF(live.LW_Matter_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.LW_Matter_Name__c}" rendered="{!IF(live.LW_Matter_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!live.State_Filed_State_Profile__c}" rendered="{!IF(live.State_Filed_State_Profile__c<> null ,true,false)}"/>
+          <apex:inputfield value="{!live.State_Filed_State_Profile__c}" rendered="{!IF(live.State_Filed_State_Profile__c= null ,true,false)}" required="true"/>
+          <apex:outputfield label="Organization Name" value="{!live.OrganizationName__c }" rendered="{!IF(live.OrganizationName__c <> null ,true,false)}"/>  
+          <apex:inputfield label="Organization Name" value="{!live.OrganizationName__c }" rendered="{!IF(live.OrganizationName__c = null ,true,false)}" required="true"/>  
+          <apex:outputfield value="{!live.County_Filed__c}" rendered="{!IF(live.County_Filed__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.County_Filed__c}" rendered="{!IF(live.County_Filed__c = null ,true,false)}" required="true"/>
+          <apex:inputfield value="{!live.Appearance_Type__c}" required="true"/>
+          <apex:outputfield value="{!live.Court_File__c}" rendered="{!IF(live.Court_File__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.Court_File__c}" rendered="{!IF(live.Court_File__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!live.Account_Number__c}" rendered="{!IF(live.Account_Number__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.Account_Number__c}" rendered="{!IF(live.Account_Number__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!live.County_Court_Name__c}" rendered="{!IF(live.County_Court_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.County_Court_Name__c}" rendered="{!IF(live.County_Court_Name__c = null ,true,false)}" required="true"/>
+          <apex:inputfield value="{!live.Defendant_Name__c}" required="true"/>
+          <apex:outputfield value="{!live.Judge_Name__c}" rendered="{!IF(live.Judge_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.Judge_Name__c}" rendered="{!IF(live.Judge_Name__c = null ,true,false)}" required="true"/>
+          <apex:inputfield value="{!live.Date_of_Appearance__c}" required="true"/>
+          <apex:outputfield value="{!live.Prior_Experience_with_Judge__c}" rendered="{!LiveWitnessId <> null}"/>
+          <apex:inputfield value="{!live.Prior_Experience_with_Judge__c}" rendered="{!LiveWitnessId = null}" required="true"/>
+          <apex:inputfield value="{!live.Time_of_Appearance__c}"/>
+          <apex:outputfield value="{!live.If_Prior_Experience_with_Judge_Comments__c}" rendered="{!LiveWitnessId <> null}"/>
+          <apex:inputfield value="{!live.If_Prior_Experience_with_Judge_Comments__c}" rendered="{!LiveWitnessId = null}"/>
+          <apex:inputfield value="{!live.AM_PM__c}" required="true"/>
+          <apex:inputfield value="{!live.Suit_Balance__c}" required="true"/>
+          <apex:inputfield value="{!live.Time_Zone__c}" required="true"/>
+          <apex:inputfield value="{!live.Days_Appearance_Is_Expected_To_Last__c}" required="true"/>
+        </apex:repeat>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="Assigned Attorney and Opposing Counsel"  collapsible="false"  > 
+        <apex:repeat value="{!Trialist}" var="live">
+          <apex:outputfield value="{!live.Assigned_Attorney__c}" rendered="{!IF(live.Assigned_Attorney__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.Assigned_Attorney__c}" rendered="{!IF(live.Assigned_Attorney__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!live.Opposing_Counsel__c}" rendered="{!IF(live.Opposing_Counsel__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.Opposing_Counsel__c}" rendered="{!IF(live.Opposing_Counsel__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!live.Assigned_Attorney_Email__c}" rendered="{!IF(live.Assigned_Attorney_Email__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.Assigned_Attorney_Email__c}" rendered="{!IF(live.Assigned_Attorney_Email__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!live.Opposing_Counsel_Firm_Name__c}" rendered="{!IF(live.Opposing_Counsel_Firm_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.Opposing_Counsel_Firm_Name__c}" rendered="{!IF(live.Opposing_Counsel_Firm_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!live.Assigned_Attorney_Cell_Phone__c}" rendered="{!IF(live.Assigned_Attorney_Cell_Phone__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.Assigned_Attorney_Cell_Phone__c}" rendered="{!IF(live.Assigned_Attorney_Cell_Phone__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!live.Opposing_Counsel_Email__c}" rendered="{!IF(live.Opposing_Counsel_Email__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.Opposing_Counsel_Email__c}" rendered="{!IF(live.Opposing_Counsel_Email__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!live.Assigned_Attorney_Direct_Line__c}" rendered="{!IF(live.Assigned_Attorney_Direct_Line__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.Assigned_Attorney_Direct_Line__c}" rendered="{!IF(live.Assigned_Attorney_Direct_Line__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!live.Opposing_Counsel_Phone__c}" rendered="{!IF(live.Opposing_Counsel_Phone__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.Opposing_Counsel_Phone__c}" rendered="{!IF(live.Opposing_Counsel_Phone__c = null ,true,false)}" required="true"/>
+          <br/>
+          <apex:outputfield value="{!live.Opposing_Counsel_Comments__c}" rendered="{!IF(live.Opposing_Counsel_Comments__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!live.Opposing_Counsel_Comments__c}" rendered="{!IF(live.Opposing_Counsel_Comments__c = null ,true,false)}" required="true"/>
+        </apex:repeat> 
+    </apex:pageBlockSection>
+<apex:pageBlockSection title="Step I"  collapsible="false"  columns="2"> 
+        <apex:repeat value="{!Trialist}" var="live">
+          <apex:inputfield value="{!live.Settlement_Attempted__c}" required="true"/>
+          <apex:inputfield value="{!live.LW_Witness_Subpoenaed__c}" required="true"/>
+          <apex:inputfield value="{!live.Last_Settlement_Offer_by__c}"/>
+          <apex:inputfield value="{!live.LW_Subpoenaed_Witness_Name__c}"/>
+          <apex:inputfield value="{!live.Settlement_Offer_Type__c}"/>
+          <br/>
+          <apex:inputfield value="{!live.Settlement_Offer_Amount__c}"/>
+          <apex:inputfield value="{!live.Discovery_Status__c}" required="true"/>
+          <apex:inputfield value="{!live.Settlement_Chance_Prior_to_Hearing__c}"/>
+          <br/>
+          <apex:inputfield value="{!live.Post_Judgment_Collectability__c}"/>
+          <apex:inputfield value="{!live.Chance_Of_Success_if_We_Appear__c}" required="true"/>
+          <apex:inputfield value="{!live.Settlement_Attempted_Comments__c}"/>
+          <br/>
+          <apex:inputHidden value="{!live.Potential_Issues_or_Limitations__c}" id="theHiddenInput"/>
+          <apex:inputfield value="{!live.Potential_Issues_or_Limitations__c}" required="true"/>
+          <apex:inputfield value="{!live.Counterclaim__c}" required="true"/>
+          <br/>
+          <apex:inputfield value="{!live.Allegations__c}"/>
+          <apex:inputfield value="{!live.Subject_Matter_to_be_Covered__c}" required="true"/>
+          <apex:inputfield value="{!live.Factual_Basis_of_Allegations__c}"/>
+          <br/>
+          <apex:inputfield value="{!live.Brief_History__c}"/>
+          <apex:inputfield value="{!live.Other_Considerations__c}" required="true"/>
+          <apex:inputfield value="{!live.Hardship__c}" required="true"/>
+          <br/>
+          <apex:inputfield value="{!live.Hardship_Documents_Attached__c}"/>
+          <br/>
+          <apex:inputfield value="{!live.Hardship_Solution__c}"/>
+          <br/>
+          <apex:inputfield value="{!live.Dispute__c}" required="true"/>
+          <br/>
+          <apex:inputfield value="{!live.Dispute_Documents_Attached__c}"/>
+          <br/>
+          <apex:inputfield value="{!live.Dispute_Solution__c}"/>
+        </apex:repeat>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="Witness Details"  collapsible="false">
+        <apex:repeat value="{!Trialist}" var="live">
+          <apex:inputfield value="{!live.Witness_Determination__c}"/>
+          <apex:outputfield value="{!live.Status__c}"/>        
+        </apex:repeat>
+    </apex:pageBlockSection> 
+     <apex:pageBlockSection title="System Information" columns="2" collapsible="false">
+        <apex:repeat value="{!Trialist}" var="live">
+          <apex:outputfield value="{!live.ownerid}"/>
+          <apex:outputfield value="{!live.RecordTypeId}"/>
+          <br/>
+          <apex:outputfield value="{!live.TW_Consumer_Account_Records__c}"/>
+        </apex:repeat>
+    </apex:pageBlockSection>    
+   </apex:pageBlock>
+   <!--  Settlement Approval Button -->
+     <apex:pageBlock title="New Settlement Approval" rendered="{!Settle}" >
+    <apex:pageBlockButtons >
+     <apex:commandButton action="{!saveSA}" value="Save" />
+     
+     <apex:commandButton value="Cancel" action="{!Cancel}"/>
+    </apex:pageBlockButtons>
+    <apex:pageBlockSection title="General Matter Information"  collapsible="false"  > 
+        <apex:repeat value="{!SAList}" var="settlement">
+          <apex:outputfield value="{!settlement.SA_Matter_Name__c}" rendered="{!IF(settlement.SA_Matter_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Matter_Name__c}" rendered="{!IF(settlement.SA_Matter_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!settlement.SA_State_Filed__c}" rendered="{!IF(settlement.SA_State_Filed__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_State_Filed__c}" rendered="{!IF(settlement.SA_State_Filed__c = null ,true,false)}" required="true"/>
+          <apex:outputfield label="Organization Name" value="{!settlement.SA_Organization_Name__c}" rendered="{!IF(settlement.SA_Organization_Name__c <> null ,true,false)}"/>  
+          <apex:inputfield label="Organization Name" value="{!settlement.SA_Organization_Name__c}" rendered="{!IF(settlement.SA_Organization_Name__c = null ,true,false)}" required="true"/>  
+          <apex:outputfield value="{!settlement.SA_Court_File__c}" rendered="{!IF(settlement.SA_Court_File__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Court_File__c}" rendered="{!IF(settlement.SA_Court_File__c = null ,true,false)}" required="true"/> 
+          <apex:outputfield value="{!settlement.SA_Account_Number__c}" rendered="{!IF(settlement.SA_Account_Number__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Account_Number__c}" rendered="{!IF(settlement.SA_Account_Number__c = null ,true,false)}" required="true"/>     
+          <apex:outputfield value="{!settlement.SA_County_Court_Name__c}" rendered="{!IF(settlement.SA_County_Court_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_County_Court_Name__c}" rendered="{!IF(settlement.SA_County_Court_Name__c = null ,true,false)}" required="true"/>           
+          <br/>
+          <apex:outputfield value="{!settlement.SA_Judge_Name__c}" rendered="{!IF(settlement.SA_Judge_Name__c <> null ,true,false)}" />
+          <apex:inputfield value="{!settlement.SA_Judge_Name__c}" rendered="{!IF(settlement.SA_Judge_Name__c = null ,true,false)}" required="true"/>  
+          <br/>    
+          <apex:outputfield value="{!settlement.SA_Prior_Experience_with_Judge__c}" rendered="{!SettlementId <> null}"/>
+          <apex:inputfield value="{!settlement.SA_Prior_Experience_with_Judge__c}" rendered="{!SettlementId = null}" required="true"/>  
+          <br/>
+          <apex:outputfield value="{!settlement.SA_IfPriorExperience_with_Judge_Comments__c}" rendered="{!SettlementId <> null}"/>
+          <apex:inputfield value="{!settlement.SA_IfPriorExperience_with_Judge_Comments__c}" rendered="{!SettlementId = null}"/>
+        </apex:repeat>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="Assigned Attorney and Opposing Counsel"  collapsible="false"  > 
+    <apex:repeat value="{!SAList}" var="settlement"> 
+          <apex:outputfield value="{!settlement.SA_Assigned_Attorney__c}" rendered="{!IF(settlement.SA_Assigned_Attorney__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Assigned_Attorney__c}" rendered="{!IF(settlement.SA_Assigned_Attorney__c = null ,true,false)}" required="true"/>    
+          <apex:outputfield value="{!settlement.SA_Opposing_Counsel__c}" rendered="{!IF(settlement.SA_Opposing_Counsel__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Opposing_Counsel__c}" rendered="{!IF(settlement.SA_Opposing_Counsel__c = null ,true,false)}" required="true"/>     
+          <apex:outputfield value="{!settlement.SA_Assigned_Attorney_Email__c}" rendered="{!IF(settlement.SA_Assigned_Attorney_Email__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Assigned_Attorney_Email__c}" rendered="{!IF(settlement.SA_Assigned_Attorney_Email__c = null ,true,false)}" required="true"/>  
+          <apex:outputfield value="{!settlement.SA_Opposing_Counsel_Firm_Name__c}" rendered="{!IF(settlement.SA_Opposing_Counsel_Firm_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Opposing_Counsel_Firm_Name__c}" rendered="{!IF(settlement.SA_Opposing_Counsel_Firm_Name__c = null ,true,false)}" required="true"/>    
+          <apex:outputfield value="{!settlement.SA_Assigned_Attorney_Cell_Phone__c}" rendered="{!IF(settlement.SA_Assigned_Attorney_Cell_Phone__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Assigned_Attorney_Cell_Phone__c}" rendered="{!IF(settlement.SA_Assigned_Attorney_Cell_Phone__c = null ,true,false)}" required="true"/>              
+          <apex:outputfield value="{!settlement.SA_Opposing_Counsel_Email__c}" rendered="{!IF(settlement.SA_Opposing_Counsel_Email__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Opposing_Counsel_Email__c}" rendered="{!IF(settlement.SA_Opposing_Counsel_Email__c = null ,true,false)}" required="true"/>          
+          <apex:outputfield value="{!settlement.SA_Assigned_Attorney_Direct_Line__c}" rendered="{!IF(settlement.SA_Assigned_Attorney_Direct_Line__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Assigned_Attorney_Direct_Line__c}" rendered="{!IF(settlement.SA_Assigned_Attorney_Direct_Line__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!settlement.SA_Opposing_counsel_Phone__c}" rendered="{!IF(settlement.SA_Opposing_counsel_Phone__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Opposing_counsel_Phone__c}" rendered="{!IF(settlement.SA_Opposing_counsel_Phone__c = null ,true,false)}" required="true"/>       
+          <br/>
+          <apex:outputfield value="{!settlement.SA_Opposing_Counsel_Comments__c}" rendered="{!IF(settlement.SA_Opposing_Counsel_Comments__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Opposing_Counsel_Comments__c}" rendered="{!IF(settlement.SA_Opposing_Counsel_Comments__c = null ,true,false)}" required="true"/>                                                              
+    </apex:repeat>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="Settlement Approval Details"  collapsible="false"  > 
+    <apex:repeat value="{!SAList}" var="settlement"> 
+          <apex:outputfield value="{!settlement.SA_Threat_of_litigation__c}" rendered="{!IF(settlement.SA_Threat_of_litigation__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Threat_of_litigation__c}" rendered="{!IF(settlement.SA_Threat_of_litigation__c = null ,true,false)}"/>     
+          <apex:outputfield value="{!settlement.SA_Amount_of_Offer__c}" rendered="{!IF(settlement.SA_Amount_of_Offer__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Amount_of_Offer__c}" rendered="{!IF(settlement.SA_Amount_of_Offer__c = null ,true,false)}" required="true"/>                     
+          <apex:outputfield value="{!settlement.SA_Type_of_Threat__c}" rendered="{!IF(settlement.SA_Type_of_Threat__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Type_of_Threat__c}" rendered="{!IF(settlement.SA_Type_of_Threat__c = null ,true,false)}"/> 
+          <apex:outputfield value="{!settlement.SA_Amount_of_Prior_Offers__c}" rendered="{!IF(settlement.SA_Amount_of_Prior_Offers__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Amount_of_Prior_Offers__c}" rendered="{!IF(settlement.SA_Amount_of_Prior_Offers__c = null ,true,false)}"/>   
+          <apex:outputfield value="{!settlement.SA_Basis_of_threat__c}" rendered="{!IF(settlement.SA_Basis_of_threat__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Basis_of_threat__c}" rendered="{!IF(settlement.SA_Basis_of_threat__c = null ,true,false)}"/>    
+          <br/>
+          <apex:outputfield value="{!settlement.SA_Demand_Date__c}" rendered="{!IF(settlement.SA_Demand_Date__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Demand_Date__c}" rendered="{!IF(settlement.SA_Demand_Date__c = null ,true,false)}"/>  
+          <apex:outputfield value="{!settlement.SA_Firm_Recommendation__c}" rendered="{!IF(settlement.SA_Firm_Recommendation__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Firm_Recommendation__c}" rendered="{!IF(settlement.SA_Firm_Recommendation__c = null ,true,false)}" required="true"/>       
+          <apex:outputfield value="{!settlement.SA_Demand_Response_Date__c}" rendered="{!IF(settlement.SA_Demand_Response_Date__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Demand_Response_Date__c}" rendered="{!IF(settlement.SA_Demand_Response_Date__c = null ,true,false)}"/>   
+          <br/>
+          <apex:outputfield value="{!settlement.SA_Next_action__c}" rendered="{!IF(settlement.SA_Next_action__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Next_action__c}" rendered="{!IF(settlement.SA_Next_action__c = null ,true,false)}"/>                                                                                                  
+    </apex:repeat>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="System Information"  collapsible="false"  > 
+    <apex:repeat value="{!SAList}" var="settlement"> 
+          <apex:outputfield value="{!settlement.SA_Consumer_Account_Details__c}" rendered="{!IF(settlement.SA_Consumer_Account_Details__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.SA_Consumer_Account_Details__c}" rendered="{!IF(settlement.SA_Consumer_Account_Details__c = null ,true,false)}"/>             
+          <apex:outputfield value="{!settlement.Settlement_Approval_Status__c}" rendered="{!IF(settlement.Settlement_Approval_Status__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.Settlement_Approval_Status__c}" rendered="{!IF(settlement.Settlement_Approval_Status__c = null ,true,false)}"/>  
+          <br/>  
+          <apex:outputfield value="{!settlement.OwnerId}" rendered="{!IF(settlement.OwnerId <> null ,true,false)}"/>
+          <apex:inputfield value="{!settlement.OwnerId}" rendered="{!IF(settlement.OwnerId = null ,true,false)}"/>                               
+    </apex:repeat>
+    </apex:pageBlockSection>
+    </apex:pageBlock> 
+   
+     <!--Business Record Affidavit section-->
+  
+   <apex:pageBlock title="New Business Record Affidavit" rendered="{!Businessrecord}" >
+      <apex:pageBlockButtons >
+          <apex:commandButton action="{!saveBRA}" value="Save" />
+     
+          <apex:commandButton value="Cancel" action="{!Cancel}"/>
+      </apex:pageBlockButtons>    
+    <apex:pageBlockSection title="General Matter Information"  collapsible="false"  > 
+        <apex:repeat value="{!BRAList}" var="braf">
+          <apex:outputfield value="{!braf.BRA_Matter_Name__c}" rendered="{!IF(braf.BRA_Matter_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Matter_Name__c}" rendered="{!IF(braf.BRA_Matter_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!braf.BRA_State_Filed__c}" rendered="{!IF(braf.BRA_State_Filed__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_State_Filed__c}" rendered="{!IF(braf.BRA_State_Filed__c = null ,true,false)}" required="true"/>
+          <apex:outputfield label="Organization Name" value="{!braf.BRA_Organization_Name__c}" rendered="{!IF(braf.BRA_Organization_Name__c <> null ,true,false)}"/>     
+          <apex:inputfield label="Organization Name" value="{!braf.BRA_Organization_Name__c}" rendered="{!IF(braf.BRA_Organization_Name__c = null ,true,false)}" required="true"/> 
+          <apex:outputfield value="{!braf.BRA_Court_File__c}" rendered="{!IF(braf.BRA_Court_File__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Court_File__c}" rendered="{!IF(braf.BRA_Court_File__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!braf.BRA_Account_Number__c}" rendered="{!IF(braf.BRA_Account_Number__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Account_Number__c}" rendered="{!IF(braf.BRA_Account_Number__c = null ,true,false)}" required="true"/>        
+          <apex:outputfield value="{!braf.BRA_County_Filed__c}" rendered="{!IF(braf.BRA_County_Filed__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_County_Filed__c}" rendered="{!IF(braf.BRA_County_Filed__c = null ,true,false)}" required="true"/>    
+          <apex:outputfield value="{!braf.BRA_Original_Creditor__c}" rendered="{!IF(braf.BRA_Original_Creditor__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Original_Creditor__c}" rendered="{!IF(braf.BRA_Original_Creditor__c = null ,true,false)}" required="true"/>          
+          <apex:outputfield value="{!braf.BRA_County_Court_Name__c}" rendered="{!IF(braf.BRA_County_Court_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_County_Court_Name__c}" rendered="{!IF(braf.BRA_County_Court_Name__c = null ,true,false)}" required="true"/>    
+          <apex:inputHidden value="{!braf.BRA_Judge_Name__c}"/>
+          <apex:outputfield value="{!braf.BRA_Judge_Name__c}" rendered="{!IF(braf.BRA_Judge_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Judge_Name__c}" rendered="{!IF(braf.BRA_Judge_Name__c = null ,true,false)}" required="true"/>    
+          <apex:inputHidden value="{!braf.BRA_Prior_Experience_with_Judge__c}"/>
+          <apex:outputfield value="{!braf.BRA_Prior_Experience_with_Judge__c}" rendered="{!BRAId <> null}"/>
+          <apex:inputfield value="{!braf.BRA_Prior_Experience_with_Judge__c}" rendered="{!BRAId ==null}" required="true"/>
+          <apex:inputHidden value="{!braf.BRA_IfPriorExperiencewith_Judge_Comments__c}"/>
+          <apex:outputfield value="{!braf.BRA_IfPriorExperiencewith_Judge_Comments__c}" rendered="{!BRAId <> null}"/>
+          <apex:inputfield value="{!braf.BRA_IfPriorExperiencewith_Judge_Comments__c}" rendered="{!BRAId == null}"/>
+                                          
+        </apex:repeat>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="Assigned Attorney and Opposing Counsel"  collapsible="false"  >
+        <apex:repeat value="{!BRAList}" var="braf">
+          <apex:outputfield value="{!braf.BRA_Assigned_Attorney__c}" rendered="{!IF(braf.BRA_Assigned_Attorney__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Assigned_Attorney__c}" rendered="{!IF(braf.BRA_Assigned_Attorney__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!braf.BRA_Opposing_Counsel__c}" rendered="{!IF(braf.BRA_Opposing_Counsel__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Opposing_Counsel__c}" rendered="{!IF(braf.BRA_Opposing_Counsel__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!braf.BRA_Assigned_Attorney_Email__c}" rendered="{!IF(braf.BRA_Assigned_Attorney_Email__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Assigned_Attorney_Email__c}" rendered="{!IF(braf.BRA_Assigned_Attorney_Email__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!braf.BRA_Opposing_Counsel_Firm_Name__c}"  rendered="{!IF(braf.BRA_Opposing_Counsel_Firm_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Opposing_Counsel_Firm_Name__c}"  rendered="{!IF(braf.BRA_Opposing_Counsel_Firm_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!braf.BRA_Assigned_Attorney_Cell_Phone__c}"  rendered="{!IF(braf.BRA_Assigned_Attorney_Cell_Phone__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Assigned_Attorney_Cell_Phone__c}"  rendered="{!IF(braf.BRA_Assigned_Attorney_Cell_Phone__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!braf.BRA_Opposing_Counsel_Email__c}" rendered="{!IF(braf.BRA_Opposing_Counsel_Email__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Opposing_Counsel_Email__c}" rendered="{!IF(braf.BRA_Opposing_Counsel_Email__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!braf.BRA_Assigned_Attorney_Direct_Line__c}" rendered="{!IF(braf.BRA_Assigned_Attorney_Direct_Line__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Assigned_Attorney_Direct_Line__c}" rendered="{!IF(braf.BRA_Assigned_Attorney_Direct_Line__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!braf.BRA_Opposing_counsel_Phone__c}"  rendered="{!IF(braf.BRA_Opposing_counsel_Phone__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Opposing_counsel_Phone__c}"  rendered="{!IF(braf.BRA_Opposing_counsel_Phone__c = null ,true,false)}" required="true"/>
+          <br/>
+          <apex:outputfield value="{!braf.BRA_Opposing_Counsel_Comments__c}" rendered="{!IF(braf.BRA_Opposing_Counsel_Comments__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Opposing_Counsel_Comments__c}" rendered="{!IF(braf.BRA_Opposing_Counsel_Comments__c = null ,true,false)}" required="true"/>
+        </apex:repeat>
+    </apex:pageBlockSection>
+   <apex:pageBlockSection title="Business Record Affidavit Details"  collapsible="false"  >
+        <apex:repeat value="{!BRAList}" var="braf">
+          <apex:inputfield value="{!braf.BRA_Why_is_BRA_Needed__c}" required="true"/>
+          <apex:inputfield value="{!braf.BRA_BRA_Attached__c}"/>     
+        </apex:repeat>               
+    </apex:pageBlockSection>    
+        <apex:pageBlockSection title="System Information"  collapsible="false"  > 
+    <apex:repeat value="{!BRAList}" var="braf"> 
+          <apex:outputfield value="{!braf.BRA_Consumer_Account_Details_Record__c}" rendered="{!IF(braf.BRA_Consumer_Account_Details_Record__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_Consumer_Account_Details_Record__c}" rendered="{!IF(braf.BRA_Consumer_Account_Details_Record__c = null ,true,false)}"/>             
+          <apex:outputfield value="{!braf.BRA_BRA_Status__c}" rendered="{!IF(braf.BRA_BRA_Status__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.BRA_BRA_Status__c}" rendered="{!IF(braf.BRA_BRA_Status__c = null ,true,false)}"/>  
+          <br/>  
+          <apex:outputfield value="{!braf.OwnerId}" rendered="{!IF(braf.OwnerId <> null ,true,false)}"/>
+          <apex:inputfield value="{!braf.OwnerId}" rendered="{!IF(braf.OwnerId = null ,true,false)}"/>                               
+    </apex:repeat>
+    </apex:pageBlockSection>  
+  </apex:pageBlock>     
+  
+  <!-- Purchase Sales Agreement Section -->
+     <apex:pageBlock title="New Purchase Sales Agreement" rendered="{!PurchaseandSales}" >
+      <apex:pageBlockButtons >
+          <apex:commandButton action="{!savePSA}" value="Save" />
+     
+          <apex:commandButton value="Cancel" action="{!Cancel}"/>
+      </apex:pageBlockButtons>    
+    <apex:pageBlockSection title="General Matter Information"  collapsible="false"> 
+        <apex:repeat value="{!PSAList}" var="psa">
+          <apex:outputfield value="{!psa.PSA_Matter_Name__c}" rendered="{!IF(psa.PSA_Matter_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Matter_Name__c}" rendered="{!IF(psa.PSA_Matter_Name__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!psa.PSA_State_Filed__c}" rendered="{!IF(psa.PSA_State_Filed__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_State_Filed__c}" rendered="{!IF(psa.PSA_State_Filed__c = null ,true,false)}" required="true"/>    
+          <apex:outputfield label="Organization Name" value="{!psa.PSA_Organization_Name__c}" rendered="{!IF(psa.PSA_Organization_Name__c <> null ,true,false)}"/>     
+          <apex:inputfield label="Organization Name" value="{!psa.PSA_Organization_Name__c}" rendered="{!IF(psa.PSA_Organization_Name__c = null ,true,false)}" required="true"/>     
+          <apex:outputfield value="{!psa.PSA_Court_File__c}" rendered="{!IF(psa.PSA_Court_File__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Court_File__c}" rendered="{!IF(psa.PSA_Court_File__c = null ,true,false)}" required="true"/>      
+          <apex:outputfield value="{!psa.PSA_Account_Number__c}" rendered="{!IF(psa.PSA_Account_Number__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Account_Number__c}" rendered="{!IF(psa.PSA_Account_Number__c = null ,true,false)}" required="true"/>
+          <apex:outputfield value="{!psa.PSA_County_Court_Name__c}" rendered="{!IF(psa.PSA_County_Court_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_County_Court_Name__c}" rendered="{!IF(psa.PSA_County_Court_Name__c = null ,true,false)}" required="true"/>      
+          <apex:outputfield value="{!psa.PSA_Original_Creditor__c}" rendered="{!IF(psa.PSA_Original_Creditor__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Original_Creditor__c}" rendered="{!IF(psa.PSA_Original_Creditor__c = null ,true,false)}" required="true"/>      
+          <apex:outputfield value="{!psa.PSA_Judge_Name__c}" rendered="{!IF(psa.PSA_Judge_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Judge_Name__c}" rendered="{!IF(psa.PSA_Judge_Name__c = null ,true,false)}" required="true"/>  
+          <apex:outputfield value="{!psa.PSA_Chain_of_Title__c}" rendered="{!IF(psa.PSA_Chain_of_Title__c <> null ,true,false)}"/>  
+          <apex:inputfield value="{!psa.PSA_Chain_of_Title__c}" rendered="{!IF(psa.PSA_Chain_of_Title__c = null ,true,false)}"/>
+          <apex:outputfield value="{!psa.PSA_Prior_Experience_with_Judge__c}" rendered="{!PSAId <> null}"/>
+          <apex:inputfield value="{!psa.PSA_Prior_Experience_with_Judge__c}" rendered="{!PSAId ==null}" required="true"/> 
+          <apex:outputfield value="{!psa.PSA_Portfolio__c}" rendered="{!IF(psa.PSA_Portfolio__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Portfolio__c}" rendered="{!IF(psa.PSA_Portfolio__c = null ,true,false)}"/> 
+          <apex:outputfield value="{!psa.PSA_IfPriorExperiencewith_Judge_Comments__c}" rendered="{!PSAId <> null}"/>
+          <apex:inputfield value="{!psa.PSA_IfPriorExperiencewith_Judge_Comments__c}" rendered="{!PSAId == null}"/>
+          </apex:repeat>
+     </apex:pageBlockSection>
+     <apex:pageBlockSection title="Assigned Attorney and Opposing Counsel"  collapsible="false"> 
+        <apex:repeat value="{!PSAList}" var="psa">
+          <apex:outputfield value="{!psa.PSA_Assigned_Attorney__c}" rendered="{!IF(psa.PSA_Assigned_Attorney__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Assigned_Attorney__c}" rendered="{!IF(psa.PSA_Assigned_Attorney__c = null ,true,false)}" required="true"/>  
+          <apex:outputfield value="{!psa.PSA_Opposing_Counsel__c}" rendered="{!IF(psa.PSA_Opposing_Counsel__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Opposing_Counsel__c}" rendered="{!IF(psa.PSA_Opposing_Counsel__c = null ,true,false)}" required="true"/>  
+          <apex:outputfield value="{!psa.PSA_Assigned_Attorney_Email__c}" rendered="{!IF(psa.PSA_Assigned_Attorney_Email__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Assigned_Attorney_Email__c}" rendered="{!IF(psa.PSA_Assigned_Attorney_Email__c = null ,true,false)}" required="true"/>    
+          <apex:outputfield value="{!psa.PSA_Opposing_Counsel_Firm_Name__c}" rendered="{!IF(psa.PSA_Opposing_Counsel_Firm_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Opposing_Counsel_Firm_Name__c}" rendered="{!IF(psa.PSA_Opposing_Counsel_Firm_Name__c = null ,true,false)}" required="true"/>    
+          <apex:outputfield value="{!psa.PSA_Assigned_Attorney_Cell_Phone__c}" rendered="{!IF(psa.PSA_Assigned_Attorney_Cell_Phone__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Assigned_Attorney_Cell_Phone__c}" rendered="{!IF(psa.PSA_Assigned_Attorney_Cell_Phone__c = null ,true,false)}" required="true"/>       
+          <apex:outputfield value="{!psa.PSA_Opposing_Counsel_Email__c}" rendered="{!IF(psa.PSA_Opposing_Counsel_Email__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Opposing_Counsel_Email__c}" rendered="{!IF(psa.PSA_Opposing_Counsel_Email__c = null ,true,false)}" required="true"/>       
+          <apex:outputfield value="{!psa.PSA_Assigned_Attorney_Direct_Line__c}" rendered="{!IF(psa.PSA_Assigned_Attorney_Direct_Line__c  <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Assigned_Attorney_Direct_Line__c}" rendered="{!IF(psa.PSA_Assigned_Attorney_Direct_Line__c   = null ,true,false)}" required="true"/>     
+          <apex:outputfield value="{!psa.PSA_Opposing_counsel_Phone__c}" rendered="{!IF(psa.PSA_Opposing_counsel_Phone__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Opposing_counsel_Phone__c}" rendered="{!IF(psa.PSA_Opposing_counsel_Phone__c = null ,true,false)}" required="true"/>   
+          <apex:inputHidden value="{!psa.PSA_Opposing_Counsel_Comments__c}"/>                                                                                  
+          <apex:outputfield value="{!psa.PSA_Opposing_Counsel_Comments__c}" rendered="{!IF(psa.PSA_Opposing_Counsel_Comments__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Opposing_Counsel_Comments__c}" rendered="{!IF(psa.PSA_Opposing_Counsel_Comments__c = null ,true,false)}" required="true"/> 
+        </apex:repeat>
+     </apex:pageBlockSection> 
+     <apex:pageBlockSection title="Purchase and Sale Agreement Details"  collapsible="false"> 
+        <apex:repeat value="{!PSAList}" var="psa">  
+          <apex:inputfield value="{!psa.PSA_Why_Is_PSA_Needed__c}" required="true"/>    
+          <apex:inputfield value="{!psa.PSA_Is_There_a_Motion_to_Compel_PSA__c}" required="true"/> 
+          <apex:inputHidden value="{!psa.PSA_Attorney_Approval_Attached__c}"/>          
+          <apex:inputfield value="{!psa.PSA_Has_Court_Issued_Order_On_Motion__c}" required="true"/>    
+          <apex:inputHidden value="{!psa.PSA_Motion_and_Response_Attached__c}"/>    
+          <apex:inputfield value="{!psa.PSA_Motion_and_Response_Attached__c}"/>   
+          <apex:inputHidden value="{!psa.PSA_Motion_and_Response_Attached__c}"/>    
+          <apex:inputfield value="{!psa.PSA_Motion_and_Response_Attached__c}"/>              
+          <apex:inputHidden value="{!psa.PSA_Order_on_Motion_Attached__c}"/>    
+          <apex:inputfield value="{!psa.PSA_Order_on_Motion_Attached__c}"/>      
+          <apex:inputHidden value="{!psa.PSA_Protective_Order_Draft_Attached__c}"/>    
+          <apex:inputfield value="{!psa.PSA_Protective_Order_Draft_Attached__c}"/>                        
+        </apex:repeat>  
+      </apex:pageBlockSection>   
+      <apex:pageBlockSection title="System Information"  collapsible="false"  > 
+        <apex:repeat value="{!PSAList}" var="psa"> 
+          <apex:outputfield value="{!psa.PSA_Consumer_Account_Detail_Name__c}" rendered="{!IF(psa.PSA_Consumer_Account_Detail_Name__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_Consumer_Account_Detail_Name__c}" rendered="{!IF(psa.PSA_Consumer_Account_Detail_Name__c = null ,true,false)}"/>             
+          <apex:outputfield value="{!psa.PSA_PSA_Status__c}" rendered="{!IF(psa.PSA_PSA_Status__c <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.PSA_PSA_Status__c}" rendered="{!IF(psa.PSA_PSA_Status__c = null ,true,false)}"/>  
+          <br/>  
+          <apex:outputfield value="{!psa.OwnerId}" rendered="{!IF(psa.OwnerId <> null ,true,false)}"/>
+          <apex:inputfield value="{!psa.OwnerId}" rendered="{!IF(psa.OwnerId = null ,true,false)}"/>                               
+        </apex:repeat>
+    </apex:pageBlockSection>                                                                                    
+     </apex:pageBlock>
+ </apex:form> 
+</apex:page>

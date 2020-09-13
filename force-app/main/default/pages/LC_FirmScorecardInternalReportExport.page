@@ -1,0 +1,1135 @@
+<apex:page renderAs="pdf" showHeader="false" Controller="LC_FirmScorecardInternalReportController" applyBodyTag="false">
+<head>
+<style>
+    body { font-family: 'calibri'; }
+    @page{size: A4 landscape;}
+</style>
+</head> 
+<body>
+  <table style = "border-collapse: collapse;border: 0.2px solid;page-break-inside:avoid;">
+
+          <tr>
+                 <td colspan ="2" style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;">Firm Scorecard Name:</apex:outputLabel>
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Name}"/></apex:outputLabel> 
+               </td>
+          </tr>
+          <tr>
+                 <td colspan ="2" style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;">Organization Name:</apex:outputLabel>
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Organization_Name__r.Name}"/></apex:outputLabel> 
+               </td> 
+          </tr>
+          <tr>
+                 <td colspan ="2" style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;">Owner:</apex:outputLabel>
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Organization_Name__r.Organization_Owner__c}"/></apex:outputLabel> 
+               </td>  
+          </tr>
+    
+          <tr>
+                 <td colspan ="3" style ="border: 0.2px solid;width:15%;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Name}"/><font style="font-size: 13px;"> Performance Metrics</font> </center></apex:outputLabel>                 
+                </td>
+                
+               <td style ="border: 0.2px solid;width:5%;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Name}"/><font style="font-size: 13px;"> Scores</font></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;width:5%;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Name}"  rendered ="{!IF(fms.size > 1,true,false)}"/><font style="font-size: 13px;"> Scores</font></center></apex:outputLabel> 
+               </td>
+            </tr>
+          
+            <tr>
+               <td  colspan = "5" bgcolor= "#DCDCDC" style ="border: 0.2px solid;">
+                   Performance Management: Metric Weight - 25%
+               </td>
+          </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;">SC: Collections</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Collections__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                      <apex:outputLabel style="font-size: 13px;">Collections Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Collections_Score__c}"/> </center></apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Collections_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+
+            </tr>
+   
+            <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Collections:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Collections_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: CC Budget</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_CC_Budget__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">CC Budget Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].CC_Budget_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].CC_Budget_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">CC Budget:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].CC_Budget_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Liquidation</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Liquidation__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Liquidation Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Liquidation_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Liquidation_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Liquidation:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Liquidation_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td> 
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Performance Metrics</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Performance_Metrics__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Performance Metrics Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Performance_Metrics_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Performance_Metrics_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Performance Metrics:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Performance_Metrics_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.5px">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+               <td  colspan = "5" bgcolor= "#DCDCDC" style ="border: 0.2px solid;">
+                   Operations: Metric Weight - 10%
+               </td>
+           </tr>
+           <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Financial Exceptions</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Financial_Exceptions__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Financial Exceptions Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Financial_Exceptions_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Financial_Exceptions_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Financial Exceptions:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Financial_Exceptions_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Affidavits</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Affidavits__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Affidavits Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Affidavits_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Affidavits_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Affidavits:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Affidavits_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+              <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Media</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Media__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Media Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Media_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Media_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Media:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Media_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Data/Doc Compliance</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Data_Doc_Compliance__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Data/Doc Compliance Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Data_Doc_Compliance_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Data_Doc_Compliance_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Data/Doc Compliance:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Data_Doc_Compliance_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Inventory Recon</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Inventory_Recon__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Inventory Recon Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Inventory_Recon_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Inventory_Recon_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Inventory Recon:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Inventory_Recon_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+               <td  colspan = "5" bgcolor= "#DCDCDC" style ="border: 0.2px solid;">
+                   Partnership &#38; Responsiveness: Metric Weight - SC: 25%, FAE: 38%
+               </td>
+           </tr>
+           <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Response/Performance Engagement</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Response_Performance_Engagement__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Response/Performance Engagement Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Response_Performance_Engagement_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Response_Performance_Engagement_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: Response/Performance Engagement</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].FAE_Response_Performance_Engagement__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Response/Performance Engagement:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Response_Performance_Engagement_Comments__c}"/></apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[1].Response_Performance_Engagement_Comments__c}"  rendered ="{!IF(fms.size > 1,true,false)}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Ops Adherence and Coding</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Ops_Adherence_and_Coding__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Ops Adherence and Coding Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Ops_Adherence_and_Coding_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Ops_Adherence_and_Coding_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: Ops Adherence and Coding</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].FAE_Ops_Adherence_and_Coding__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Ops Adherence and Coding:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Ops_Adherence_and_Coding_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Strategic Opps/Compromise/Comm</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Strategic_Opps_Compromise_Comm__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Strategic Opps/Compromise/Comm Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Strategic_Opps_Compromise_Comm_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Strategic_Opps_Compromise_Comm_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: Strategic Opps/Compromise/Comm</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].FAE_Strategic_Opps_Compromise_Comm__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Strategic Opps/Compromise/Comm:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Strategic_Opps_Compromise_Comm_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: ACD &#38; Regulatory Complaint</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_ACD_Regulatory_Complaints__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">ACD &#38; Regulatory Complaint Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].ACD_Regulatory_Complaints_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].ACD_Regulatory_Complaints_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: ACD &#38; Regulatory Complaint</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].FAE_ACD_Regulatory_Complaints__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">ACD &#38; Regulatory Complaint:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].ACD_Regulatory_Complaints_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+             <tr>
+               <td  colspan = "5" bgcolor= "#DCDCDC" style ="border: 0.2px solid;">
+                   Firm Practices: Metric Weight - SC: 15%, FAE: 31%
+               </td>
+           </tr>
+           <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Inventory Mgmt and Analytics</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Inventory_Mgmt_and_Analytics__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Inventory Mgmt and Analytics Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Inventory_Mgmt_and_Analytics_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Inventory_Mgmt_and_Analytics_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: Inventory Mgmt and Analytics</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].FAE_Inventory_Mgmt_and_Analytics__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Inventory Mgmt and Analytics:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Inventory_Mgmt_Analystics_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Org Structure and Capacity Mgmt</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Org_Structure_and_Capacity_Mgmt__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Org Structure and Capacity Mgmt Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Org_Structure_and_Capacity_Mgmt_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Org_Structure_and_Capacity_Mgmt_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: Org Structure and Capacity Mgmt</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].FAE_Org_Structure_and_Capacity_Mgmt__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Org Structure and Capacity Mgmt:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Org_Structure_and_Capacity_Mgmt_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Consumer Treatment</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Consumer_Treatment__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Consumer Treatment Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Consumer_Treatment_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Consumer_Treatment_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: Consumer Treatment</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].FAE_Consumer_Treatment__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Consumer Treatment:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Consumer_Treatment_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 150px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: POE and Bank Data Utilizations</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_POE_and_Bank_Data_Utilization__c}"/>%</apex:outputLabel> 
+               </td> 
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">POE and Bank Data Utilizations Score</apex:outputLabel>      
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].POE_and_Bank_Data_Utilization_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].POE_and_Bank_Data_Utilization_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: POE and Bank Data Utilizations</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].FAE_POE_and_Bank_Data_Utilization__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">POE and Bank Data Utilizations:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].POE_and_Bank_Data_Utilization_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+               <td  colspan = "5" bgcolor= "#DCDCDC" style ="border: 0.2px solid;">
+                   Compliance &#38; Legal Expertise: Metric Weight - SC: 25%, FAE: 31%
+               </td>
+           </tr>
+           <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Compliance and Vendor Oversight</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Compliance_and_Audit__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Compliance and Vendor Oversight</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Compliance_and_Audit_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Compliance_and_Audit_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+             <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: Compliance and Vendor Oversight</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].FAE_Compliance_and_Audit__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+               <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Compliance and Vendor Oversight:Comments</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Compliance_and_Audit_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Legal Comm &#38; Collaboration</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Legal_Comm_Collaboration__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Legal Comm &#38; Collaboration Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Legal_Comm_Collaboration_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Legal_Comm_Collaboration_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+               <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: Legal Comm &#38; Collaboration</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].FAE_Legal_Comm_Collaboration__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+               <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Legal Comm &#38; Collaboration:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Legal_Comm_Collaboration_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+              <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Application of Law</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Application_of_Law__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Application of Law Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Application_of_Law_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Application_of_Law_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: Application of Law</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].FAE_Application_of_Law__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Application of Law:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Application_of_Law_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+            
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;" >SC: Call Monitoring</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Call_Monitoring__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Call Monitoring Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Call_Monitoring_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Call_Monitoring_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: Call Monitoring</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].FAE_Call_Monitoring__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Call Monitoring: Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Call_Monitoring_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               
+            </tr>
+           
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Industry Involvement</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].SC_Industry_Involvement__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">Industry Involvement Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Industry_Involvement_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Industry_Involvement_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: Industry Involvement</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].FAE_Industry_Involvement__c}"/>%</apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+                 <td style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">Industry Involvement:Comments</apex:outputLabel>
+                </td>
+                <td style ="border: 0.2px solid;width: 150px;">
+                     <apex:outputLabel style="font-size: 13px;"><apex:outputText value="{!fms[0].Industry_Involvement_Comments__c}"/></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+               <td style ="border: 0.2px solid;">
+               </td>
+            </tr>
+            <tr>
+               <td colspan = "3" bgcolor= "#DCDCDC" style ="border: 0.2px solid;">
+                    SC: Overall Scores
+               </td>
+                <td bgcolor= "#DCDCDC" style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Name}"/><font style="font-size: 13px;"> Scores</font></center></apex:outputLabel> 
+               </td>
+                <td bgcolor= "#DCDCDC" style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Name}" rendered ="{!IF(fms.size > 1,true,false)}"/><font style="font-size: 13px;"> Scores</font></center></apex:outputLabel> 
+               </td>
+           </tr>
+            <tr>
+                 <td colspan = "2" style ="border: 0.2px solid;width: 200px;"> 
+                </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">SC: Performance Management Overall Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].SC_Performance_Management_Overall_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].SC_Performance_Management_Overall_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+
+            <tr>
+                 <td colspan = "2" style ="border: 0.2px solid;width: 200px;"> 
+                </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">SC: Operations Overall Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].SC_Operations_Overall_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].SC_Operations_Overall_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td colspan = "2" style ="border: 0.2px solid;width: 200px;"> 
+                </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">SC: P &#38; R Overall Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].SC_P_R_Overall_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].SC_P_R_Overall_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td colspan = "2" style ="border: 0.2px solid;width: 200px;"> 
+                </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">SC: Firm Practices Overall Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].SC_Firm_Practices_Overall_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].SC_Firm_Practices_Overall_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td colspan = "2" style ="border: 0.2px solid;width: 200px;"> 
+                </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">SC:Comp/Legal Expertise Overall Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].SC_Compliance_Legal_Expertise_Overall_S__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].SC_Compliance_Legal_Expertise_Overall_S__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td colspan = "2" style ="border: 0.2px solid;width: 200px;"> 
+                </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">SC: Overall Firm Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].SC_Overall_Firm_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].SC_Overall_Firm_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+            </tr>
+             <tr>
+                 <td  style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Overall Comments</apex:outputLabel>
+                </td>
+               <td colspan = "4" style ="border: 0.2px solid;">
+                    <apex:outputLabel ><apex:outputText style="font-size: 13px;" value="{!fms[0].SC_Overall_Comments__c}"/></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td  style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Focus #1</apex:outputLabel>
+                </td>
+               <td colspan = "4" style ="border: 0.2px solid;">
+                    <apex:outputLabel ><apex:outputText style="font-size: 13px;" value="{!fms[0].SC_Focus_1__c}"/></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td  style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Focus #2</apex:outputLabel>
+                </td>
+               <td colspan = "4" style ="border: 0.2px solid;">
+                    <apex:outputLabel ><apex:outputText style="font-size: 13px;" value="{!fms[0].SC_Focus_2__c}"/></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+                 <td  style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">SC: Focus #3</apex:outputLabel>
+                </td>
+               <td colspan = "4" style ="border: 0.2px solid;">
+                    <apex:outputLabel ><apex:outputText style="font-size: 13px;" value="{!fms[0].SC_Focus_3__c}"/></apex:outputLabel> 
+               </td>
+            </tr>
+            <tr>
+               <td colspan = "3" bgcolor= "#DCDCDC" style ="border: 0.2px solid;">
+                    FAE: Overall Scores
+               </td>
+                <td bgcolor= "#DCDCDC" style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].Name}"/><font style="font-size: 13px;"> Scores</font></center></apex:outputLabel> 
+               </td>
+                <td bgcolor= "#DCDCDC" style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].Name}" rendered ="{!IF(fms.size > 1,true,false)}"/><font style="font-size: 13px;"> Scores</font></center></apex:outputLabel> 
+               </td>
+           </tr>
+           <tr>
+                 <td colspan = "2" style ="border: 0.2px solid;width: 200px;"> 
+                </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">FAE: P &#38; R Overall Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].FAE_P_R_Overall_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].FAE_P_R_Overall_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+             </tr>
+             <tr>
+                 <td colspan = "2" style ="border: 0.2px solid;width: 200px;"> 
+                </td>
+                <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">FAE: Firm Practices Overall Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].FAE_Firm_Practices_Overall_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].FAE_Firm_Practices_Overall_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+             </tr>  
+             <tr>
+                 <td colspan = "2" style ="border: 0.2px solid;width: 200px;"> 
+                </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">FAE: Comp/Legal Expertise Overall Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].FAE_Comp_Legal_Expertise_Overall_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].FAE_Comp_Legal_Expertise_Overall_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+             </tr> 
+              <tr>
+                 <td colspan = "2" style ="border: 0.2px solid;width: 200px;"> 
+                </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel style="font-size: 13px;">FAE:Overall Firm Score</apex:outputLabel>
+               </td>
+               <td style ="border: 0.2px solid;">
+                     <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[0].FAE_Overall_Firm_Score__c}"/></center></apex:outputLabel> 
+               </td>
+               <td style ="border: 0.2px solid;">
+                    <apex:outputLabel ><center><apex:outputText style="font-size: 13px;" value="{!fms[1].FAE_Overall_Firm_Score__c}" rendered ="{!IF(fms.size > 1,true,false)}"/></center></apex:outputLabel> 
+               </td>
+             </tr>  
+             <tr>
+                 <td  style ="border: 0.2px solid;width: 200px;"> 
+                     <apex:outputLabel style="font-size: 13px;">FAE: Overall Comments</apex:outputLabel>
+                </td>
+               <td colspan = "4" style ="border: 0.2px solid;">
+                    <apex:outputLabel ><apex:outputText style="font-size: 13px;" value="{!fms[0].FAE_Overall_Comments__c}"/></apex:outputLabel> 
+               </td>
+            </tr>
+ 
+</table>
+  </body>
+</apex:page>

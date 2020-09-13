@@ -1,0 +1,241 @@
+<!--********************************************** 
+* Page Name  : DataArchiveReport
+* Description : Vf Page to show the number of records needs to be Archive.
+* Created By  : Prabhakar Joshi
+* Created Date: 1-Apr-2020
+* *************************************************-->
+
+<apex:page controller="DataArchiveReportController" showHeader="true" sidebar="false" id="pg" lightningStylesheets="true"
+    applyBodyTag="false">
+    <apex:slds />
+    
+    <style>
+        .tabContent{
+        border:1px solid grey;
+        padding : 20px;
+        
+        }
+        .slds-tabs_default__item{
+        cursor: pointer;
+        }
+       
+        .slds-box{
+        background-color:#FFFFCC;
+        width:60%;
+        
+        }
+        
+        .slds-scope .slds-select[size]{
+        width:10%;
+        }
+       
+    </style>
+    <apex:form id="frm">
+        <!--@ Action Function to get the chart data according to selected Tab and calling from JS. @-->
+        <apex:actionFunction name="getData" action="{!init}" rerender="tabContentPNL" status="sts">
+            <!--@ To hold the salected Tab name and passing to controller as a parameter. @-->
+            <apex:param assignTo="{!tabName}" name="tabName" value="" />
+        </apex:actionFunction>
+        
+        <!--@ Action Function to get the selected Limit value from Case Tab @-->
+        <apex:actionFunction name="selectLimit" action="{!init}" rerender="tabContentPNL" status="sts">
+            <!--@ To hold the salected limit value and passing to controller as a parameter. @-->
+            <apex:param assignTo="{!selectedLimit}" name="selectedLimit" value="" />
+        </apex:actionFunction>
+        
+        <!--@ Action status to show the spinner @-->
+        <apex:actionstatus id="sts">
+            <div class="demo-only" style="height:6rem">
+                <apex:facet name="start">
+                    <div class="slds-spinner_container">
+                        <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </apex:facet>
+            </div>
+        </apex:actionstatus>
+        <!--@ End @-->
+        
+        
+        <apex:outputPanel style="text-align:center;padding: 10px;" id="pnl">
+            <!--@ Tab Group @-->
+            <div class="slds-tabs_default">
+                <ul class="slds-tabs_default__nav" role="tablist">
+                    <li id="LRMM_Tab" class="slds-tabs_default__item slds-is-active" title="LRMM Tab" role="presentation">
+                        <a class="slds-tabs_default__link" href="javascript:ActiveTab('LRMM_Tab');" role="tab">LRMM</a>
+                    </li>
+                    <li id="CM_Tab" class="slds-tabs_default__item" title="CM Tab" role="presentation">
+                        <a class="slds-tabs_default__link" href="javascript:ActiveTab('CM_Tab');" role="tab" >Call Monitoring</a>
+                    </li>
+                    <li id="PAM_Tab" class="slds-tabs_default__item" title="PAM Tab" role="presentation">
+                        <a class="slds-tabs_default__link" href="javascript:ActiveTab('PAM_Tab');" role="tab">PAM</a>
+                    </li>
+                    <li id="Case_Tab" class="slds-tabs_default__item" title="Case Tab" role="presentation">
+                        <a class="slds-tabs_default__link" href="javascript:ActiveTab('Case_Tab');" role="tab" >Case</a>
+                    </li>
+                </ul>
+                
+                
+                <div class="tabContent">
+                    <!--@ Tab content Panel @-->
+                    <apex:outputPanel id="tabContentPNL"  >
+                        <apex:outputPanel rendered="{!tabName == 'Case_Tab'}" id="limit_PNL">
+                            <label><b>Select the number of Case records that you want to process :</b> </label>
+                            <apex:selectList onchange="selectLimit(this.value)"  multiselect="false" size="1" value="{!selectedLimit}" styleClass="slds-select" >
+                                <apex:selectOptions value="{!items}"/>
+                                
+                            </apex:selectList>
+                        </apex:outputPanel>
+                        <apex:chart colorSet="#BCD96E,#F7DC6F,#D2B4DE,#A3E4D7,#E6B0AA ,#85C1E9,#A4F0A6,#AEB6BF" id="LRMM_chart" animate="true" data="{!chartData}"
+                                    height="350" width="700"  >
+                            
+                            <apex:legend position="left" spacing="20" padding="10"  />
+                            
+                            <apex:pieSeries dataField="data" tips="false">
+                                <apex:chartLabel display="rotate" />
+                            </apex:pieSeries>
+                            
+                        </apex:chart>
+                        <div style="font-weight:bold;padding:10px;">
+                            <span>Total {!dataType} Archive Attachments : {!totalArchiveData}
+                                <br/>
+                                <br/> Total Attachments : {!totalAttachmentData}
+                            </span>
+                            
+                        </div>
+                        <div class="slds-text-align_center slds-m-around_small">
+                            <apex:commandButton id="archiveBtn" value="Archive Data" disabled="{!if(or(AttachmentTriggerActive == true,totalArchiveData == 0),true,false)}" onclick="archiveDataJS('{!tabName}','{!selectedLimit}');return false;" styleClass="slds-button slds-button_destructive" />
+                        </div>
+                    </apex:outputPanel>
+                    <!--@ End @-->
+                    
+                    
+                    <!--@ Progress Bar Section @-->
+                    <div id="progressBarDiv" style="width:60%;margin:auto;" class="slds-progress-bar slds-hide slds-progress-bar_circular" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5" role="progressbar">
+                        <span id="progressBarValue" style="width:0%;" class="slds-progress-bar__value">
+                            
+                        </span>
+                    </div>
+                    
+                    <div id="processingDiv" class="slds-hide">
+                        
+                    </div>
+                    <div id="progressRing" class="slds-progress-ring slds-progress-ring_complete slds-m-around_small slds-hide">
+                        <div class="slds-progress-ring__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                            <svg viewBox="-1 -1 2 2">
+                                <circle class="slds-progress-ring__path" id="slds-progress-ring-path-39" cx="0" cy="0" r="1"></circle>
+                            </svg>
+                        </div>
+                        <div class="slds-progress-ring__content">
+                            <span class="slds-icon_container slds-icon-utility-check" title="Complete">
+                                <svg class="slds-icon" aria-hidden="true">
+                                    
+                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#check')}" />
+                                </svg>
+                                <span class="slds-assistive-text">Complete</span>
+                            </span>
+                        </div>
+                    </div>
+                    <!--@ End @-->
+                    
+                    
+                        <!--@ Instruction Section @-->
+                    <div class="slds-m-around_medium">
+                        <apex:outputPanel rendered="{!AttachmentTriggerActive}" >
+                            <div class = " slds-m-around_small slds-box slds-box_xx-small slds-text-align_center " style="margin:auto;">
+                                First, Need to Inactive 'AttachmentTrigger' from custom setting to enable the Archive button. 
+                                <a href="javascript:showInstruction();" >See Instructions...</a>
+                            </div>
+                            
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!!AttachmentTriggerActive}" >
+                            <div class = " slds-m-around_small slds-box slds-box_xx-small slds-text-align_center " style="margin:auto;">
+                                Active the 'AttachmentTrigger' from custom setting after completing Data Archive process.
+                                <a href="javascript:showInstruction();" >See Instructions...</a>
+                            </div>
+                            
+                        </apex:outputPanel>
+                        <div class = " slds-m-around_small slds-box slds-box_xx-small slds-text-align_center slds-hide" id="instruction" style="margin:auto;">
+                            <a href="/setup/ui/listCustomSettings.apexp" target="_blank" class="slds-m-around_x-small"> Go to custom settings</a><B> > Find 'Trigger Setting' and click on Manage > Edit the 'AttachmentTrigger'
+                            <br/> > &nbsp;<apex:outputText value="{!if(AttachmentTriggerActive == false,'Check','Uncheck')}"/> 
+                                the Active checkbox</B>
+                        </div>
+                    </div>
+                        <!--@ End @-->
+                        
+                </div>
+            </div>
+        </apex:outputPanel>
+    </apex:form>
+    
+    
+    
+    <script>
+    
+    /* Function the Active the tab for switch between tabs. */
+    function ActiveTab(tabId){
+        
+        document.getElementById(tabId).classList.add("slds-is-active");
+        var allTabs = document.getElementsByClassName('slds-tabs_default__item');
+        for (let i = 0; i < allTabs.length; i++) {
+            if(allTabs[i].id != tabId){
+                allTabs[i].classList.remove("slds-is-active");
+            }
+        }
+        getData(tabId);
+    }
+    
+    /* Function to start the process of Data Archive. */
+    function archiveDataJS(activeTab,limitVal){
+        
+        if(confirm('Are you sure to want to archive data.')){
+            document.getElementById('pg:frm:archiveBtn').disabled = true;
+            document.getElementById('progressBarDiv').classList.toggle('slds-hide');
+            document.getElementById('processingDiv').classList.toggle('slds-hide');
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.DataArchiveReportController.archiveData}',
+                activeTab,limitVal,
+                function(result, event){
+                    if(event.status && result){
+                        var jobId = result;
+                        
+                        getBatchProgress(jobId);
+                    }
+                }
+            );
+        }
+    }
+    
+    /* Function to get the status of the process of Data Archive. */
+    function getBatchProgress(jobId){
+        
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.DataArchiveReportController.updateProgress}',
+            jobId,
+            function(result, event){
+                document.getElementById('progressBarValue').style.width = result.percent+'%';
+                if(result.status != 'Completed'){
+                    document.getElementById('processingDiv').innerHTML = result.status+'...';
+                    
+                    setTimeout(function(){
+                        getBatchProgress(jobId);
+                    }, 100);
+                }else{
+                    document.getElementById('progressBarValue').classList.add('slds-progress-bar__value_success');
+                    document.getElementById('processingDiv').classList.toggle('slds-hide');
+                    document.getElementById('progressRing').classList.toggle('slds-hide');
+                }
+            }
+        );
+    }
+    
+    /* Function to render the instruction panel. */
+    function showInstruction(){
+        document.getElementById('instruction').classList.toggle('slds-hide');
+    }
+    
+    </script>
+</apex:page>

@@ -1,0 +1,38 @@
+<apex:page standardController="Call_Monitoring__c" standardStylesheets="true" applyHtmlTag="false" showHeader="false">
+    
+    
+        <style>
+            body,td {
+            background-color: #ffff;
+           }
+            .bPageBlock .detailList .labelCol{
+            text-align: right;
+            width: 40%;
+            }
+        </style>    
+  
+    
+    <apex:form >
+        <apex:pageBlock mode="maindetail"  >
+            <apex:pageBlockSection columns="2">
+                
+                <apex:pageBlockSection columns="1" >
+                    <apex:repeat value="{!$ObjectType.Call_Monitoring__c.FieldSets.Error_CheckBox_CM_Material}" var="cm" >
+                        <apex:inputCheckbox label="{!cm.Label}" value="{!Call_Monitoring__c[cm]}"
+                                            rendered="{!If(Call_Monitoring__c[cm] == true,true,false)}" disabled="true" />
+                    </apex:repeat>
+                </apex:pageBlockSection>
+                
+                <apex:pageBlockSection columns="1"  >
+                    <apex:repeat value="{!$ObjectType.Call_Monitoring__c.FieldSets.Error_CheckBox_Others}" var="cme" >
+                        <apex:inputCheckbox label="{!cme.Label}" value="{!Call_Monitoring__c[cme]}"
+                                            rendered="{!If(Call_Monitoring__c[cme] == true,true,false)}" disabled="true" />
+                        <apex:outputText label="{!cme.Label}" value="{!Call_Monitoring__c[cme]}"
+                                         rendered="{!If(AND(Call_Monitoring__c.Other__c  == true,cme.label == 'Error Details - Other'),true,false)}"/>
+                    </apex:repeat>
+                </apex:pageBlockSection>
+                
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

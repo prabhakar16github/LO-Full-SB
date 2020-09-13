@@ -1,0 +1,129 @@
+<apex:page controller="CustomReportPageCtrl" lightningStylesheets="true" sidebar="false">
+<apex:slds />
+  <script>
+      var asc = true;
+      function exportSheetFun(){
+      var tempIdStr = '' ;
+      var checkboxArr = document.getElementsByClassName('checkboxes');
+       for(var i = 0 ; i < checkboxArr.length; i++){
+         if(checkboxArr[i].checked == true){
+            tempIdStr += checkboxArr[i].parentElement.id+ '-';
+         }
+       }
+      var url = '{!$Page.ExportSCMAccountNumber}'+'?id='+tempIdStr;
+        window.open(url, '_blank');
+      }
+      
+      function openRecord(othis){
+         var ids = othis.parentElement.id;
+         var url = '/'+ids;
+         window.open(url, '_blank');
+      }
+      
+      function searchRecords() {
+          let value = document.getElementById("{!$Component.theForm.pb.searchId}").value;
+          var keyCode = event.keyCode;
+          search(value);
+      }
+      
+      function clearValue(){
+      document.getElementById("{!$Component.theForm.pb.searchId}").value = '';
+      }
+      
+      function selectAllCheckboxes(obj,receivedInputID){
+            var inputCheckBox = document.getElementsByTagName("input");                  
+            for(var i=0; i<inputCheckBox.length; i++){          
+                if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1){                                     
+                    inputCheckBox[i].checked = obj.checked;
+                }
+            }
+        }
+      
+  </script>
+ <apex:form id="theForm" >
+    <apex:actionstatus id="statusProcessing">
+        <apex:facet name="start">
+            <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height:100%;opacity:0.65;width:100%;">
+                <div class="waitingHolder" style="top: 100px; width: 91px;">
+                    <img class="waitingImage" src="{!$Resource.Processing}" title="Please Wait..." />
+                    <span class="waitingDescription">
+                          Please Wait....
+                    </span>
+                </div>
+            </div>
+        </apex:facet>
+      </apex:actionstatus>
+   <apex:actionFunction action="{!getRecords}" name="RecordsFun" reRender="opt"/>
+   
+     <apex:pageBlock id="pb" tabStyle="Account" title="Export Account Number" >
+        <!--
+        <apex:outputLabel styleClass="slds-output"> Account Type </apex:outputLabel>
+            <apex:selectList onchange="RecordsFun()" size="1" value="{!pamSelected}" 
+                styleClass="slds-select" style="width: 15%;margin-left: 15px;">
+              <apex:selectOptions value="{!PamAccountTypeList}" />
+            </apex:selectList> -->&nbsp; &nbsp;
+             <apex:outputLabel styleClass="slds-output"> Search Organization </apex:outputLabel>
+            <apex:actionFunction name="search" action="{!getRecords}" reRender="pb" >
+                <apex:param name="searchStr" assignTo="{!searchString}" value=""  />
+            </apex:actionFunction>
+            <apex:inputText value="{!searchString}" 
+                style="width: 15%;margin-left: 15px;" 
+                styleClass="slds-input" id="searchId" 
+                
+                label="Search Organization"
+             />
+             &nbsp; &nbsp;
+             <apex:commandButton value="Search" style="width: 5%;margin-left: 15px;" 
+                 styleClass="slds-button slds-button_brand" action="{!getRecords}"
+                 reRender="pb" status="statusProcessing" />
+                 
+             <apex:commandButton value="Clear" style="width: 5%;margin-left: 35px;" 
+                 styleClass="slds-button slds-button_destructive" onclick="clearValue();return false;"
+                  />
+            <br/><br/>
+            <apex:outputPanel id="opt">
+            
+                  <table id="myTable" class="slds-table slds-table_cell-buffer slds-table_bordered">
+                  <thead>
+                     <tr class="slds-line-height_reset">
+                         <th class="" scope="col">
+                            <apex:inputCheckbox onclick="selectAllCheckboxes(this,'inputId')"/>
+                         </th> 
+                         <th class="" scope="col">Organization Name</th>
+                         <th class="" scope="col">Process Adherence Monitoring Id</th>
+                         <th class="" scope="col">Reporting Period</th>
+                         <!--Developer: Sanjana Das-->
+                         <th class="" scope="col"><apex:image value="{!IF(sortDir = 'desc','/img/arrowDown.gif','/img/arrowUp.gif')}"/><apex:commandLink value="Total PCodes Sent" action="{!toggleSort}" rerender="opt" /></th>
+                     </tr>    
+                   </thead>      
+                       <apex:repeat value="{!wrapperClassList}" var="wc">
+                             <tr>
+                                <td id="{!wc.PamRecords.Id}">
+                                <apex:inputCheckbox value="{!wc.isSelected}" 
+                                    id="inputId" styleClass="checkboxes"
+                                     />
+                                </td>
+                                <td><apex:outputField value="{!wc.PamRecords.Organization_Name__r.name}"></apex:outputField></td>
+                                <td id="{!wc.PamRecords.Id}"><apex:outputLink onclick="openRecord(this);return false;">{!wc.PamRecords.Name}</apex:outputLink></td>
+                                <td><apex:outputField value="{!wc.PamRecords.SCMD_Reporting_Period__c}"></apex:outputField></td>
+                                <td><apex:outputField value="{!wc.PamRecords.Total_PCodes_Sent__c}"></apex:outputField></td>
+                             </tr>
+                       </apex:repeat>
+                       
+                  </table>
+            
+            
+            </apex:outputPanel>
+            
+        <apex:pageBlockButtons >
+           <apex:commandButton value="Export Detail" styleClass="slds-button slds-button_brand" 
+               onclick="exportSheetFun();return false;" />
+           <apex:commandButton value="Update Status" styleClass="slds-button slds-button_brand" 
+               action="{!updateStatus}"
+               reRender="theForm" status="statusProcessing"  />
+        
+        </apex:pageBlockButtons>     
+     </apex:pageBlock>
+ 
+ </apex:form>
+</apex:page>

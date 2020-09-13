@@ -1,0 +1,224 @@
+<apex:page controller="CT_SendEmail_Controller" tabStyle="Task">
+    <apex:sectionHeader title="Task" subtitle="Send An Email" />
+    <apex:pageMessages id="Msgs"/>
+	<apex:form enctype="multipart/form-data" >
+	<apex:pageBlock >
+		<apex:pageBlockButtons >
+            <apex:commandButton value="Send" action="{!ButtonClickEventSendEmail}" rerender="MainPanel, Msgs" />
+            <apex:commandButton value="Cancel" action="{!ButtonClickEventCancel}" immediate="true" />
+		</apex:pageBlockButtons>
+		<apex:outputPanel id="MainPanel">
+		<apex:pageBlockSection columns="2" title="Edit Email" collapsible="false" >
+
+		<apex:pageBlockSectionItem >
+			<apex:outputLabel value="From " for="EmailFrom"/>
+			<apex:outputText id="EmailFrom" value="{!model.EmailFrom}" label="From: " style="width:400px" />
+		</apex:pageBlockSectionItem>
+		<apex:pageBlockSectionItem >
+		</apex:pageBlockSectionItem>
+
+		<apex:pageBlockSectionItem >
+			<apex:outputLabel value="To" for="EmailTo" />
+			<apex:inputTextArea id="EmailTo" value="{!model.EmailTo}" style="width:400px" />
+		</apex:pageBlockSectionItem>
+		<apex:pageBlockSectionItem >
+			<apex:outputLabel value="" for="To"/>
+			<apex:inputField id="To" value="{!model.DraftEmailMessage.ToAddress__c}" >
+				<apex:actionSupport event="onchange" action="{!EventEmailToChanged}" rerender="Msgs, MainPanel" status="" />
+			</apex:inputField>
+		</apex:pageBlockSectionItem>
+		
+		<apex:pageBlockSectionItem >
+			<apex:outputLabel value="Related To " for="EmailRelatedTo"/>
+			<apex:outputText id="EmailRelatedTo" value="{!model.RelatedTo}" label="From: " style="width:400px" />
+		</apex:pageBlockSectionItem>
+		<apex:pageBlockSectionItem >
+		</apex:pageBlockSectionItem>
+		
+		<apex:pageBlockSectionItem >
+			<apex:outputLabel value="Additional To" for="EmailAdditionalTo" />
+			<apex:inputTextArea id="EmailAdditionalTo" value="{!model.EmailAdditionalTo}" style="width:400px; height:30px" />
+		</apex:pageBlockSectionItem>
+		<apex:pageBlockSectionItem >
+			<apex:outputLabel value="" for="AddlTo"/>
+			<apex:inputField id="AddlTo" value="{!model.DraftEmailMessage.AdditionalTo__c}" >
+				<apex:actionSupport event="onchange" action="{!EventEmailAdditionalToChanged}" rerender="Msgs, MainPanel" status="" />
+			</apex:inputField>
+		</apex:pageBlockSectionItem>
+
+		<apex:pageBlockSectionItem >
+			<apex:outputLabel value="CC" for="EmailCC"/>
+			<apex:inputTextArea id="EmailCC" value="{!model.EmailCC}" style="width:400px; height:30px" />
+		</apex:pageBlockSectionItem>
+		<apex:pageBlockSectionItem >
+			<apex:outputLabel value="" for="CC"/>
+			<apex:inputField id="CC" value="{!model.DraftEmailMessage.CcAddress__c}" >
+				<apex:actionSupport event="onchange" action="{!EventEmailCcChanged}" rerender="Msgs, MainPanel" status="" />
+				<!-- <apex:actionSupport event="onchange" action="{!EventEmailCcChanged}" immediate="true" rerender="Msgs, MainPanel" status="" /> -->
+			</apex:inputField>
+		</apex:pageBlockSectionItem>
+
+		
+		<apex:pageBlockSectionItem >
+			<apex:outputLabel value="BCC" for="EmailBCC"/>
+			<apex:inputTextArea id="EmailBCC" value="{!model.EmailBCC}" style="width:400px; " rows="2" />
+		</apex:pageBlockSectionItem>
+		<apex:pageBlockSectionItem >
+			<apex:outputLabel value="" for="BCC"/>
+			<apex:inputField id="BCC" value="{!model.DraftEmailMessage.BccAddress__c}" >
+				<apex:actionSupport event="onchange" action="{!EventEmailBccChanged}" rerender="Msgs, MainPanel" status="" />
+			</apex:inputField>
+		</apex:pageBlockSectionItem>
+
+		<apex:pageBlockSectionItem >
+			<apex:outputLabel value="Subject" for="EmailSubj"/>
+			<apex:inputField id="EmailSubj" value="{!model.DraftEmailMessage.Subject__c}" style="width:400px" />
+		</apex:pageBlockSectionItem>
+		<apex:pageBlockSectionItem >
+		</apex:pageBlockSectionItem>
+		
+		<apex:pageBlockSectionItem >
+			<apex:outputLabel value="Body" for="EmailBody"/>
+			<apex:inputField id="EmailBody" value="{!model.DraftEmailMessage.TextBody__c}" style="width:400px; height:250px" />
+		</apex:pageBlockSectionItem>
+		<apex:pageBlockSectionItem >
+		</apex:pageBlockSectionItem>
+		
+		</apex:pageBlockSection>
+
+		<apex:pageBlockSection columns="1" title="Add An Attachment" collapsible="false" >
+			<apex:outputPanel id="AttachmentPanels">
+			<!-- <apex:actionregion >-->
+			
+			<apex:outputLabel value="File Location: " for="EmailAttachmentSource"/>
+			<apex:selectList id="EmailAttachmentSource" value="{!model.EmailAttachmentSource}" size="1" >
+				<apex:selectOptions value="{!EmailAttachmentSources}"/>
+				<apex:actionSupport event="onchange" action="{!EventSelectedAttachmentSourceChanged}" rerender="Msgs, AttachmentPanels" status="AttachmentSourceStatus" />
+			</apex:selectList><br /><br />
+	
+			<apex:outputPanel id="LocalSourcePanel" rendered="{!IF(model.EmailAttachmentSource == 'local', true, false)}" >
+				<!-- <apex:actionregion >-->
+				<table border="0" cellspacing="2" cellpadding="0">
+				<tbody>
+				<tr>
+				  <td><strong>1.</strong></td>
+				  <td><strong>Select the File</strong></td>
+				</tr>
+				<tr>
+				  <td></td>
+				  <td>NOTE: You can attach multiple files to the Email as long as the total size of all attachments does not exceed 10 MB.</td>
+				</tr>
+				<tr>
+				  <td></td>
+				  <td>
+					<!--<apex:inputFile id="ipf" value="{!fileAttachmentBody}" filename="{!fileAttachmentName}" ContentType="{!fileAttachmentContentType}" />-->
+					<apex:inputFile value="{!model.NewAttachment.body}" filename="{!model.NewAttachment.name}" id="file" />
+				  </td>
+				</tr>
+				<tr>
+				  <td colspan="2">&nbsp;</td>
+				</tr>
+				<tr>
+				  <td><strong>2.</strong></td>
+				  <td><strong>Click the Attach button.</strong></td>
+				</tr>
+				<tr>
+				  <td></td>
+				  <td>Repeat steps 1 and 2 to attach multiple files.</td>
+				</tr>
+				<tr>
+				  <td></td>
+				  <td>( When the upload is complete the file will appear in the attachment list below. )</td>
+				</tr>
+				<tr>
+				  <td></td>
+				  <td>
+					<apex:actionStatus id="AttachingNewStatus">
+						<apex:facet name="stop">
+							<apex:commandButton value="Attach To Email" action="{!ButtonClickEventAttachNewFile}" status="AttachingNewStatus" /><!--  rerender="EmailAttachmentsPanel" -->
+						</apex:facet>
+						<apex:facet name="start">
+							<apex:commandButton value="Attaching..." disabled="true" />
+						</apex:facet>
+					</apex:actionStatus>
+				  </td>
+				</tr>
+				</tbody>
+				</table>
+				<!-- </apex:actionregion>-->
+			</apex:outputPanel>
+		
+			<apex:outputPanel id="ExistingAttachmentPanel" rendered="{!IF(model.EmailAttachmentSource == 'existing', true, false)}" >
+			
+				<apex:outputPanel id="NoExistingAttachmentsPanel" rendered="{!model.ExistingAttachments.size<1}" >
+					<p><apex:outputText value="There are no existing Attachments." style="font-weight:bold; color:rgb(0, 0, 255);" /></p>
+				</apex:outputpanel>
+				
+				<apex:outputPanel id="SomeExistingAttachmentsPanel" rendered="{!model.ExistingAttachments.size>0}" >
+
+					<apex:actionStatus id="AttachingExistingStatus">
+						<apex:facet name="stop">
+							<apex:commandButton value="Attach Selected to Email" action="{!ButtonClickEventAttachSelectedExistingAttachments}" rerender="" status="AttachingExistingStatus" />
+						</apex:facet>
+						<apex:facet name="start">
+							<apex:commandButton value="Attaching..." disabled="true" />
+						</apex:facet>
+					</apex:actionStatus>
+				
+					<apex:dataTable value="{!model.ExistingAttachments}" var="objWrapper" id="ExistingAttachmentsTable" rules="rows" columnsWidth="50px, 200px">
+	
+						<apex:column >
+							<apex:facet name="header">Sel</apex:facet>
+							<apex:inputCheckbox value="{!objWrapper.selected}"/>
+						</apex:column>
+	
+						<apex:column >
+						    <apex:facet name="header">Name</apex:facet>
+							<apex:outputLink value="/{!objWrapper.attach.Id}" id="ExistingAttachmentLink">{!objWrapper.attach.Name}</apex:outputLink>
+						</apex:column>
+				
+					</apex:dataTable>
+	
+				</apex:outputPanel>
+				
+			</apex:outputPanel>
+
+		<!--</apex:actionregion> -->
+		</apex:outputPanel>
+		</apex:pageBlockSection>
+		</apex:outputPanel>
+
+	</apex:pageBlock>
+	
+	<apex:pageBlock title="Email Attachments" >
+		<apex:outputPanel id="EmailAttachmentsPanel">
+			<apex:outputPanel rendered="{!model.EmailAttachments.size<1}" >
+				<p>
+				<apex:outputText value="There are no Attachments on the Email." style="font-weight:bold; color:rgb(0, 0, 255);" />
+				</p>
+			</apex:outputpanel>
+
+			<apex:outputPanel rendered="{!model.EmailAttachments.size>0}" >
+
+				<apex:dataTable value="{!model.EmailAttachments}" var="objWrapper" id="EmailAttachmentsTable" rules="rows" columnsWidth="500px">
+<!--
+					<apex:column >
+						<apex:facet name="header">Sel</apex:facet>
+						<apex:inputCheckbox value="{!objWrapper.selected}"/>
+					</apex:column>
+-->
+					<apex:column >
+					    <apex:facet name="header">Name</apex:facet>
+						<apex:outputText value="{!objWrapper.attach.Name}" />
+					</apex:column>
+			
+				</apex:dataTable>
+
+			</apex:outputPanel>
+
+		</apex:outputPanel>
+
+	</apex:pageBlock>
+	</apex:form>
+
+</apex:page>

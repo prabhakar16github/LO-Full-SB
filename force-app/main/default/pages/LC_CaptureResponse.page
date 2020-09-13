@@ -1,0 +1,3 @@
+<apex:page sidebar="false" showHeader="false" controller="LC_CaptureResponse" action="{!getAccessToken}">
+
+</apex:page>

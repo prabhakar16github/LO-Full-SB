@@ -1,0 +1,60 @@
+<!-- 
+##########################################################################################################################################
+# Project Name..........: LO - Customer Community Consumer Inquiries Automate follow up 
+# File..................: Page : "LC_DisplayFolderElements.page"
+# Version...............: 1.0
+# Created by............: Sunny Kumar
+# Created Date..........: 29-Sep-2014
+# Last Modified by......: Sunny Kumar 
+# Last Modified Date....: 12-Dev-2014
+# Description...........: This Page is used to display consolidated list of files from box and existing Attachments from Salesforce 
+#						  in a CI Detail Page 
+# BOX Sequence..........: 01 Portal Page 
+###############################################################################################################################################
+-->
+<apex:page standardController="Consumer_Inquiries__c" extensions="LC_DisplayFolderElementsController">
+	
+	<style>
+		.bPageBlock {
+			height: 577px;
+			margin-top: 11px;
+		}
+	</style>
+
+    <apex:form >
+    	<apex:Messages /> 
+	    <apex:pageBlock rendered="{!displayIFrame}">
+	    	<table cellspacing="0" border="1" width="100%" bordercolor="#8A9EBE">
+				<tr>
+                    <tr>
+                    	<td>
+                    		<table class="list" cellspacing="0">
+                    			<tr>
+                       				<td>
+                       					<table width="100%">
+                       						<tr class="headerRow">
+                       							<td align="center" width="25%" style="color:#FFFFFF;font-size: inherit;background-color: #4690d1;"><strong>Name</strong></td>
+			                                    <td align="center" width="25%" style="color:#FFFFFF;font-size: inherit;background-color: #4690d1;"><strong>File ID</strong></td>
+			                                    <td align="center" width="25%" style="color:#FFFFFF;font-size: inherit;background-color: #4690d1;"><strong>Type</strong></td>
+			                                    <td align="center" width="25%" style="color:#FFFFFF;font-size: inherit;background-color: #4690d1;"><strong>Location</strong></td>
+			                                </tr>
+											<apex:repeat value="{!Box_Attachments}" var="Att">
+	                       						<tr>
+				                                    <td align="center" width="25%">{!Att.Attachment_Name}</td>
+				                                    <td align="center" width="25%">{!Att.FileID}</td>
+				                                    <td align="center" width="25%">{!Att.Type}</td>
+				                                    <td align="center" width="25%">{!Att.Location}</td>
+				                                </tr>
+											</apex:repeat>
+                       					</table>
+                       				</td>
+                       			</tr>
+                       		</table>
+                       	</td>
+					</tr>
+				</tr>    
+			</table>
+			<br/>
+	    </apex:pageBlock>
+	</apex:form>
+</apex:page>

@@ -1,0 +1,37 @@
+<apex:page standardController="Trial_Witness_Request__c" extensions="LRMM_PopulateResolutionController">
+    <apex:form >
+        <apex:pageMessages id="errorSec"></apex:pageMessages>
+        
+        <apex:pageBlock id="pb">
+            
+            <apex:actionstatus id="sts">
+                <apex:facet name="start">
+                    <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height: 100%; opacity: 0.65; width: 100%;">
+                        <div class="waitingHolder" style="margin-left: 25%; position: fixed;">
+                            <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." /> 
+                            <span class="waitingDescription">Saving...</span>
+                        </div>
+                    </div>
+                </apex:facet>
+            </apex:actionstatus>
+            
+            
+            <apex:pageBlockSection columns="2">
+                <apex:repeat value="{!objFieldsMap[sobjectName]}" var="field"> 
+                    <apex:inputField value="{!currentObj[field]}"   /> 
+                </apex:repeat>
+                
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Save" action="{!doSave}" disabled="{!disableSave}"
+                                    status="sts" reRender="pb,errorSec" />
+                <apex:commandButton value="Cancel" action="/{!Trial_Witness_Request__c.Id}" immediate="true" />
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+    <!--
+    <c:LRMM_PopulateResolutionComponent currentRecordId="{!Trial_Witness_Request__c.Id}" 
+                                        sobjectType="Trial_Witness_Request__c" 
+                                        parentId="{!Trial_Witness_Request__c.TW_Consumer_Account_Records__c}"/>
+-->
+</apex:page>

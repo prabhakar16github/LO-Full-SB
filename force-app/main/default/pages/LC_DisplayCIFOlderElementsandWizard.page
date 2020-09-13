@@ -1,0 +1,21 @@
+<!-- /*
+##########################################################################################################################################
+# Project Name..........: LO - Customer Community Consumer Inquiries Automate follow up 
+# File..................: Page : "LC_DisplayCIFolderElementsandWizard"
+# Version...............: 1.0
+# Created by............: Sunny Kumar
+# Created Date..........: 29-Sep-2014
+# Last Modified by......: Sunny Kumar 
+# Last Modified Date....: 12-Dev-2014
+# Description...........: This Page is created to display either Box wizard for System Administrator or to display files for Portal User.
+# BOX Sequence..........: 01 Wizard/Display File Elements for CI
+###############################################################################################################################################
+*/ -->
+<apex:page standardController="Consumer_Inquiries__c" sidebar="False" extensions="LC_DisplayFOlderElementsandWizardCntrl">
+	<apex:include pageName="LC_DisplayFolderElements" rendered="{!displayPortal}"/>
+	
+	<apex:outputPanel rendered="{!NOT(displayPortal)}">
+		<apex:include pageName="CIBoxSectionCustom" rendered="{!displayIFrame}"/>
+	</apex:outputPanel>
+	
+</apex:page>

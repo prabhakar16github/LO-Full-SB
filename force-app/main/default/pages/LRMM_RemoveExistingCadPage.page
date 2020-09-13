@@ -1,0 +1,345 @@
+<apex:page controller="LRMM_RemoveExistingCadController" action="{!init}">
+	<html>
+		<head>
+			<!--  include scripts -->
+			<apex:includeScript value="{!URLFOR($Resource.ExternalJavaScriptlibrary, '/jquery-3.3.1.min.js')}"/>
+			<apex:includeScript value="{!URLFOR($Resource.ExternalJavaScriptlibrary, '/handlebars-v4.0.11.js')}"/>
+			<apex:includeScript value="{!URLFOR($Resource.ExternalJavaScriptlibrary, '/notify.js')}"/>
+			<apex:slds />
+			
+			<style>
+				.f-w_Bold_f-s_small{
+					font-weight: bold; 
+					font-size: small;
+				}
+			</style>
+			<script>
+			
+				// remote actions
+				 
+				var removeCadFromMasterCad = '{!$RemoteAction.LRMM_RemoveExistingCadController.removeCadFromMasterCad}';
+				var initRemote = '{!$RemoteAction.LRMM_RemoveExistingCadController.initRemote}';
+			</script>
+			<script>
+			
+				var profileName = '{!$Profile.Name}';
+				var baseUrl = '{!baseUrl}';
+				
+				function showLoader(){
+					$("#spinner").show();
+				}
+				function hideLoader(){
+					$("#spinner").hide();
+				}
+				
+				function backButtonJS(cadId){
+                	
+                	var url = '';
+                	
+                	if(profileName == 'CC - User Access'){
+                		url = '/LCPartnerAccess/'+cadId;
+                	}else{
+                		url = '/'+cadId;
+                	}
+                	
+                	window.open(url, '_self');
+                }
+                
+                Handlebars.registerHelper('createRecordOpenUrl', function(id) {
+                  
+                  var url = '';
+                  
+                  if(profileName == 'CC - User Access'){
+                      url = '/LCPartnerAccess/'+id;
+                  }else{
+                      url = '/'+id;
+                  }
+                    
+                  return url;
+                });
+                
+			</script>
+		</head>
+		
+		<body>
+			<div class="slds-scope">
+			
+				<div id="spinner" style="display: none">
+					<div class="demo-only demo--inverse">
+					  <div class="slds-spinner_container">
+					    <div role="status" class="slds-spinner slds-spinner_small">
+					      <span class="slds-assistive-text">Loading</span>
+					      <div class="slds-spinner__dot-a"></div>
+					      <div class="slds-spinner__dot-b"></div>
+					    </div>
+					  </div>
+					</div>					
+				</div>
+				
+					<article class="slds-card" id="availableCadContainer">
+					  <div class="slds-card__header slds-grid">
+						<header class="slds-media slds-media_center slds-has-flexi-truncate">
+						  <div class="slds-media__figure">
+							<span class="slds-icon_container slds-icon-standard-contact" title="description of icon when needed">
+							  
+							</span>
+						  </div>
+						  <div class="slds-media__body">
+							<h2 style="display: inline;">
+							  <a href="javascript:void(0);" class="slds-card__header-link slds-truncate" title="Available Consumer Account's">
+								<span class="slds-text-heading_small">Available Consumer Account's</span>
+							  </a>
+							</h2>
+							<span style="float: right;">
+								<button class="slds-button slds-button_neutral" onclick="backButtonJS('{!cadId}');">
+						  			Back
+						  		</button>
+							</span>
+						  </div>
+						</header>
+						
+					  </div>
+					  <div class="slds-card__body" style="padding: 5px;">
+					  	<div id="noRecordsFoundDiv" class="demo-only" style="padding: 0.5rem; background: rgb(22, 50, 92); display: none;">
+						  <div class="slds-text-color_inverse">No records found.</div>
+						</div>
+						<table id="availableCadTable" class="slds-table slds-table_fixed-layout slds-table_bordered slds-no-row-hover slds-table_cell-buffer">
+						  <thead>
+							<tr class="slds-text-title_caps">
+							  <th scope="col" style="width: 50px;">
+								<div class="slds-form-element">
+								  <div class="slds-form-element__control">
+									<input type="checkbox" data-is_allChecked="false" onchange="selectDeselectAll(this);"/>
+								  </div>
+								</div>					  
+							  </th>
+							  <th scope="col">
+								<div class="slds-truncate" title="Name">
+									<label class="f-w_Bold_f-s_small">Name</label>
+								</div>
+							  </th>
+							  <th scope="col">
+								<div class="slds-truncate" title="Consumer Master File Record">
+									<label class="f-w_Bold_f-s_small">Consumer Master File Record</label>
+								</div>
+							  </th>
+							  <th scope="col">
+								<div class="slds-truncate" title="Account Number">
+									<label class="f-w_Bold_f-s_small">Account Number</label>
+								</div>
+							  </th>
+							  <th scope="col">
+								<div class="slds-truncate" title="Placement Date">
+									<label class="f-w_Bold_f-s_small">Placement Date</label>
+								</div>
+							  </th>
+							  <th scope="col">
+								<div class="slds-truncate" title="Original Creditor">
+									<label class="f-w_Bold_f-s_small">Original Creditor</label>
+								</div>
+							  </th>
+							  <th scope="col">
+								<div class="slds-truncate" title="Original Creditor Account Number">
+									<label class="f-w_Bold_f-s_small">Original Creditor Account Number</label>
+								</div>
+							  </th>
+							  <th scope="col" style="width: 115px;">
+								<div class="slds-truncate" title="Type">
+									<label class="f-w_Bold_f-s_small">Type</label>
+								</div>
+							  </th>
+							  <!-- <th scope="col">
+								<div class="slds-truncate" title="Account Balance">
+									<label class="f-w_Bold_f-s_small">Account Balance</label>
+								</div>
+							  </th> -->
+							</tr>
+						  </thead>
+						  <tbody id="cadRecordTableContainer">
+							
+						  </tbody>
+						</table>
+					  </div>
+					  <footer id="removeButtonContainer" class="slds-card__footer">
+					  	<div style="text-align: right">
+					  		<button class="slds-button slds-button_brand" onclick="removeSelectCadFromMaster();">
+					  			Remove
+					  		</button>
+					  	</div>
+					  </footer>
+					</article>			
+			</div>
+			
+		</body>
+		<script id="cadTableTrTemplate" type="text/x-handlebars-template">
+			{{#each .}}
+			<tr class="slds-hint-parent">
+			  <td scope="row" style="width: 50px;">
+				<div class="slds-form-element">
+				  <div class="slds-form-element__control">
+					<input id="{{id}}" class="cadSelect" type="checkbox" />
+				  </div>
+				</div>						  
+			  </td>
+			  <td scope="row">
+				<div class="slds-truncate" title="{{name}}"><a href="{{#createRecordOpenUrl id}}{{/createRecordOpenUrl}}">{{name}}</a></div>
+			  </td>
+			  <td scope="row">
+				<div class="slds-truncate" title="{{consumerMasterFileName}}"><a href="{{#createRecordOpenUrl consumerMaterFile}}{{/createRecordOpenUrl}}">{{consumerMasterFileName}}</a></div>
+			  </td>
+			  <td scope="row">
+				<div class="slds-truncate" title="{{mcmAccountNo}}">{{mcmAccountNo}}</div>
+			  </td>
+			  <td scope="row">
+				<div class="slds-truncate" title="{{placementDate}}">{{placementDate}}</div>
+			  </td>
+			  <td scope="row">
+				<div class="slds-truncate" title="{{orignalCreditor}}">{{orignalCreditor}}</div>
+			  </td>
+			  <td scope="row">
+				<div class="slds-truncate" title="{{orignalCreditorAccountNumber}}">{{orignalCreditorAccountNumber}}</div>
+			  </td>
+			  <td scope="row">
+				<div class="slds-truncate" title="{{loanType}}">{{loanType}}</div>
+			  </td>
+			</tr>
+			{{/each}}
+		</script>
+		<script>
+			
+			var cadId = '{!cadId}';
+			var availableConsumerAccountDetailString = '{!availableConsumerAccountDetailListJson}';
+			var availableCADList = JSON.parse(availableConsumerAccountDetailString);
+			
+			
+			$( document ).ready(function() {
+			    if(availableCADList.length > 0){
+			    	
+			    	$("#noRecordsFoundDiv").hide();
+			    	$("#availableCadTable").show();
+			    	$("#removeButtonContainer").show();
+				    init();
+			    }else{
+			    	
+			    	$("#noRecordsFoundDiv").show();
+			    	$("#availableCadTable").hide();
+			    	$("#removeButtonContainer").hide();
+			    }
+			});
+			
+			function init(){
+				renderConsumerAccountDetailsList(availableCADList);
+			}
+			
+			function rerenderAvailableCadList(masterCadId){
+				showLoader();
+				Visualforce.remoting.Manager.invokeAction(initRemote, masterCadId, function(result, event){
+					console.log(result);
+					console.log(event);
+					
+					if(result.resultObj.length > 0){
+			    	
+				    	$("#noRecordsFoundDiv").hide();
+				    	$("#availableCadTable").show();
+				    	$("#removeButtonContainer").show();
+					    renderConsumerAccountDetailsList(result.resultObj);
+				    }else{
+				    
+				    	$("#noRecordsFoundDiv").show();
+				    	$("#availableCadTable").hide();
+				    	$("#removeButtonContainer").hide();
+				    }
+					hideLoader();
+				});
+			}
+			
+			function renderConsumerAccountDetailsList(dataObj){
+				
+				$("#cadRecordTableContainer").html('');
+				var source = $("#cadTableTrTemplate").html();
+				var template = Handlebars.compile(source);
+				var html = template(dataObj);
+				
+				$("#cadRecordTableContainer").html(html);
+			}
+			
+			function selectDeselectAll(ele){
+				
+				var isAllChecked = $(ele).attr("data-is_allChecked"); 
+				
+				if(isAllChecked == 'true'){
+					$("#cadRecordTableContainer").children().find("input[type='checkbox']").prop("checked", false);
+					$(ele).attr("data-is_allChecked", false);
+				}else{
+					$("#cadRecordTableContainer").children().find("input[type='checkbox']").prop("checked", true);
+					$(ele).attr("data-is_allChecked", true);
+				}
+			}
+			
+			function removeSelectCadFromMaster(){
+				
+				showLoader();
+				var selectedCadCheckBoxes = $("#cadRecordTableContainer").children().find("input[type='checkbox']").filter(':checked');
+				
+				if(selectedCadCheckBoxes.length <= 0){
+					$.notify("Please select at least one record.", "info");
+					hideLoader();
+					return false;
+				}
+				var selectedCadList = [];
+				$.each(selectedCadCheckBoxes, function(index, node){
+					selectedCadList.push($(node).attr('id'));
+				});
+				
+				console.log(selectedCadList);
+				
+				var SelectedCounsumerAccountDetailWrapper = {};
+				SelectedCounsumerAccountDetailWrapper.masterCadId = cadId;
+				SelectedCounsumerAccountDetailWrapper.selectedCadIds = selectedCadList;
+				console.log(SelectedCounsumerAccountDetailWrapper);
+				var selectedListJson = JSON.stringify(SelectedCounsumerAccountDetailWrapper);
+				console.log(selectedListJson);
+				Visualforce.remoting.Manager.invokeAction(removeCadFromMasterCad, selectedListJson, function(result, event){
+					
+					if(result){
+						
+						if(result.response == 'Ok'){
+						
+							rerenderAvailableCadList(cadId);
+							$.notify("Successfully removed.", "success");
+													
+							if(result.resultObj != undefined && result.resultObj != ''){
+								
+								showLoader();
+								setTimeout(function(){
+									setTimeout(function(){
+									
+										if(profileName == 'CC - User Access'){
+                                    		window.location.href = baseUrl + '/LCPartnerAccess/' +result.resultObj;
+                                    	}else{
+                                    		window.location.href = baseUrl + '/' +result.resultObj;
+                                    	}
+
+										hideLoader();										
+									},2000);
+									
+									$.notify("Please wait...", "info"); 
+								}, 1000);
+								
+							}
+						}else if(result.response == 'Error'){
+							
+							var errorMessage = result.errorMessage + 'because ' + result.resultObj;  
+							$.notify( errorMessage, "error");
+							hideLoader();
+						}
+					}
+					
+				});
+				
+				
+			}
+			
+		</script>
+	</html>
+</apex:page>

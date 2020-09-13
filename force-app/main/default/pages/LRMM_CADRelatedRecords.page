@@ -1,0 +1,157 @@
+<apex:page controller="LRMM_CADRelatedRecordsController"
+	tabStyle="{!IF(selectedObject<>null,selectedObject,"Consumer_Account_Details__c")}">
+	<apex:form >
+		<apex:actionstatus id="counterStatus">
+			<apex:facet name="start">
+				<div class="waitingSearchDiv" id="el_loading"
+					style="background-color: #fbfbfb; height: 100%; opacity: 0.65; width: 100%;">
+					<div class="waitingHolder"
+						style="margin-left: 25%; position: fixed;">
+						<img class="waitingImage" src="/img/loading.gif"
+							title="Please Wait..." /> <span class="waitingDescription">Loading...</span>
+					</div>
+				</div>
+			</apex:facet>
+		</apex:actionstatus>
+		<apex:sectionHeader title="{!objectLabel} Edit"
+			subtitle="New {!objectLabel}" />
+		<apex:pageBlock title="{!objectLabel} Edit" mode="edit"
+			id="pageBlockId">
+
+			<apex:pageblockButtons >
+				<apex:commandButton value="Save" action="{!saveRecord}"
+					rerender="pageBlockId" status="counterStatus" />
+				<apex:commandButton value="Cancel" immediate="true"
+					action="/{!cadObj.id}" />
+			</apex:pageblockButtons>
+
+			<apex:pageMessages />
+
+			<apex:repeat value="{!sectionList}" var="sectionName">
+				<apex:pageBlockSection title="{!sectionName}" collapsible="false">
+					<apex:repeat value="{!fieldsSectionMap[sectionName]}"
+						var="fieldName">
+						<apex:outputPanel rendered="{!fieldName == 'Blank'}"></apex:outputPanel>
+						<apex:inputField required="{!!(CONTAINS(fieldName,'Pro_Se__c') || CONTAINS(fieldName,'Opposing_Counsel__c') || CONTAINS(fieldName,'Opposing_Counsel_Firm_Name__c') || CONTAINS(fieldName,'Opposing_Counsel_Email__c') || CONTAINS(fieldName,'Opposing_counsel_Phone__c') || CONTAINS(fieldName,'Opposing_Counsel_Comments__c') || CONTAINS(fieldName,'Closed_Date__c') || CONTAINS(fieldName,'Chain_of_Title__c') || CONTAINS(fieldName,'IfPriorExperience_with_Judge_Comments__c') || CONTAINS(fieldName,'Date_Notice_of_Appeal_Filed__c') || CONTAINS(fieldName,'Appeal_Status__c'))}"
+							value="{!sObjLRMM[fieldName]}"
+							rendered="{!fieldName != 'Blank' && (sObjLRMM[fieldName] == null || CONTAINS(fieldName,'Pro_Se__c')) && !(CONTAINS(fieldName,'Prior_Experience_with_Judge__c') || CONTAINS(fieldName,'IfPriorExperience') || CONTAINS(fieldName,'If_Prior_Experience'))}" />
+						<apex:outputField value="{!sObjLRMM[fieldName]}"
+							rendered="{!fieldName != 'Blank' && (sObjLRMM[fieldName] != null && !CONTAINS(fieldName,'Pro_Se__c')) && !(CONTAINS(fieldName,'Prior_Experience_with_Judge__c') || CONTAINS(fieldName,'IfPriorExperience') || CONTAINS(fieldName,'If_Prior_Experience'))}" />
+
+						<!-- For Prior Experience with Judge -->
+						<apex:inputField required="true" value="{!sObjLRMM[fieldName]}"
+							rendered="{!CONTAINS(fieldName,'Prior_Experience_with_Judge__c') && !hasRecord}" />
+						<apex:outputField value="{!sObjLRMM[fieldName]}"
+							rendered="{!CONTAINS(fieldName,'Prior_Experience_with_Judge__c') && hasRecord}" />
+
+						<!-- For If Prior Experience -->
+						<apex:inputField value="{!sObjLRMM[fieldName]}"
+							rendered="{!(CONTAINS(fieldName,'IfPriorExperience') || CONTAINS(fieldName,'If_Prior_Experience')) && !hasRecord}" />
+						<apex:outputField value="{!sObjLRMM[fieldName]}"
+							rendered="{!(CONTAINS(fieldName,'IfPriorExperience') || CONTAINS(fieldName,'If_Prior_Experience')) && hasRecord}" />
+					</apex:repeat>
+				</apex:pageBlockSection>
+			</apex:repeat>
+
+			<apex:pageBlockSection title="Type of Discovery" collapsible="false"
+				rendered="{!selectedObject == 'Discovery__c'}">
+				<apex:repeat value="{!fieldsSectionMap['Type of Discovery']}"
+					var="fieldName">
+					<apex:outputPanel rendered="{!fieldName == 'Blank'}"></apex:outputPanel>
+					<apex:inputField value="{!sObjLRMM[fieldName]}"
+						rendered="{!fieldName != 'Blank'}" />
+				</apex:repeat>
+			</apex:pageBlockSection>
+
+			<apex:pageBlockSection title="Step I" collapsible="false"
+				rendered="{!selectedObject == 'Trial_Witness_Request__c'}">
+				<apex:repeat value="{!fieldsSectionMap['Step I']}" var="fieldName">
+					<apex:outputPanel rendered="{!fieldName == 'Blank'}"></apex:outputPanel>
+					<apex:inputField required="{!CONTAINS(fieldName,'Dispute__c') || CONTAINS(fieldName,'Hardship__c') || CONTAINS(fieldName,'Other_Considerations__c') || CONTAINS(fieldName,'Subject_Matter_to_be_Covered__c') || CONTAINS(fieldName,'Counterclaim__c') || CONTAINS(fieldName,'Potential_Issues_or_Limitations__c') || CONTAINS(fieldName,'Chance_Of_Success_if_We_Appear__c') || CONTAINS(fieldName,'Discovery_Status__c') || CONTAINS(fieldName,'LW_Witness_Subpoenaed__c') || CONTAINS(fieldName,'Settlement_Attempted__c')}"
+						value="{!sObjLRMM[fieldName]}" rendered="{!fieldName != 'Blank'}" />
+				</apex:repeat>
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Additional Contacts" />
+					<apex:selectList value="{!selectedContactList}" multiselect="true"
+						size="5">
+						<apex:selectOptions value="{!contactList}" />
+					</apex:selectList>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+
+			<apex:pageBlockSection title="{!objectLabel} Information"
+				collapsible="false"
+				rendered="{!selectedObject == 'Appeal__c' || selectedObject == 'Trial_Witness_Request__c'}">
+				<apex:repeat value="{!fieldsSectionMap[objectLabel + ' Information']}"
+					var="fieldName">
+					<apex:outputPanel rendered="{!fieldName == 'Blank'}"></apex:outputPanel>
+					<apex:inputField required="{!!(CONTAINS(fieldName,'Witness_Determination__c') || CONTAINS(fieldName,'Original_Creditor_Witness_Needed__c') || CONTAINS(fieldName,'Amended_Responses_Due_to_Court_Order__c') || CONTAINS(fieldName,'New_Request_or_for_Amendment__c') || CONTAINS(fieldName,'Extension_Date_Discovery_Response_Due__c') || CONTAINS(fieldName,'Amended_Responses_Due_to_Stipulation__c') || CONTAINS(fieldName,'Discovery_Notes__c') || CONTAINS(fieldName,'Date_Discovery_Responses_Served__c') || CONTAINS(fieldName,'If_Yes_MSJ_Due_Date__c') || CONTAINS(fieldName,'Complaint_Attached__c') || CONTAINS(fieldName,'If_Yes_Discovery_Propounded_Due_Date__c') || CONTAINS(fieldName,'Date_Notice_of_Appeal_Filed__c'))}"
+						value="{!sObjLRMM[fieldName]}"
+						rendered="{!fieldName != 'Blank' && fieldName != 'Status__c'}" />
+					<apex:outputField value="{!sObjLRMM[fieldName]}"
+						rendered="{!fieldName != 'Blank' && fieldName == 'Status__c'}" />
+				</apex:repeat>
+				<apex:pageBlockSectionItem rendered="{!objectLabel != 'Trial_Witness_Request__c'}">
+					<apex:outputLabel value="Additional Contacts" />
+					<apex:selectList value="{!selectedContactList}" multiselect="true"
+						size="5">
+						<apex:selectOptions value="{!contactList}" />
+					</apex:selectList>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+
+			<apex:pageBlockSection title="{!objectLabel} Details"
+				collapsible="false"
+				rendered="{!selectedObject == 'Business_Record_Affidavit__c' || selectedObject == 'Counterclaim__c' || selectedObject == 'Discovery__c'}">
+				<apex:repeat value="{!fieldsSectionMap[objectLabel + ' Details']}"
+					var="fieldName">
+					<apex:outputPanel rendered="{!fieldName == 'Blank'}"></apex:outputPanel>
+					<apex:inputField required="{!!(CONTAINS(fieldName,'Witness_Determination__c') || CONTAINS(fieldName,'Amended_Responses_Due_to_Court_Order__c') || CONTAINS(fieldName,'Extension_Date_Discovery_Response_Due__c') || CONTAINS(fieldName,'Amended_Responses_Due_to_Stipulation__c') || CONTAINS(fieldName,'Discovery_Notes__c') || CONTAINS(fieldName,'Date_Discovery_Responses_Served__c') || CONTAINS(fieldName,'If_Yes_MSJ_Due_Date__c') || CONTAINS(fieldName,'Complaint_Attached__c') || CONTAINS(fieldName,'If_Yes_Discovery_Propounded_Due_Date__c') || CONTAINS(fieldName,'Attached__c'))}"
+						value="{!sObjLRMM[fieldName]}"
+						rendered="{!fieldName != 'Blank' && fieldName != 'Status__c'}" />
+					<apex:outputField value="{!sObjLRMM[fieldName]}"
+						rendered="{!fieldName != 'Blank' && fieldName == 'Status__c'}" />
+				</apex:repeat>
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Additional Contacts" />
+					<apex:selectList value="{!selectedContactList}" multiselect="true"
+						size="5">
+						<apex:selectOptions value="{!contactList}" />
+					</apex:selectList>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+
+			<apex:pageBlockSection title="{!objectLabel} Details"
+				collapsible="false"
+				rendered="{!selectedObject == 'Purchase_and_Sales_Agreement__c' || selectedObject == 'Settlement_Approval__c' || selectedObject == 'Escalated_Contested_Matters__c'}">
+				<apex:repeat value="{!fieldsSectionMap[objectLabel + ' Details']}"
+					var="fieldName">
+					<apex:outputPanel rendered="{!fieldName == 'Blank'}"></apex:outputPanel>
+					<apex:inputField required="{!(CONTAINS(fieldName,'State_Suit_Theory__c') || CONTAINS(fieldName,'MSJ_Recommended__c') || CONTAINS(fieldName,'Litigation_Type__c') || CONTAINS(fieldName,'Discovery_Propounded_on_MCM__c') || CONTAINS(fieldName,'Allegation_Summary_From_Firm__c') || CONTAINS(fieldName,'Firm_Recommedation__c') || CONTAINS(fieldName,'Chain_of_Title_Summary__c') || CONTAINS(fieldName,'Motion_to_Compel_DEF_Filed__c') || CONTAINS(fieldName,'NOA_Sent_to_Consumer_State_Dependent__c') || CONTAINS(fieldName,'Motion_to_Compel_PLTF_Filed__c') || CONTAINS(fieldName,'Terms_Conditions__c') || CONTAINS(fieldName,'Business_Record_Affidavit_Requested__c') || CONTAINS(fieldName,'Statements_in_Possession__c') || CONTAINS(fieldName,'One_Off_Affidavit_Requested__c') || CONTAINS(fieldName,'Additional_Statements_Requested__c') || CONTAINS(fieldName,'Media_Chain_of_Title_Notes__c') || CONTAINS(fieldName,'Litigation_Type__c') || CONTAINS(fieldName,'Amount_of_Offer__c') || CONTAINS(fieldName,'Firm_Recommendation__c') || CONTAINS(fieldName,'Why_Is_PSA_Needed__c'))}"
+						value="{!sObjLRMM[fieldName]}"
+						rendered="{!fieldName != 'Blank' && fieldName != 'Status__c'}" />
+					<apex:outputField value="{!sObjLRMM[fieldName]}"
+						rendered="{!fieldName != 'Blank' && fieldName == 'Status__c'}" />
+				</apex:repeat>
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Additional Contacts" />
+					<apex:selectList value="{!selectedContactList}" multiselect="true"
+						size="5">
+						<apex:selectOptions value="{!contactList}" />
+					</apex:selectList>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+
+			<apex:pageBlockSection title="System Information" collapsible="false">
+				<apex:repeat value="{!fieldsSectionMap['System Information']}"
+					var="fieldName">
+					<apex:outputPanel rendered="{!fieldName == 'Blank'}"></apex:outputPanel>
+					<apex:inputField value="{!sObjLRMM[fieldName]}"
+						rendered="{!fieldName != 'Blank' && sObjLRMM[fieldName] == null}" />
+					<apex:outputField value="{!sObjLRMM[fieldName]}"
+						rendered="{!fieldName != 'Blank' && sObjLRMM[fieldName] != null}" />
+				</apex:repeat>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

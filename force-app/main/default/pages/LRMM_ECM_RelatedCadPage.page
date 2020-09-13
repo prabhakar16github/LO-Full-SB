@@ -1,0 +1,43 @@
+<apex:page standardController="Escalated_Contested_Matters__c" extensions="RelatedCADForLRMMObjController" applyBodyTag="false">
+    <body style="background: none !important;">
+        <apex:outputPanel layout="block" rendered="{!childCads.size>0}">
+            <script>
+                    var profileName = '{!$Profile.Name}';
+                    
+                    function navigateToObjectJS(objId){
+                        
+                        var url = '';
+                        
+                        if(profileName == 'CC - User Access'){
+                            url = '/LCPartnerAccess/'+objId;
+                        }else{
+                            url = '/'+objId;
+                        }
+                        
+                        window.open(url, '_blank');
+                    }
+                    
+            </script>
+            <apex:pageBlock mode="maindetail">
+                <apex:pageBlockTable frame="none" value="{!childCads}" var="item">
+                    <apex:column headervalue="Consumer Account Details Name">
+                        <a href="#" onclick="navigateToObjectJS('{!item.Id}');">
+                            <apex:outputText value="{!item.Name}" />
+                        </a>
+                    </apex:column>
+                    <apex:column headervalue="Consumer Master File Record">
+                        <a href="#" onclick="navigateToObjectJS('{!item.Consumer_Master_File_Record__c}')">
+                            <apex:outputText value="{!item.Consumer_Master_File_Record__r.name}" />
+                        </a>
+                    </apex:column>
+                    <apex:column value="{!item.Account_Number__c}"/>
+                    <apex:column value="{!item.Original_Creditor__c}"/>
+                    <apex:column value="{!item.Original_Creditor_Account_Number__c}"/>
+                    <apex:column value="{!item.Placement_Date__c}"/>
+                    <apex:column value="{!item.CAD_Credit_Card__c}"/>
+                    <apex:column value="{!item.CAD_Consumer_Loan__c}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:outputPanel>
+    </body>
+</apex:page>

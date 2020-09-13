@@ -1,0 +1,26 @@
+<apex:page controller="CustomReportSCMD_ACFController" contenttype="application/vnd.ms-excel#SCM - Dispute Report.xls">
+	<apex:form >
+		<apex:pageBlock title="SCMD ACF Account Numbers">
+			<apex:pageBlockTable value="{!pamRecordsList}" var="pam"
+				border="1px solid black;">
+				<apex:column headerValue="Organization Name: Organization Name"
+					style="vertical-align: middle;">
+					<apex:outputField value="{!pam.Organization_Name__r.Name}" />
+				</apex:column>
+				<apex:column headerValue="Process Adherence Monitoring: ID"
+					style="vertical-align: middle;">
+	                {!pam.Id}
+	            </apex:column>
+				<apex:column headerValue="Consumer Disputes Debt Orally">
+					<apex:outputField value="{!pam.SCMD_Oral_Dispute_Account_s__c}" />
+				</apex:column>
+				<apex:column headerValue="Consumer Disputes Debt Writing">
+					<apex:outputField value="{!pam.SCMD_Written_Dispute_Account_s__c}" />
+				</apex:column>
+				<apex:column headerValue="Mail Out – Validation of Debt">
+					<apex:outputField value="{!pam.SCMD_MailOutValidation_of_Debt_Account_s__c}" />
+				</apex:column>
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

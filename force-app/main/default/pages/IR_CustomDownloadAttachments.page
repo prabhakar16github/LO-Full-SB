@@ -1,0 +1,93 @@
+<apex:page controller="IR_CustomDownloadAttachmentsController"
+	action="{!init}" lightningStylesheets="true" applyHtmlTag="true" >
+   
+	<style>
+.buttonCss {
+	text-decoration: none;
+}
+
+.buttonCss:HOVER {
+	text-decoration: none;
+}
+
+.color-green{
+	color: green !important;
+}
+.no-color{
+	
+}
+</style>
+	<script>
+		function updateDownloaded(ele, pamId){
+			Visualforce.remoting.Manager.invokeAction(
+	            '{!$RemoteAction.IR_CustomDownloadAttachmentsController.updateIsDownloaded}',
+	            pamId, 
+	            function(result, event){
+	                if (event.status) {
+	                	ele.className = 'color-green';
+	                } else if (event.type === 'exception') {
+	                	alert(event.message +'\n'+ event.where);
+	                } else {
+	                	alert(event.message);
+	                }
+	            });			
+		}
+	</script>
+      
+	<apex:includeScript value="{!URLFOR($Resource.ExternalJavaScriptlibrary, '/jquery-3.3.1.min.js')}" />
+	<apex:form >
+		<apex:pageBlock title="Inventory Reconciliation">
+            
+            Select PAM Type<br/><br/>
+            
+            <apex:pageMessages id="errorId"></apex:pageMessages>
+            <apex:selectList value="{!SelectedRecordType}"  multiselect="false" size="1"  > 
+                <apex:selectOptions value="{!PAMRecordTypeList}"/>
+                <apex:actionSupport event="onchange" action="{!init}" reRender="recordBlock, errorId"  status="sts" />
+            </apex:selectList>
+            
+            <center>
+                <apex:actionStatus id="sts">
+                    <apex:facet name="start">
+                        
+                    <apex:outputLabel >
+                        <img src="/img/loading32.gif" width="20" height="20" />&nbsp;&nbsp;Loading...
+                    </apex:outputLabel>
+                </apex:facet>    
+                <apex:facet name="stop"  />
+            </apex:actionStatus>
+            </center>
+
+            
+            <apex:pageBlockButtons rendered="{!IF(pamWraps.size > 0, True, False)}">
+                <apex:commandButton action="{!updateStatus}" value="Update status"
+					styleClass="btn buttonCss"></apex:commandButton>
+				<!-- <button type="button" id="download_all" onclick="downloadAll();" style="padding: 3.5px;" class="btn btn buttonCss">Download All</button> -->
+			</apex:pageBlockButtons>
+            <apex:outputPanel id="recordBlock">
+			<apex:pageBlockTable value="{!pamWraps}" var="pamWrapper"
+				rendered="{!IF(pamWraps.size > 0, True, False)}">
+				<apex:column headerValue="Organization Name: Organization Name">
+					<apex:outputField value="{!pamWrapper.pam.Organization_Name__c}" />
+				</apex:column>
+				<apex:column headerValue="Process Adherence Monitoring: ID">
+					<apex:outputField value="{!pamWrapper.pam.Id}" />
+				</apex:column>
+				<apex:column headerValue="Open Inventory Act # Volume">
+					<apex:outputField value="{!pamWrapper.pam.IR_Open_Inventory_Act_Volume__c}" />
+				</apex:column>
+				<apex:column headerValue="Excluded From Status Update">
+					<apex:inputField value="{!pamWrapper.pam.IR_Excluded_From_Status_Update__c}" />
+				</apex:column>
+				<apex:column headerValue="Attachment Link">
+					<apex:repeat value="{!pamWrapper.attachments}" var="attachment">
+						<apex:outputLink target="_blank" styleClass="{!IF(pamWrapper.pam.IR_Is_Attachment_Downloaded__c, 'color-green', 'no-color')}" onclick="updateDownloaded(this, '{!pamWrapper.pam.Id}')"
+							value="{!sfbaseUrl}/servlet/servlet.FileDownload?file={!attachment.id}">{!attachment.Name}</apex:outputLink>
+						<br />
+					</apex:repeat>
+				</apex:column>
+			</apex:pageBlockTable>
+            </apex:outputPanel>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

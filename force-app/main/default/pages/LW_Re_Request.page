@@ -1,0 +1,150 @@
+<!--********************************************** 
+* Page Name   : LW_Re_Request
+* Description : VF Page Calling from Re-Request Button in Live Witness record.
+* Created By  : Prabhakar Joshi
+* Created Date: 1-July-2020
+* *************************************************-->
+<apex:page id="pg" title="{!oldRecord.Name}" controller="LW_Re_Request_Controller" tabStyle="Trial_Witness_Request__c">
+    
+    <apex:form id="frm">
+        
+        <apex:pageBlock id="pb" title="{!oldRecord.Name} : Trial Witness Request Clone">
+            <apex:pageBlockSection title="General Live Witness Information" columns="2" id="GeneralLWInfo_Sec"  >
+                <apex:outputField value="{!newRecord.LW_Matter_Name__c}" id="LW_Matter_Name__c"  />
+                <apex:outputField value="{!newRecord.State_Filed_State_Profile__c}" id="State_Filed_State_Profile__c"/>
+                <apex:outputField value="{!newRecord.OrganizationName__c}" id="OrganizationName__c"/>
+                <apex:outputField value="{!newRecord.County_Filed__c}" id="County_Filed__c"/>
+                <apex:inputField value="{!newRecord.Appearance_Type__c}" id="Appearance_Type__c" styleClass="blankField" />
+                <apex:outputField value="{!newRecord.Court_File__c}" id="Court_File__c"/>
+                <apex:outputField value="{!newRecord.Account_Number__c}" id="Account_Number__c"/>
+                <apex:outputField value="{!newRecord.County_Court_Name__c}" id="County_Court_Name__c"/>
+                <apex:outputField value="{!newRecord.Original_Creditor__c}" id="Original_Creditor__c"/>
+                <apex:inputField value="{!newRecord.Judge_Name__c}" id="Judge_Name__c" styleClass="blankField"/>
+                <apex:outputField value="{!newRecord.Defendant_Name__c}" id="Defendant_Name__c"/>
+                <apex:inputField value="{!newRecord.Prior_Experience_with_Judge__c}" id="Prior_Experience_with_Judge__c" styleClass="blankField"/>
+                <apex:inputField value="{!newRecord.Date_of_Appearance__c}" id="Date_of_Appearance__c" styleClass="blankField"/>
+                <apex:outputField value="{!newRecord.If_Prior_Experience_with_Judge_Comments__c}" id="If_Prior_Experience_with_Judge_Comments__c"/>
+                <apex:inputField value="{!newRecord.Time_of_Appearance__c}" id="Time_of_Appearance__c" styleClass="blankField"/>
+                <!--<apex:inputField value="{!Trial_Witness_Request__c.State_Filed_State_Profile__c}" id="State_Filed_State_Profile__c"/>-->
+                <apex:outputField value="{!newRecord.Suit_Balance__c}" id="Suit_Balance__c"/>
+                <apex:inputField value="{!newRecord.AM_PM__c}" id="AM_PM__c" styleClass="blankField"/>
+                <apex:inputField value="{!newRecord.Days_Appearance_Is_Expected_To_Last__c}" id="Days_Appearance_Is_Expected_To_Last__c" styleClass="blankField"/>
+                <apex:outputField value="{!newRecord.Time_Zone__c}" id="Time_Zone__c" />
+                <apex:outputField value="{!newRecord.LW_Settlement_Authority_Needed__c}" id="LW_Settlement_Authority_Needed__c"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection id="OpposingCounsel_Sec" title="Assigned Attorney and Opposing Counsel" columns="2">
+                <apex:outputField value="{!newRecord.Assigned_Attorney__c}" id="Assigned_Attorney__c"/>
+                <apex:outputField value="{!newRecord.Pro_Se__c}" id="Pro_Se__c"/>
+                <apex:outputField value="{!newRecord.Assigned_Attorney_Email__c}" id="Assigned_Attorney_Email__c"/>
+                <apex:outputField value="{!newRecord.Opposing_Counsel__c}" id="Opposing_Counsel__c"/>
+                <apex:outputField value="{!newRecord.Assigned_Attorney_Cell_Phone__c}" id="Assigned_Attorney_Cell_Phone__c"/>
+                <apex:outputField value="{!newRecord.Opposing_Counsel_Firm_Name__c}" id="Opposing_Counsel_Firm_Name__c"/>
+                <apex:outputField value="{!newRecord.Assigned_Attorney_Direct_Line__c}" id="Assigned_Attorney_Direct_Line__c"/>
+                <apex:outputField value="{!newRecord.Opposing_Counsel_Email__c}" id="Opposing_Counsel_Email__c"/>
+                <apex:outputField value="{!newRecord.Opposing_Counsel_Phone__c}" id="Opposing_Counsel_Phone__c"/>
+                <apex:outputField value="{!newRecord.Opposing_Counsel_Comments__c}" id="Opposing_Counsel_Comments__c"/>
+            </apex:pageBlockSection>
+            
+            
+            <apex:pageBlockSection id="Step1_Sec" title="Step I">
+                <apex:outputField value="{!newRecord.Settlement_Attempted__c}" id="Settlement_Attempted__c"/>
+                <apex:outputField value="{!newRecord.LW_Witness_Subpoenaed__c}" id="LW_Witness_Subpoenaed__c"/>
+                <apex:outputField value="{!newRecord.Last_Settlement_Offer_by__c}" id="Last_Settlement_Offer_by__c"/>
+                <apex:outputField value="{!newRecord.LW_Subpoenaed_Witness_Name__c}" id="LW_Subpoenaed_Witness_Name__c"/>
+                <apex:outputField value="{!newRecord.Settlement_Offer_Type__c}" id="Settlement_Offer_Type__c"/>
+                <apex:outputField value="{!newRecord.Settlement_Offer_Amount__c}" id="Settlement_Offer_Amount__c"/>
+                <apex:outputField value="{!newRecord.Discovery_Status__c}" id="Discovery_Status__c"/>
+                <apex:outputField value="{!newRecord.Settlement_Chance_Prior_to_Hearing__c}" id="Settlement_Chance_Prior_to_Hearing__c"/>
+                <apex:outputField value="{!newRecord.Post_Judgment_Collectability__c}" id="Post_Judgment_Collectability__c"/>
+                <apex:outputField value="{!newRecord.Chance_Of_Success_if_We_Appear__c}" id="Chance_Of_Success_if_We_Appear__c"/>
+                
+                <apex:outputField value="{!newRecord.Settlement_Attempted_Comments__c}" id="Settlement_Attempted_Comments__c"/>
+                <apex:outputField value="{!newRecord.Counterclaim__c}" id="Counterclaim__c"/>
+                <!--<apex:inputField value="{!Trial_Witness_Request__c.Allegations__c}" id="Allegations__c"/>-->
+                <apex:outputField value="{!newRecord.Subject_Matter_to_be_Covered__c}" id="Subject_Matter_to_be_Covered__c"/>
+                <!--<apex:inputField value="{!Trial_Witness_Request__c.Factual_Basis_of_Allegations__c}" id="Factual_Basis_of_Allegations__c"/>-->
+                <!--<apex:inputField value="{!Trial_Witness_Request__c.Brief_History__c}" id="Brief_History__c"/>-->
+                <apex:outputField value="{!newRecord.Other_Considerations__c}" id="Other_Considerations__c"/>
+                <apex:outputField value="{!newRecord.Hardship__c}" id="Hardship__c"/>
+                <apex:outputField value="{!newRecord.Additional_Contacts__c}" id="Additional_Contacts__c"/>
+                <!--<apex:inputField value="{!Trial_Witness_Request__c.Hardship_Documents_Attached__c}" id="Hardship_Documents_Attached__c"/>-->
+                <apex:outputField value="{!newRecord.Hardship_Solution__c}" id="Hardship_Solution__c"/>
+                <apex:outputField value="{!newRecord.Dispute__c}" id="Dispute__c"/>
+                <apex:outputField value="{!newRecord.Counterclaim_Record__c}" id="Counterclaim_Record__c"/>
+                <apex:outputField value="{!newRecord.Dispute_Solution__c}" id="Dispute_Solution__c"/>
+                <apex:outputField value="{!newRecord.Escalated_Contested_Matter_Record__c}" id="Escalated_Contested_Matter_Record__c"/>
+            </apex:pageBlockSection>
+            
+            <apex:outputPanel id="step2Pnl" rendered="{!IF(OR(oldRecord.RecordType.Name == 'Live Witness Request Step II',oldRecord.RecordType.Name == 'Live Witness Request Step III'),true,false)}">
+                <apex:pageBlockSection title="Step II" id="step2_Sec">
+                    <apex:outputField value="{!newRecord.Discovery_Sent_to_Defendant__c}" id="Discovery_Sent_to_Defendant__c"/>
+                    <!--<apex:inputField value="{!Trial_Witness_Request__c.Disposition_Motion_Attempted_Plaintiff__c}" id="Disposition_Motion_Attempted_Plaintiff__c"/>-->
+                    <apex:outputField value="{!newRecord.If_Discovery_Sent_When__c}" id="If_Discovery_Sent_When__c"/>
+                    <!--<apex:inputField value="{!Trial_Witness_Request__c.If_no_Why_Not_Plaintiff__c}" id="If_no_Why_Not_Plaintiff__c"/>-->
+                    <apex:outputField value="{!newRecord.Discovery_Propounded_on_MCM__c}" id="Discovery_Propounded_on_MCM__c"/>
+                    <apex:outputField value="{!newRecord.What_Media_is_Needed_for_Trial__c}" id="What_Media_is_Needed_for_Trial__c"/>
+                    <apex:outputField value="{!newRecord.Has_Media_been_requested__c}" id="Has_Media_been_requested__c"/>
+                    <apex:outputField value="{!newRecord.Required_Affidavits_Obtained__c}" id="Required_Affidavits_Obtained__c"/>
+                	<apex:outputField value="{!newRecord.Discovery_Name__c}" id="Discovery_Name__c"/>
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+            
+            <apex:outputPanel id="step3Pnl" rendered="{!oldRecord.RecordType.Name == 'Live Witness Request Step III'}">
+                <apex:pageBlockSection title="Step III" id="step3_Sec">
+                    <apex:outputField value="{!newRecord.Estimated_Time_Frame_for_Trial__c}" id="Estimated_Time_Frame_for_Trial__c"/>
+                    <apex:outputField value="{!newRecord.Documents_for_Witness_Attached__c}" id="Documents_for_Witness_Attached__c"/>
+                    <apex:outputField value="{!newRecord.Where_will_Witness_Meet_Attorney__c}" id="Where_will_Witness_Meet_Attorney__c"/>
+                    <apex:outputField value="{!newRecord.General_Overview_of_Testimony_Attached__c}" id="General_Overview_of_Testimony_Attached__c"/>
+                    <apex:outputField value="{!newRecord.Proposed_Questions_Attached__c}" id="Proposed_Questions_Attached__c"/>
+                    <apex:outputField value="{!newRecord.Court_Street_Address__c}" id="Court_Street_Address__c"/>
+                    <apex:outputField value="{!newRecord.Expected_OC_Questions_Attached__c}" id="Expected_OC_Questions_Attached__c"/>
+                    <apex:outputField value="{!newRecord.Dept_Div_Room__c}" id="Dept_Div_Room__c"/>
+                    <apex:outputField value="{!newRecord.Brief_Case_History_Attached__c}" id="Brief_Case_History_Attached__c"/>
+                    <apex:outputField value="{!newRecord.Court_City__c}" id="Court_City__c"/>
+                    <apex:outputField value="{!newRecord.Court_State__c}" id="Court_State__c"/>
+                    <apex:outputField value="{!newRecord.Court_Zip_Code__c}" id="Court_Zip_Code__c"/>
+                    
+                </apex:pageBlockSection>
+            </apex:outputPanel>
+            
+            <apex:pageBlockSection title="Witness Details" columns="2" id="WD_Sec">
+                <apex:outputField value="{!newRecord.Witness_Determination__c}" id="Witness_Determination__c"/>
+                <apex:outputField value="{!newRecord.Original_Creditor_Witness_Needed__c}" id="Original_Creditor_Witness_Needed__c"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Attorney Approval Status" columns="2" id="Attorny_App_Sec">
+                <apex:outputField value="{!newRecord.LW_PL_Recommendations__c}" id="LW_PL_Recommendations__c"/>
+                <apex:outputField value="{!newRecord.LW_Attorney_Approval_Needed__c}" id="LW_Attorney_Approval_Needed__c"/>
+                <apex:outputField value="{!newRecord.LW_Attorney_Approval_of_Recommendation__c}" id="LW_Attorney_Approval_of_Recommendation__c"/>
+                <apex:outputField value="{!newRecord.LW_Attorney_Recommendation_Comments__c}" id="LW_Attorney_Recommendation_Comments__c"/>
+                
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection title="System Information" columns="2" id="System_Info_Sec">
+                
+                <apex:outputField value="{!newRecord.RecordTypeId}" id="RecordTypeId"/>
+                
+                <apex:outputField value="{!newRecord.Status__c}" id="Status__c"/>
+                
+                <apex:outputField value="{!newRecord.OwnerId}" id="OwnerId"/>
+                <apex:outputField value="{!newRecord.TW_Consumer_Account_Records__c}" id="TW_Consumer_Account_Records__c"/>
+                <apex:outputField value="{!newRecord.LW_Paralegal_Assignment__c}" id="LW_Paralegal_Assignment__c"/>
+                <apex:outputField value="{!newRecord.LW_Age__c}" id="LW_Age__c"/>
+                <apex:outputField value="{!newRecord.LW_Attorney_Assignment__c}" id="LW_Attorney_Assignment__c"/>
+                <apex:outputField value="{!newRecord.LW_Closed_Date__c}" id="LW_Closed_Date__c"/>
+                <apex:outputField value="{!newRecord.LW_ClosedDate_CreatedDate__c}" id="LW_ClosedDate_CreatedDate__c"/>
+                
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!SaveNew}" />
+                <apex:commandButton value="Cancel" onclick="closeWindow();"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+    
+    
+    <script>
+    function closeWindow(){
+        window.close();
+    }
+    </script>
+</apex:page>

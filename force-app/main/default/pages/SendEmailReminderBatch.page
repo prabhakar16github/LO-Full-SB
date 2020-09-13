@@ -1,0 +1,22 @@
+<apex:page controller="SendEmailReminderBatchCtrl">
+
+<apex:pagemessages />
+<apex:form >
+     <apex:pageblock >
+        <apex:pageblocksection >
+             <apex:inputfield required="true" value="{!objConsumer.Month__c}"/>
+             <apex:inputfield required="true" value="{!objConsumer.Year__c}"/>
+             <apex:inputfield value="{!objConsumer.Is_Monthly_Reminder__c}"/>
+             <apex:inputfield value="{!objConsumer.Is_Business_Day_Reminder__c}"/>
+             <apex:inputfield value="{!objConsumer.Is_Email_Send__c}"/>
+         </apex:pageblocksection>
+         <apex:commandbutton value="Start" action="{!start}"/>
+     
+     
+     </apex:pageblock>
+
+
+
+</apex:form>
+
+</apex:page>

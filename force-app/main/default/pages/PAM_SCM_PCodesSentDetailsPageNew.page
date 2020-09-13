@@ -1,0 +1,533 @@
+<apex:page sidebar="false" showHeader="false" lightningStylesheets="true" controller="PAM_SCM_PCodesSentDetailsPageNewCtrl" >
+    <apex:slds />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        #rcorners4{
+    background: #1797c0;
+    padding: 20px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+    } 
+    .slds-scope .slds-page-header{
+        border-radius: 0rem !important;
+    }
+    
+    .slds-scope .slds-page-header__title{
+        font-size: 13px;
+    }
+    .parasize{
+        text-align: left;
+        font-size: 13px;
+        font-weight: bold;
+    }
+    .slds-scope .slds-textarea{
+        width: 90%;
+        height: 100px;
+    }
+     #errormsg2{
+        margin: 10px;
+        padding: 20px;
+        background: #FFBABA;
+        color: red;
+        width: 50%;
+        font-size: 15px;
+        border-radius: 11px;
+    } 
+    #errormsg1{
+    margin: 10px;
+    padding: 20px;
+    background: #FFBABA;
+    color: red;
+    width: 50%;
+    font-size: 15px;
+    border-radius: 11px;
+    }
+    #errormsg3{
+    margin: 10px;
+    padding: 20px;
+    background: #FFBABA;
+    color: red;
+    width: 50%;
+    font-size: 15px;
+    border-radius: 11px;
+    }
+    .Ul_Class{
+    padding-top: 30px !important;
+    padding-left: 366px !important;
+    padding-bottom: 30px !important;
+    }
+    .li_class{
+        background: #1797c0;
+        color: white !important;
+        font-size: 14px !important;
+    }
+    </style>
+    <!--- global page header ----->
+    <div class="slds-page-header" style="background: #1797c0;color: white;">
+<div class="slds-page-header__row">
+    <div class="slds-page-header__col-title">
+       <div class="slds-media">
+            <div class="slds-media__figure">
+                <span class="slds-icon_container slds-icon-standard-opportunity" title="opportunity">
+                <span class="slds-assistive-text">opportunity</span>
+                </span>
+            </div>
+        <div class="slds-media__body">
+            <div class="slds-page-header__name">
+                <div class="slds-page-header__name-title">
+                <h3>
+                <span class="slds-page-header__title slds-truncate" title="Add Dispute/Non-Dispute Account Number" style="font-size: 20px;">Add Dispute/Non-Dispute Account Number</span>
+                </h3>
+            </div>
+        </div>
+        <p class="slds-page-header__name-meta">Process Adherence Monitoring</p>
+      </div>
+    </div>
+    </div>
+   </div>
+</div>
+    <!--   html here ------->
+    <div class="slds-tabs_default slds-tabs_large">
+        <ul class="slds-tabs_default__nav Ul_Class" role="tablist">
+            <li class="li_class slds-tabs_default__item slds-is-active" title="3-Dispute Accounts" role="presentation" onclick="showHide(this);return false">
+                <a class="slds-tabs_default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-1" id="tab-default-1__item">SCM Dispute Account Numbers</a>
+             </li>
+                
+             <li  style="margin-left: 50px;" class="li_class slds-tabs_default__item " title="15-Other Accounts" role="presentation" onclick="showHide(this);return false">
+                    <a class="slds-tabs_default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" id="tab-default-2__item">SCM Non-Dispute Account Numbers</a>
+              </li>
+                    
+         </ul>
+       <div class="topDiv">       
+        <!--------------- Tab 1 ---------------------------------------->      
+         <div id="tab-default-1" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item">
+            <div id="errormsg1" style="display:none">
+              <h1>This option is not available if the “No Dispute Codes Sent in Report Period” is selected</h1>
+            </div>
+            <div style="display:none" id="panel1">            
+            <button class="slds-button slds-button_brand" style="text-align:center;margin-left: 16cm;" onclick="uploadAccountToPam();">Save</button>
+            <button class="slds-button slds-button_brand" onclick="backBtn();return false;">Cancel</button>
+             <br/><br/>
+                        
+               <div id="rcorners4">
+                            
+                       <table width="100%" cellpadding="5" class="slds-table"> 
+                           <tr>
+                                <td>
+                                   <p class="parasize"><label for="Mail_Out_Validation_of_Debt_Account_s__c">Mail Out Validation of Debt Account #s</label></p>
+                                    <textarea id="Mail_Out_Validation_of_Debt_Account_s__c" class="slds-textarea" ></textarea>
+                                </td>
+                                    
+                                <td>
+                                    <p class="parasize"><label for="Oral_Dispute_Account_s__c">Oral Dispute Account #s</label></p>
+                                    <textarea id="Oral_Dispute_Account_s__c" class="slds-textarea" >{!wc.OralDisputeAccount}</textarea>
+                                </td>
+                            </tr>
+                             
+                             <tr>
+                                 <td>
+                                    <p class="parasize"><label for="Written_Dispute_Account_s__c">Written Dispute Account #s</label></p>
+                                    <textarea id="Written_Dispute_Account_s__c" class="slds-textarea" >{!wc.writtenDisputeAccount}</textarea>
+                                 </td>
+                                 <td>
+                                          <!---- empty here ---->
+                                 </td>
+                              </tr>
+                         </table>
+               </div>    
+             </div>                       
+         </div>
+                                    
+                                    
+          <!-- --------------------------- ************************ Tab 2 Work here ************ ---------------------->
+                                    
+          <div id="tab-default-2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
+            <div id="errormsg2" style="display:none">
+              <h1>This option is not available if the “No PCodes/vXCodes Sent in Report Period” is selected</h1>
+            </div>
+            
+             <div id="errormsg3" style="display:none">
+              <h1>Error : Advises Dispute Pcode Accounts must me added first</h1>
+             </div>
+            <div style="display:none" id="panel2">
+            <br/>
+                <button class="slds-button slds-button_brand" style="text-align:center;margin-left: 16cm;" onclick="uploadAccountToPam();">Save</button>
+                <button class="slds-button slds-button_brand" onclick="backBtn();return false;">Cancel</button>
+            <br/>
+                                    
+              <div class="slds-page-header" style="box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);margin-top: 12px;">
+                    <div class="slds-page-header__row">
+                         <div class="slds-page-header__col-title">
+                             <div class="slds-media">
+                                         <div class="slds-media__figure"></div>
+                                   <div class="slds-media__body">
+                                     <div class="slds-page-header__name">
+                                          <div class="slds-page-header__name-title">
+                                                 <h1>
+                                                   <span class="slds-page-header__title slds-truncate" title="SCM Pcode Sent Details">SCM Pcode Sent Details
+                                                   </span>
+                                                 </h1>
+                                          </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                               </div>
+                          </div>
+                </div>
+                                    
+                  
+         <div id="rcorners4">
+                                    
+              <table width="100%" cellpadding="5" class="slds-table"> 
+                        <tr>
+                           <td>
+                                    <p class="parasize"><label for="Answer_Filed_Account_s__c">Answer Filed Account #s</label></p>
+                                    <textarea id="Answer_Filed_Account_s__c" class="slds-textarea" >{!wc.AnswerFiledAccount}</textarea>
+                           </td>
+                           <td>
+                                    <p class="parasize"><label for="Judgment_Satisfied_Account_s__c">Judgment Satisfied Account #s</label></p>
+                                    <textarea id="Judgment_Satisfied_Account_s__c" class="slds-textarea" >{!wc.JudgmentSatisfiedAccou}</textarea>
+                           </td>
+                          
+                          
+                        </tr>
+              
+                        <tr>
+                             <td>
+                                    <p class="parasize"><label for="Cease_Desist_Account_s__c">Cease And Desist Account #s</label></p>
+                                    <textarea id="Cease_Desist_Account_s__c" class="slds-textarea" >{!wc.CeaseDesistAccount}</textarea>
+                             </td>
+                                    
+                              <td>
+                                    <p class="parasize"><label for="Judgment_Vacated_Account_s__c">Judgment Vacated Account #s</label></p>
+                                    <textarea id="Judgment_Vacated_Account_s__c" class="slds-textarea" >{!wc.judgmentVacatedAccount}</textarea>
+                             </td>
+                              
+                        </tr>
+                  
+                        <tr>
+                             <td>
+                                    <p class="parasize"><label for="Consumer_Rep_by_Counsel_Account_s__c">Consumer Rep by Counsel Account #s</label></p>
+                                    <textarea id="Consumer_Rep_by_Counsel_Account_s__c" class="slds-textarea" >{!wc.ConsumerRepByConsuel}</textarea>
+                             </td>
+                              <td>
+                                    <p class="parasize"><label for="Judgment_Account_s__c">Judgment Account #s</label></p>
+                                    <textarea id="Judgment_Account_s__c" class="slds-textarea" >{!wc.judgementAccount}</textarea>
+                                    
+                                    <!--
+                                    <p class="parasize"><label for="Mail_Out_Validation_of_Debt_Account_s__c">Mail Out Validation of Debt Account #s</label></p>
+                                    <textarea id="Mail_Out_Validation_of_Debt_Account_s__c" class="slds-textarea" >{!wc.mailOutValidation}</textarea>
+                                    -->
+                              </td>
+                       </tr>
+          
+                       <tr>
+                              <td>
+                                    <p class="parasize"><label for="Counter_Claim_Account_s__c">Counter Claim Account #s</label></p>
+                                    <textarea id="Counter_Claim_Account_s__c" class="slds-textarea">{!wc.counterClaimAccount}</textarea>
+                              </td>
+                              <td>
+                                    <p class="parasize"><label for="Temp_Hardship_Account_s__c">Temp Hardship Account #s</label></p>
+                                    <textarea id="Temp_Hardship_Account_s__c" class="slds-textarea">{!wc.tempHardshipAccount}</textarea>
+                                    
+                                     <!-- <p class="parasize"><label for="Oral_Dispute_Account_s__c">Oral Dispute Account #s</label></p>
+                                    <textarea id="Oral_Dispute_Account_s__c" class="slds-textarea" >{!wc.OralDisputeAccount}</textarea>
+                                     -->
+                              </td>
+                       </tr>
+                              
+                        <tr>
+                               <td>
+                                    <p class="parasize"><label for="Dismissed_with_Prejudice_Account_s__c">Dismissed with Prejudice Account #s</label></p>
+                                    <textarea id="Dismissed_with_Prejudice_Account_s__c" class="slds-textarea" >{!wc.dismissedWithPrejudice}</textarea>
+                                    
+                               </td>
+                               <td>
+                                       <p class="parasize"><label for="Return_Mail_on_Disclosure_Account_s__c">Disclosure and Demand Letter<br/> Return Mail Act # Volume </label></p> <!-- Return Mail on Disclosure Account #s-->
+                                    <textarea id="Return_Mail_on_Disclosure_Account_s__c" class="slds-textarea" >{!wc.returnMailOnDisclouser}</textarea>
+                                    
+                               </td>
+                        </tr>
+   
+                        <tr>
+                               <td>
+                                    <p class="parasize"><label for="Dismissed_w_out_Predudice_Account_s__c">Dismissed w/out Predudice Account #s</label></p>
+                                    <textarea id="Dismissed_w_out_Predudice_Account_s__c" class="slds-textarea" >{!wc.dismissedWOPrejudice}</textarea>
+                                    
+                               </td>
+                               <td>
+                                       <p class="parasize"><label for="Substantiation_Request_Account_s__c">Written Substantiation Request Received <br/> due to Disclosure Letter Act # Volume </label></p> <!-- Substantiation Request Account #s-->
+                                    <textarea id="Substantiation_Request_Account_s__c" class="slds-textarea" >{!wc.judgementAccount}</textarea>
+                               </td>
+                        </tr>
+              
+                        <tr>
+                               <td>
+                                    
+                                    <p class="parasize"><label for="Do_Not_Call_Account_s__c">Do Not Call Account #s</label></p>
+                                    <textarea id="Do_Not_Call_Account_s__c" class="slds-textarea" >{!wc.doNotCall}</textarea>
+                               </td>
+                               <td>
+                                    <p class="parasize"><label for="Suit_Filed_Account_s__c">Suit Filed Account #s</label></p>
+                                    <textarea id="Suit_Filed_Account_s__c" class="slds-textarea" >{!wc.suitFieldAccount}</textarea>
+                               </td>
+                        </tr>
+        
+                        <tr>
+                                <td>
+                                    <p class="parasize"><label for="Hardship_End_Account_s__c">Hardship End Account #s</label></p>
+                                    <textarea id="Hardship_End_Account_s__c" class="slds-textarea" >{!wc.hardshipEndAccount}</textarea>
+                                </td>
+                                <td>
+                                   <!--
+                                    <p class="parasize"><label for="Temp_Hardship_Account_s__c">Temp Hardship Account #s</label></p>
+                                    <textarea id="Temp_Hardship_Account_s__c" class="slds-textarea">{!wc.tempHardshipAccount}</textarea>
+                                      -->
+                                </td>
+                         </tr>
+                 </table>
+                                    
+            <br/>
+            <button class="slds-button slds-button_brand" style="text-align:center;margin-left: 16cm;" onclick="uploadAccountToPam();">Save</button>
+            <button class="slds-button slds-button_brand" onclick="backBtn();return false;">Cancel</button>
+      
+      </div>
+     </div>                               
+    </div>
+</div>
+
+   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"/>
+                                    
+            <div id="demo-on" class="demo-only" style="height:6rem ; display:none;">
+                <div class="slds-spinner_container" style="height: 1300px;">
+                    <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                            <span class="slds-assistive-text">Loading</span>
+                             <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                    </div>
+                 </div>
+            </div>
+            
+            
+            <div id="demo-only" class="demo-only" style="height:6rem;display:none">
+                <div class="slds-spinner_container" style="height: 1300px;">
+                      <div class="top_progress" style="width: 60%;margin-left: 238px;">
+                          <div class="w3-container" style="margin-top: 232px;">
+                                
+                                <div class="w3-light-grey w3-round">
+                                    
+                                   <div class="w3-container w3-blue w3-round top_widths" style="width:0%;text-align:center"> 1% </div>
+                                 </div>
+                          </div>
+                      </div> 
+            
+                  </div>
+            </div>
+            
+</div>
+                                    
+                                    
+                                    <!-- ----------------------- Script code here --------------------------------------------------- -->                                                
+                                    
+                                    <script>
+                                    
+                                    var recursionCounter = 0;
+                                    var fieldApiArr = ['Written_Dispute_Account_s__c','Do_Not_Call_Account_s__c','Hardship_End_Account_s__c','Judgment_Account_s__c','Suit_Filed_Account_s__c','Dismissed_with_Prejudice_Account_s__c','Temp_Hardship_Account_s__c','Dismissed_w_out_Predudice_Account_s__c','Answer_Filed_Account_s__c','Judgment_Vacated_Account_s__c','Mail_Out_Validation_of_Debt_Account_s__c','Cease_Desist_Account_s__c','Oral_Dispute_Account_s__c','Consumer_Rep_by_Counsel_Account_s__c','Return_Mail_on_Disclosure_Account_s__c','Counter_Claim_Account_s__c','Judgment_Satisfied_Account_s__c','Substantiation_Request_Account_s__c'];
+                                    var sobjectId = '{!$CurrentPage.parameters.id}'; // current pam object record id here 
+                                    var maxLimit = 7000;
+                                    var checkVal = false;
+                                    var progressLength = 1;
+                                    
+                                    function backBtn(){
+                                        window.location = '/'+sobjectId;
+                                    }     
+                                        
+                                        
+                                  var previousOnload = window.onload;
+                                    window.onload = function(){
+                                         if(previousOnload) {
+                                             previousOnload();
+                                         }
+                                          
+                                        $('#demo-on').css('display','block');
+                                        PAM_SCM_PCodesSentDetailsPageNewCtrl.getFirstHalfAccountNumberInfo(sobjectId , function(result , error){
+                                        
+                                            if(result != null){
+                                                console.log(' first Done--');
+                                                checkVal = true;
+                                                
+                                                var showFirstHalf = result.first_halfToShow;
+                                                var showSecondHalf = result.second_halfToShow;
+                                                var showErrorMsg = result.conditionalMessage ;
+                                                console.log('=========showErrorMsg ==========',showErrorMsg );
+                                                if(showFirstHalf == true && showSecondHalf == true){
+                                                
+                                                }else if(showFirstHalf == false && showSecondHalf == false){
+                                                        $('#panel1').show();
+                                                        if(showErrorMsg == true){
+                                                        $('#panel2').show();
+                                                        }else if(showErrorMsg == false){
+                                                        $('#panel2').hide();
+                                                        $('#errormsg3').show();
+                                                        }
+                                                }else{
+                                                    if(showFirstHalf ==  true){
+                                                      $('#panel1').show();
+                                                    }else{
+                                                      $('#panel1').hide();
+                                                      $('#errormsg1').show();
+                                                    }
+                                                    
+                                                    if(showSecondHalf == true){
+                                                      $('#panel2').show();
+                                                    }else{
+                                                      $('#panel2').hide();
+                                                      $('#errormsg2').show();
+                                                    }
+                                                }
+                                                
+                                                document.getElementById("Answer_Filed_Account_s__c").innerHTML = result.AnswerFiledAccount;
+                                                document.getElementById("Judgment_Vacated_Account_s__c").innerHTML = result.judgmentVacatedAccount;
+                                                document.getElementById("Mail_Out_Validation_of_Debt_Account_s__c").innerHTML = result.mailOutValidation ;
+                                                document.getElementById("Cease_Desist_Account_s__c").innerHTML = result.CeaseDesistAccount ;
+                                                document.getElementById("Oral_Dispute_Account_s__c").innerHTML = result.OralDisputeAccount ;
+                                                document.getElementById("Consumer_Rep_by_Counsel_Account_s__c").innerHTML = result.ConsumerRepByConsuel ;
+                                                document.getElementById("Return_Mail_on_Disclosure_Account_s__c").innerHTML = result.returnMailOnDisclouser;
+                                                document.getElementById("Counter_Claim_Account_s__c").innerHTML = result.counterClaimAccount ;
+                                                document.getElementById("Suit_Filed_Account_s__c").innerHTML = result.suitFieldAccount ;
+                                            
+                                             }
+                                        
+                                        PAM_SCM_PCodesSentDetailsPageNewCtrl.getSecondHalfAccountNumberInfo(sobjectId , function(result , error){
+                                        
+                                        if(result != null){
+                                              console.log('Second Done--');
+                                              checkVal = true;
+                                            document.getElementById("Dismissed_with_Prejudice_Account_s__c").innerHTML = result.dismissedWithPrejudice;
+                                            document.getElementById("Temp_Hardship_Account_s__c").innerHTML = result.tempHardshipAccount ;
+                                            document.getElementById("Dismissed_w_out_Predudice_Account_s__c").innerHTML = result.dismissedWOPrejudice ;
+                                            document.getElementById("Written_Dispute_Account_s__c").innerHTML = result.writtenDisputeAccount ;
+                                            document.getElementById("Do_Not_Call_Account_s__c").innerHTML = result.doNotCall ;
+                                            document.getElementById("Hardship_End_Account_s__c").innerHTML = result.hardshipEndAccount ;
+                                            document.getElementById("Judgment_Account_s__c").innerHTML = result.judgementAccount ;
+                                            document.getElementById("Judgment_Satisfied_Account_s__c").innerHTML = result.JudgmentSatisfiedAccou ;
+                                            document.getElementById("Substantiation_Request_Account_s__c").innerHTML = result.SubstantiationReqAcco ;   
+                                            
+                                         }
+                                          $('#demo-on').css('display','none');
+                                       }); 
+                                });
+                                        
+                             }
+                                        
+                                        
+                                    function uploadAccountToPam(){
+                                        //Developer: Sanjana Das
+                                        var y = document.getElementsByTagName("textarea");
+                                        var invalidChars = /[^0-9\n]/gi;
+                                        var save = true;
+                                        for (var i=0; i< y.length; i++) {
+                                        	if(y[i].value != null && invalidChars.test(y[i].value)){
+                                        		alert('Please enter only numbers.');
+                                        		save=false;
+                                        		break;
+                                        	}
+                                        }
+                                        if(save == true){
+                                            if(checkVal == true){
+                                                var confirms = window.confirm('Are You Sure Want To Save?');
+                                                if(confirms == true){
+                                                    $('#demo-only').css('display','block');
+                                                    // remove the existing record and update the current one 
+                                                    PAM_SCM_PCodesSentDetailsPageNewCtrl.deleteChildRecord(sobjectId , function(result, error){
+                                                        callSaveRecordBtn(fieldApiArr[recursionCounter], sobjectId); // update the current result here 
+                                                    });
+                                                }  
+                                            } else {
+                                                console.log('insert case here ');
+                                                $('#demo-only').css('display','block');
+                                                callSaveRecordBtn(fieldApiArr[recursionCounter], sobjectId);
+                                            }
+                                        }
+                                    }
+                                        
+                                        function callSaveRecordBtn(fieldApi , sobjectId){
+                                        var infoArr = [];
+                                        var textData = $('#'+fieldApi).val();
+                                        
+                                        
+                                        if(textData != ''){
+                                        
+                                        var judgmentArray = textData.split('\n');
+                                        var arrayLength = judgmentArray.length ;
+                                        if(arrayLength > maxLimit){
+                                        var i = 0;
+                                        var j = maxLimit ;
+                                        while(arrayLength > 0){
+                                        var recordValueArr = judgmentArray.slice(i,j);
+                                        var recordInfo = recordValueArr.join('\n');
+                                        infoArr.push(recordInfo);
+                                        i = j;
+                                        j = j + maxLimit;
+                                        arrayLength = arrayLength - maxLimit ;
+                                    } 
+                                        
+                                    }else{
+                                        infoArr.push(textData);
+                                    }
+                                    }
+                                        PAM_SCM_PCodesSentDetailsPageNewCtrl.saveRecordBtn(fieldApi ,infoArr,sobjectId,function(result,error){
+                                        
+                                        if(recursionCounter != 17){
+                                        recursionCounter ++;
+                                        callSaveRecordBtn(fieldApiArr[recursionCounter], sobjectId);
+                                        progressLength = progressLength + 5.5;
+                                        $('.top_widths').css('width',progressLength+'%');
+                                        $('.top_widths').text(progressLength+'%');
+                                        
+                                    }
+                                        
+                                        
+                                        if(recursionCounter == 17){
+                                        progressLength = progressLength + 5.5;
+                                        $('.top_widths').text(progressLength+'%');
+                                        console.log(' finish it should be 100');
+                                        $('#demo-only').css('display','none');
+                                        window.location = '/'+sobjectId;
+                                    }
+                                        
+                                        
+                                    }); 
+                                    }
+                                        
+                                   function showHide(othis){
+                                        var title = $(othis).attr('title');
+                                        if(title == '3-Dispute Accounts'){
+                                        $('.slds-tabs_default__item').removeClass('slds-is-active');
+                                        $(othis).addClass('slds-is-active');
+                                        $('#tab-default-1').removeClass('slds-hide');
+                                        $('#tab-default-1').addClass('slds-show');
+                                        $('#tab-default-2').removeClass('slds-show');
+                                        $('#tab-default-2').addClass('slds-hide');
+                                    }else if(title == '15-Other Accounts'){
+                                        $('.slds-tabs_default__item').removeClass('slds-is-active');
+                                        $(othis).addClass('slds-is-active');
+                                        $('#tab-default-2').removeClass('slds-hide');
+                                        $('#tab-default-2').addClass('slds-show');
+                                        $('#tab-default-1').removeClass('slds-show');
+                                        $('#tab-default-1').addClass('slds-hide');   
+                                    }
+                                    }     
+// Developer: Sanjana Das
+$(document).ready(function() {
+    $("textarea").attr("placeholder", "Please input numbers").change(function(e) {
+      var invalidChars = /[^0-9\n]/gi;
+  	  if(invalidChars.test($(this).val())) {
+            alert('Please input only numbers.');
+      }
+    });
+})
+                                        
+                                        
+                                        </script>
+    
+</apex:page>

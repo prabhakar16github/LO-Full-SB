@@ -1,0 +1,611 @@
+<apex:page applyBodyTag="false" controller="PAM_SCM_PCodesSentPageController" action="{!init}">
+	<html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<apex:form >
+			<head>
+				<apex:slds />		
+				<apex:includeScript value="{!URLFOR($Resource.ExternalJavaScriptlibrary, '/jquery-3.3.1.min.js')}"/>
+				<apex:includeScript value="{!URLFOR($Resource.ExternalJavaScriptlibrary, '/handlebars-v4.0.11.js')}"/>
+				<apex:includeScript value="{!URLFOR($Resource.ExternalJavaScriptlibrary, '/notify.js')}"/>
+				<script>
+					
+					var profileName = '{!$Profile.Name}';
+					
+					var pamObj = '{!pamValues}';
+					
+					var savePcodeSentDetails = '{!$RemoteAction.PAM_SCM_PCodesSentPageController.savePcodeSentDetails}';
+					
+				</script>		
+			</head>
+			<body>
+			
+				<apex:pageMessages />
+				
+				<div id="errorToast" class="slds-scope" style="height: 4rem; display: none;">
+				  <div class="slds-notify_container slds-is-relative">
+				    <div class="slds-notify slds-notify_toast slds-theme_error" role="alert">
+				      <span class="slds-assistive-text">error</span>
+				      <span class="slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top" title="Description of icon when needed">
+				        <svg class="slds-icon slds-icon_small" aria-hidden="true">
+				          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#error')}" />
+				        </svg>
+				      </span>
+				      <div class="slds-notify__content">
+				        <h2 class="slds-text-heading_small " id="errorToastMessage"></h2>
+				      </div>
+				      <button type="button" class="slds-button slds-button_icon slds-notify__close slds-button_icon-inverse" onclick="closeErrorToast();" title="Close">
+				        <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+				          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#close')}" />
+				        </svg>
+				        <span class="slds-assistive-text">Close</span>
+				      </button>
+				    </div>
+				  </div>
+				</div>				
+				
+				<div class="slds-scope" style="height: 450px; display: none;" id="slds_CardBlock">
+				
+					<div id="spinner" style="display: none">
+	                    <div class="demo-only demo--inverse">
+	                      <div class="slds-spinner_container">
+	                        <div role="status" class="slds-spinner slds-spinner_small">
+	                          <span class="slds-assistive-text">Loading</span>
+	                          <div class="slds-spinner__dot-a"></div>
+	                          <div class="slds-spinner__dot-b"></div>
+	                        </div>
+	                      </div>
+	                    </div>                  
+	                </div>
+				
+					<div class="slds-card">
+					  <div class="slds-card__header slds-grid">
+					    <div class="slds-media slds-media_center slds-has-flexi-truncate">
+					      <div class="slds-media__figure">
+					        <span class="slds-icon_container slds-icon-standard-contact" title="Pam SCM Dispute Pcode Sent Details">
+					          <svg class="slds-icon slds-icon_small" aria-hidden="true">
+					            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/custom-sprite/svg/symbols.svg#custom108')}" />
+					          </svg>
+					        </span>
+					      </div>
+					      <div class="slds-media__body">
+					        <h2>
+					          <a href="javascript:void(0);" class="slds-card__header-link slds-truncate">
+					            <span class="slds-text-heading_small">SCM Pcode Sent Details</span>
+					          </a>
+					        </h2>
+					      </div>
+					    </div>
+					    <div class="slds-no-flex">
+					      <a class="slds-button slds-button_neutral" href="javascript:void(0);" onclick="backButtonJS('{!pamId}')">Back</a>
+					    </div>
+					  </div>
+					  <div id="pcodesSentDetailsCardBody" class="slds-card__body slds-card__body_inner">
+								  		
+					  </div>
+					  
+					  <div class="slds-m-top_medium"></div>
+					  
+					  <apex:outputPanel layout="block" rendered="{!NOT(disableEditSaveMode)}">
+					  
+						  <div class="slds-grid slds-gutters">
+						  		<div class="slds-col slds-size_4-of-12"></div>
+						  		<div class="slds-col slds-size_2-of-12">
+						  			<a class="slds-button slds-button_neutral" data-Id="{!pamId}" href="javascript:void(0);" id="editButton" 
+						  					onclick="onclickEditbutton();">Edit</a>
+						  		</div>
+						  		<div class="slds-col slds-size_2-of-12">
+						  			<a class="slds-button slds-button_brand" data-Id="{!pamId}" style="display: none;" 
+						  					href="javascript:void(0);" id="saveButton" onclick="onclickSaveButton();">Save</a>
+						  		</div>
+						  		<div class="slds-col slds-size_4-of-12"></div>
+						  </div>
+					  
+					  </apex:outputPanel>
+					  
+					  <div class="slds-m-bottom_medium"></div>
+					</div>
+					
+					
+					
+					
+					<!-- modal for accounts start -->
+					
+					
+						<div class="demo-only" style="max-height: 640px; display: none;" id="modalAccounts">
+						  <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_small">
+						    <div class="slds-modal__container" style="min-width: 15rem; width: 15rem;">
+						      <header class="slds-modal__header">
+						        <button type="button" class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="closeModalAccounts();">
+						          <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+						            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#close')}" />
+						          </svg>
+						          <span class="slds-assistive-text">Close</span>
+						        </button>
+						        <h2 id="modalAccounts-heading" class="slds-text-heading_medium slds-hyphenate">
+						        	
+						        </h2>
+						        
+						         <div class="slds-m-top_medium"></div>
+						        
+						        <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+						        
+								  <input type="text" class="slds-input slds-combobox__input" onkeyup="searchAccount(this);" aria-controls="listbox-unique-id" 
+								  		autocomplete="off" role="textbox" placeholder="Search accounts" aria-autocomplete="list" />
+								  		
+								  <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+								    <svg class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" aria-hidden="true">
+								    
+								      <use xmlns:xlink="http://www.w3.org/1999/xlink" 
+								      		xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#search')}" />
+								    
+								    </svg>
+								  </span>
+								</div>
+						        
+						      </header>
+						      <div class="slds-modal__content slds-p-around_medium" id="modalAccounts_content" style="height:300px;">
+						        
+						      </div>
+						    </div>
+						  </section>
+						  <div class="slds-backdrop slds-backdrop_open"></div>
+						</div>
+					
+					<!-- modal for accounts ends -->
+					
+					
+				</div>
+				
+			</body>
+			
+			<script>
+					
+					$( document ).ready(function() {
+					
+						init();
+					});
+					
+					function searchAccount(ele){
+						var value = $(ele).val();
+					
+					    $("#modalAccounts_content table tr").each(function(index, item) {
+					    
+				            $row = $(this);
+							
+				            var id = $row.find("td div").text();
+								
+							
+				            if (id.indexOf(value) < 0) {
+				                $(this).hide();
+				            }
+				            else {
+				                $(this).show();
+				            }
+					    });
+					}
+					    
+					function init(){
+					
+						if(pamObj){
+							$("#slds_CardBlock").show();
+							
+							console.log(pamObj);
+							
+							renderCardData(JSON.parse(pamObj));
+						}
+						
+						
+					}
+			
+					function backButtonJS(pamId){
+                		
+	                	var url = '';
+	                	
+	                	if(profileName == 'CC - User Access'){
+	                		url = '/LCPartnerAccess/'+pamId;
+	                	}else{
+	                		url = '/'+pamId;
+	                	}
+	                	
+	                	window.open(url, '_self');
+	                }
+	                
+	                function closeErrorToast(){
+	                	
+	                	$("#errorToastMessage").html('');
+	                	$("#errorToast").hide();
+	                	
+	                }
+	                
+	                function showErrorToast(errorMessage){
+	                	
+	                	$("#errorToastMessage").html(errorMessage);
+	                	$("#errorToast").show();
+	                	
+	                }
+	                
+	                function openModalAccounts(ele, label){
+	                	
+	                	$("#modalAccounts_content").html('');
+	                	$("#modalAccounts_content").html(getModalContent(ele, label));
+	                	$("#modalAccounts-heading").html('');
+	                	$("#modalAccounts-heading").html(label);
+	                	$("#modalAccounts").show();
+	                }
+	                
+	                function getModalContent(ele, label){
+	                	
+	                	
+						var accountList = $(ele).attr('data-accounts-list');
+	                	var accountListObj = accountList.split(",");
+	                	
+	                	var modalContent = '';
+	                		modalContent += '<table class="slds-table slds-table_bordered slds-table_cell-buffer">';
+					  		modalContent += '<thead>';
+					  		modalContent += '</thead>';
+					  		modalContent += '<tbody>';
+
+			  				$.each(accountListObj, function(index, item){
+			  				
+			  					modalContent += '<tr>';
+			  					modalContent += '<td data-label="Account Name">';
+		                		modalContent += '<div class="slds-truncate" title="'+item+'">'+item+'</div>';
+		                		modalContent += '</td>';
+		                		modalContent += '</tr>';
+		                		
+		                	});
+		                	
+				  			modalContent += '</tbody>';
+							modalContent += '</table>';
+							
+							
+	                	return modalContent;
+	                }
+	                
+	                function closeModalAccounts(){
+	                	$("#modalAccounts").hide();
+	                }
+	                
+	                function onclickEditbutton(){
+	                
+	                	$("#editButton").hide();
+	                	
+	                	//$("#pcodeSentOral_Dispute").removeAttr('disabled');
+	                	//$("#pcodeSentWritten_Dispute").removeAttr('disabled');
+	                	//$("#pcodeSentMailedOut_Dispute").removeAttr('disabled');
+	                	$(".readMode").hide();
+	                	$(".editMode").show();
+	                	$("#saveButton").show();
+	                }
+	                
+	                function onclickSaveButton(){
+	                	
+	                	setDefaultBorderColor();
+	                	closeErrorToast();
+	                	showLoader();
+	                	var pcodeSentDetailsValues = getPcodeSentDetailsValues();
+	                	
+	                	/*if(validatePcodeSentDetailsValues(pcodeSentDetailsValues) == false){
+	                		hideLoader();
+	                		return;
+	                	}*/
+	                	$("#saveButton").hide();
+	                	
+	                	
+	                	//$("#pcodeSentOral_Dispute").attr('disabled', 'disabled');
+	                	//$("#pcodeSentWritten_Dispute").attr('disabled', 'disabled');
+	                	//$("#pcodeSentMailedOut_Dispute").attr('disabled', 'disabled');
+	                	$(".readMode").show();
+	                	$(".editMode").hide();
+	                	
+	                	var pCodeSentDetails = JSON.stringify(pcodeSentDetailsValues);
+	                	
+	                	savePcodeSentDetailsRecord(pCodeSentDetails);
+	                	
+	                	$("#editButton").show();	
+	                }
+	                
+	                function setDefaultBorderColor(){
+	                	
+	                	//$("#pcodeSentOral_Dispute").css('border', '1px solid #DDDBDA');
+	                	//$("#pcodeSentWritten_Dispute").css('border', '1px solid #DDDBDA');
+	                	//$("#pcodeSentMailedOut_Dispute").css('border', '1px solid #DDDBDA');
+	                	$("#inputOralDisputeAccounts").css('border', '1px solid #DDDBDA');
+	                	$("#inputWrittenDisputeAccounts").css('border', '1px solid #DDDBDA');
+	                	$("#inputMailedOutValidationAccounts").css('border', '1px solid #DDDBDA');
+	                	
+	                }
+	                
+	                function getPcodeSentDetailsValues(){
+	                	
+	                	var pcodeSentDetails = {};
+	                	
+	                	pcodeSentDetails.id = $("#saveButton").attr('data-id');
+	                	//pcodeSentDetails.pcodeSentOralDispute = $("#pcodeSentOral_Dispute").val().trim();
+	                	//pcodeSentDetails.pcodeSentWrittenDispute = $("#pcodeSentWritten_Dispute").val().trim();
+	                	//pcodeSentDetails.pcodeSentMailedOutValidationDebt = $("#pcodeSentMailedOut_Dispute").val().trim();
+	                	
+	                	pcodeSentDetails.oralDisputeAccounts = encodeURIComponent($("#inputOralDisputeAccounts").val().trim());
+	                	pcodeSentDetails.writtenDisputeAccounts = encodeURIComponent($("#inputWrittenDisputeAccounts").val().trim());
+	                	pcodeSentDetails.mailedOutValidationAccounts = encodeURIComponent($("#inputMailedOutValidationAccounts").val().trim()); 
+	                	
+	                	return pcodeSentDetails;
+	                }
+	                
+	                /*
+	                
+	                not in use as requirement changes on 6/1/2018
+	                
+	                function validatePcodeSentDetailsValues(pCodeSentDetails){
+	                	
+	                	if(pCodeSentDetails.pcodeSentOralDispute == undefined 
+	                			|| pCodeSentDetails.pcodeSentOralDispute == '' 
+	                			|| pCodeSentDetails.pcodeSentOralDispute == null){
+	                			
+	                			$.notify('value required.', {position:'top left', style: 'bootstrap', className: 'error'});
+	                			$("#pcodeSentOral_Dispute").css('border-color', 'Red');
+	                			return false;
+	                				
+	                	}else if(pCodeSentDetails.oralDisputeAccounts == undefined 
+	                			|| pCodeSentDetails.oralDisputeAccounts == '' 
+	                			|| pCodeSentDetails.oralDisputeAccounts == null){
+	                			
+	                			$.notify('value required.', {position:'top left', style: 'bootstrap', className: 'error'});
+	                			$("#inputOralDisputeAccounts").css('border-color','Red');
+	                			return false;
+	                				
+	                	}else if(pCodeSentDetails.pcodeSentWrittenDispute == undefined 
+	                			|| pCodeSentDetails.pcodeSentWrittenDispute == '' 
+	                			|| pCodeSentDetails.pcodeSentWrittenDispute == null){
+	                			
+	                			$.notify('value required.', {position:'top left', style: 'bootstrap', className: 'error'});
+	                			$("#pcodeSentWritten_Dispute").css('border-color', 'Red');
+	                			return false;
+	                				
+	                	}else if(pCodeSentDetails.writtenDisputeAccounts == undefined 
+	                			|| pCodeSentDetails.writtenDisputeAccounts == '' 
+	                			|| pCodeSentDetails.writtenDisputeAccounts == null){
+	                			
+	                			$.notify('value required.', {position:'top left', style: 'bootstrap', className: 'error'});
+	                			$("#inputWrittenDisputeAccounts").css('border-color', 'Red');
+	                			return false;
+	                				
+	                	}else if(pCodeSentDetails.pcodeSentMailedOutValidationDebt == undefined 
+	                			|| pCodeSentDetails.pcodeSentMailedOutValidationDebt == '' 
+	                			|| pCodeSentDetails.pcodeSentMailedOutValidationDebt == null){
+	                			
+	                			$.notify('value required.', {position:'top left', style: 'bootstrap', className: 'error'});
+	                			$("#pcodeSentMailedOut_Dispute").css('border-color', 'Red');
+	                			return false;
+	                				
+	                	}else if(pCodeSentDetails.mailedOutValidationAccounts == undefined 
+	                			|| pCodeSentDetails.mailedOutValidationAccounts == '' 
+	                			|| pCodeSentDetails.mailedOutValidationAccounts == null){
+	                			
+	                			$.notify('value required.', {position:'top left', style: 'bootstrap', className: 'error'});
+	                			$("#inputMailedOutValidationAccounts").css('border-color', 'Red');
+	                			return false;
+	                			
+	                	}else if((checkNa(pCodeSentDetails.pcodeSentOralDispute) 
+	                				&& !checkNa(decodeURIComponent(pCodeSentDetails.oralDisputeAccounts)))
+	                				|| (!checkNa(pCodeSentDetails.pcodeSentOralDispute)
+	                				&& checkNa(decodeURIComponent(pCodeSentDetails.oralDisputeAccounts)))){
+	                			
+	                			showErrorToast('If the Pcode Sent or coinciding Account Number Field contains na (na or n/a), both must reflect the same value: na or n/a. Click on the "X" to exit error message and correct the field value.');	
+	                			return false;
+	                			
+	                	}else if((checkNa(pCodeSentDetails.pcodeSentWrittenDispute) 
+	                				&& !checkNa(decodeURIComponent(pCodeSentDetails.writtenDisputeAccounts)))
+	                				|| (!checkNa(pCodeSentDetails.pcodeSentWrittenDispute)
+	                				&& checkNa(decodeURIComponent(pCodeSentDetails.writtenDisputeAccounts)))){
+	                		
+	                			showErrorToast('If the Pcode Sent or coinciding Account Number Field contains na (na or n/a), both must reflect the same value: na or n/a. Click on the "X" to exit error message and correct the field value.');
+	                			return false;
+	                			
+	                	} else if((checkNa(pCodeSentDetails.pcodeSentMailedOutValidationDebt) 
+	                				&& !checkNa(decodeURIComponent(pCodeSentDetails.mailedOutValidationAccounts)))
+	                				|| (!checkNa(pCodeSentDetails.pcodeSentMailedOutValidationDebt)
+	                				&& checkNa(decodeURIComponent(pCodeSentDetails.mailedOutValidationAccounts)))){
+	                		
+	                			showErrorToast('If the Pcode Sent or coinciding Account Number Field contains na (na or n/a), both must reflect the same value: na or n/a. Click on the "X" to exit error message and correct the field value.');
+	                			return false;
+	                	}   
+	                	 
+	                }
+	                
+	                */
+	                
+	                /*
+	                
+	                function checkNa(value){
+	                
+	                	if(value.toLowerCase() == 'n/a' || value.toLowerCase() == 'na'){
+	                		return true;
+	                	}else{
+	                		return false;
+	                	}
+	                	
+	                }
+	                */
+	                
+	                function savePcodeSentDetailsRecord(pCodeSentDetails){
+	                		
+                		Visualforce.remoting.Manager.invokeAction( savePcodeSentDetails, pCodeSentDetails, 
+                			function(result, event){
+                			
+	                				if(event.status && !result.isError){
+	                					
+	                					$.notify("sucessfully saved.", {position:'top center', style: 'bootstrap', className: 'success'});
+	                					
+	                					console.log(result.response);
+	                					renderCardData(result.response);
+	                					hideLoader();
+	                					
+	                				}else if(event.type === 'exception'){
+	                					$.notify(event.message, {position:'top left', style: 'bootstrap', className: 'error'});
+	                					renderCardData(JSON.parse(pamObj));
+	                					hideLoader();
+	                					
+	                				}else if(result.isError){
+	                				
+	                					$.notify(result.errorMessage, {position:'top left', style: 'bootstrap', className: 'error'});
+	                					renderCardData(JSON.parse(pamObj));
+	                					hideLoader();
+	                				}
+                				
+                			});
+	                		
+	                }
+			
+					function renderCardData(dataObj){
+					
+						$("#pcodesSentDetailsCardBody").html('');
+						var source = $("#pcodesSentDetailsTemplate").html();
+						var template = Handlebars.compile(source);
+						var html = template(dataObj);
+						
+						
+						$("#pcodesSentDetailsCardBody").html(html);
+						$('.editMode').hide();
+					}
+					
+					Handlebars.registerHelper('renderAccountList', function(accountsList, label) {
+                  		
+                  		var accountsListValue = '';
+                  		
+                  		$.each(accountsList, function(index, item){
+                  			
+                  			if(index > 0 && index < 5){
+								accountsListValue += ', '+item+''; 				
+                  			}else if(index < 5){
+	                  			accountsListValue += item;
+                  			}
+                  		});
+                  		
+                  		if(accountsList.length > 5){
+                  		
+                  			accountsListValue += ' <a href="#" data-accounts-list="'+accountsList+'" onclick="openModalAccounts(this, \''+label+'\');"> +'+(accountsList.length - 5)+' More..</a>'
+                  		}
+                  		
+		                 return accountsListValue;
+	                });
+	                
+	                Handlebars.registerHelper('renderAccountListToTextArea', function(accountString) {
+                  		
+                  		/*var accountsListValue = '';
+                  		
+                  		$.each(accountsList, function(index, item){
+                  			
+                  			if(index > 0 && index < 5){
+								accountsListValue += '\r\n'+item+''; 				
+                  			}else if(index < 5){
+	                  			accountsListValue += item;
+                  			}
+                  		});
+                  		
+                  		*/
+                  		
+		                 return decodeURIComponent(accountString);
+	                });
+	                
+	                
+	                function showLoader(){
+	                    $("#spinner").show();
+	                }
+	                
+	                function hideLoader(){
+	                    $("#spinner").hide();
+	                }
+			
+			</script>
+			
+			<script id="pcodesSentDetailsTemplate" type="text/x-handlebars-template">
+
+				<div class="slds-m-top_medium"></div>
+
+				<div class="slds-grid slds-gutters">
+
+				  <div class="slds-col slds-size_4-of-12">
+						<label>
+								<abbr class="slds-required editMode" title="required">*</abbr>
+								{!$ObjectType.Process_Adherence_Monitoring__c.fields.SCMD_Oral_Dispute_Account_s__c.label}
+						</label>
+				  </div>
+				  
+				  <div class="slds-col slds-size_8-of-12">
+					
+					<div class="slds-form-element__control readMode">
+					    
+						<div>
+							{{#renderAccountList oralDisputeAccountsList '{!$ObjectType.Process_Adherence_Monitoring__c.fields.SCMD_Oral_Dispute_Account_s__c.label}'}}{{/renderAccountList}}
+						</div>
+
+					</div>
+	
+					<div class="slds-form-element editMode" style="display : none;">
+						<div class="slds-form-element__control">
+							<textarea id="inputOralDisputeAccounts" maxlength="131070" class="slds-textarea" placeholder="Enter Oral Dispute Account #s">{{#renderAccountListToTextArea oralDisputeAccounts}}{{/renderAccountListToTextArea}}</textarea>
+						</div>
+					</div>							
+					
+				  </div>
+				</div>
+
+				<div class="slds-m-top_small"></div>
+
+				<div class="slds-grid slds-gutters">
+				  
+				  <div class="slds-col slds-size_4-of-12">
+						<label>
+								<abbr class="slds-required editMode" title="required">*</abbr>
+								{!$ObjectType.Process_Adherence_Monitoring__c.fields.SCMD_Written_Dispute_Account_s__c.label}
+						</label>
+				  </div>
+				  <div class="slds-col slds-size_8-of-12">
+					
+					<div class="slds-form-element__control readMode">
+					   <div>
+							{{#renderAccountList writtenDisputeAccountsList '{!$ObjectType.Process_Adherence_Monitoring__c.fields.SCMD_Written_Dispute_Account_s__c.label}'}}{{/renderAccountList}}
+						</div>
+					</div>
+					
+					<div class="slds-form-element editMode" style="display : none;">
+						<div class="slds-form-element__control">
+							<textarea id="inputWrittenDisputeAccounts" maxlength="131070" class="slds-textarea" placeholder="Enter Written Dispute Account #s">{{#renderAccountListToTextArea writtenDisputeAccounts}}{{/renderAccountListToTextArea}}</textarea>
+						</div>
+					</div>
+					
+				  </div>
+				</div>
+
+				<div class="slds-m-top_small"></div>
+
+				<div class="slds-grid slds-gutters">
+				  
+				  <div class="slds-col slds-size_4-of-12">
+						<label>
+								<abbr class="slds-required editMode" title="required">*</abbr>
+								{!$ObjectType.Process_Adherence_Monitoring__c.fields.SCMD_MailOutValidation_of_Debt_Account_s__c.label}
+						</label>
+				  </div>
+				  <div class="slds-col slds-size_8-of-12">
+				  
+						<div class="slds-form-element__control readMode">
+						   	<div>
+								{{#renderAccountList mailedOutValidationAccountsList '{!$ObjectType.Process_Adherence_Monitoring__c.fields.SCMD_MailOutValidation_of_Debt_Account_s__c.label}'}}{{/renderAccountList}}
+							</div>
+						</div>
+				
+						<div class="slds-form-element editMode" style="display : none;">
+							<div class="slds-form-element__control">
+								<textarea id="inputMailedOutValidationAccounts" maxlength="131070" class="slds-textarea" placeholder="Enter Mail Out Validation of Debt Account #s">{{#renderAccountListToTextArea mailedOutValidationAccounts}}{{/renderAccountListToTextArea}}</textarea>
+							</div>
+						</div>
+					
+				  </div>
+				</div>
+
+			</script>
+					
+		</apex:form>
+	</html>
+</apex:page>

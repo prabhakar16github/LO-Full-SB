@@ -1,0 +1,57 @@
+<apex:page controller="LRMM_UpdateAdditionalContactsCtrl" title="Update Additional Contacts" tabStyle="{!IF(selectedObject<>null,selectedObject,"Consumer_Account_Details__c")}">
+    <apex:form >
+        <apex:actionstatus id="counterStatus">
+            <apex:facet name="start">
+                <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height:100%;opacity:0.65;width:100%;">
+                    <div class="waitingHolder" style="top: 100px; width: 91px;">
+                    <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                    <span class="waitingDescription">Loading...</span>
+                    </div>
+                </div>
+            </apex:facet>
+        </apex:actionstatus>
+        <apex:actionFunction name="addRemove" action="{!addRemoveEmails}" rerender="sectionId" status="counterStatus">
+            <apex:param name="param1" assignTo="{!isAddition}" value=""/>
+        </apex:actionFunction>
+        <apex:sectionHeader title="{!recordLabel} Edit" subtitle="{!sobjLRMM['Name']}"/>
+        <apex:pagemessages id="errorMessage"/>
+        <apex:pageBlock title="{!recordLabel} Edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" status="counterStatus" rerender="sectionId,errorMessage" action="{!saveDetails}"/>
+                <apex:commandButton value="Cancel" action="/{!sObjLRMM.id}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Update Additional Contacts" collapsible="false" columns="1" id="sectionId">
+                <apex:outputPanel dir="block">
+                    <table>
+                        <tr style="font-weight:700;">
+                            <td>Avaliable Contacts</td>
+                            <td></td>
+                            <td>Selected Contacts</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <apex:selectList value="{!availableFieldsList}" size="10" multiselect="true" style="min-width:240px;min-height:171.9px;">
+                                    <apex:selectOptions value="{!availableFieldSOList}"/>
+                                </apex:selectList>
+                            </td>
+                            <td style="vertical-align:middle;text-align:-webkit-center;">
+                                Add
+                                <br/>
+                                <img onClick="addRemove(true); return false;" src="/s.gif" alt="Add" class="rightArrowIcon" style="cursor:pointer;margin-bottom:10%;"/>
+                                <br/>
+                                <img onClick="addRemove(false); return false;" src="/s.gif" alt="Remove" class="leftArrowIcon" style="cursor:pointer;"/>
+                                <br/>
+                                Remove
+                            </td>
+                            <td>
+                                <apex:selectList value="{!selectedFieldsList}" size="10" multiselect="true" style="min-width:240px;min-height:171.9px;">
+                            <apex:selectOptions value="{!selectedFieldSOList}"/>
+                        </apex:selectList>
+                            </td>
+                        </tr>
+                    </table>
+                </apex:outputPanel>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

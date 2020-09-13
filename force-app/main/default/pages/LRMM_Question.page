@@ -1,0 +1,51 @@
+<apex:page controller="LRMM_QuestionController" tabStyle="{!IF(selectedObject<>null,selectedObject,"Consumer_Account_Details__c")}">
+    <apex:form >
+        <apex:actionstatus id="counterStatus">
+            <apex:facet name="start">
+                <div class="waitingSearchDiv" id="el_loading" style="background-color: #fbfbfb; height:100%;opacity:0.65;width:100%;">
+                    <div class="waitingHolder" style="top: 100px; width: 91px;">
+                    <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." />
+                    <span class="waitingDescription">Loading...</span>
+                    </div>
+                </div>
+            </apex:facet>
+        </apex:actionstatus>
+        <apex:pageBlock title="New Case">
+            <apex:pageMessages id="errorMessage"></apex:pageMessages>
+            <apex:pageblockButtons >
+                <apex:commandButton value="Save" action="{!saveCase}"/>
+                <apex:commandButton value="Cancel" action="/{!sObjLRMM.id}" immediate="true"/>
+            </apex:pageblockButtons>
+            
+            <apex:pageBlockSection title="Case Information" collapsible="false">
+                <apex:outputField value="{!caseObj.AccountId}"/>
+                <apex:inputField value="{!caseObj.contactId}" required="true"/>
+                <apex:outputField value="{!caseObj.Status}"/>
+                <apex:outputField value="{!caseObj.Reason}"/>
+                <apex:outputField value="{!caseObj.MCM_Account__c}"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection title="Case Details" id="questionSection" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Question Short Description"/>
+                    <apex:inputField value="{!caseObj.Subject}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Question Details"/>
+                    <apex:inputField value="{!caseObj.Description}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection title="System Information" columns="1" collapsible="false">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!recordLabel}"/>
+                    <apex:outputLink target="_blank" value="/{!sObjLRMM.id}">{!sObjLRMM['Name']}</apex:outputLink>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Case Record Type"/>
+                    <apex:outputField value="{!caseObj.RecordTypeId}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

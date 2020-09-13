@@ -1,0 +1,149 @@
+<apex:page controller="PNA_PDFReportController" renderAs="pdf" readOnly="true" applyBodyTag="false">
+    
+    <head>
+        <style type="text/css" media="print">
+            @page {
+                margin-top:200px;
+                margin-bottom:60px;
+                @top-center {
+                    content: element(header);
+                }
+               @bottom-left {
+                     content: element(footer);
+               }
+               
+            }
+            div.header {
+                padding: 10px;
+                position: running(header);
+            }
+            div.footer {
+                display: block;
+                padding: 5px;
+                position: running(footer);
+            }
+            .pagenumber:before {
+                content: counter(page);
+            }
+            .pagecount:before {
+                content: counter(pages);
+            }
+            
+            thead {
+            	display: table-header-group;
+            	}
+            
+            body{
+                font-family: SansSerif !important;
+                font-size: 13px;
+            }
+            table{
+                -fs-table-paginate: paginate;
+                width: 100%; 
+            }
+            hr {
+                border: none;
+                background-color: #ccc;
+                color: #ccc;
+                height: 1px;
+            }
+            
+        </style>
+    </head>
+    
+    <apex:pageMessages ></apex:pageMessages>
+    <div class="header" >
+        <div style="display:inline;width:100%;">
+            <apex:image width="180" height="120" value="{!$Resource.ENCORE_LOGO}" />
+            <h3 style="display:inline;float:right;">{!accountObj.Name}</h3>
+        </div>
+        <hr/>
+    </div>
+
+    <div class="footer">
+        <div>Page <span class="pagenumber"/> of <span class="pagecount"/></div>
+    </div>
+
+    <div class="content">
+    	
+    	<apex:outputPanel layout="none" rendered="{!If(pamWrapObj.pna_firstEscalation != null && pamWrapObj.pna_firstEscalation.size > 0 ,true,false)}">
+    		<h2>First Escalation</h2>
+    		<table>
+	        	<thead>
+			      <tr>
+			         <th>Account Number</th>
+			         <th>Placement Date</th>
+			      </tr>
+			   </thead>
+			   <tbody>
+			   
+					<apex:repeat value="{!pamWrapObj.pna_firstEscalation}" var="pnaObj">
+						<tr>
+							<td>{!pnaObj.Account_Number__c}</td>
+							<td>
+								<apex:outputText value="{0, date, MMMM d','  yyyy}">
+									<apex:param value="{!pnaObj.SOL_Placement_Date__c}" />
+								</apex:outputText>
+							</td>
+						</tr>
+					</apex:repeat>
+			   </tbody>
+	        </table>
+    	</apex:outputPanel>
+    	
+    	<apex:outputPanel layout="none" rendered="{!If(pamWrapObj.pna_finalEscalation != null && pamWrapObj.pna_finalEscalation.size > 0 ,true,false)}">
+    		<h2>Final Escalation</h2>
+    		<table>
+	        	<thead>
+			      <tr>
+			         <th>Account Number</th>
+			         <th>Placement Date</th>
+			      </tr>
+			   </thead>
+			   <tbody>
+			   
+					<apex:repeat value="{!pamWrapObj.pna_finalEscalation}" var="pnaObj">
+						<tr>
+							<td>{!pnaObj.Account_Number__c}</td>
+							<td>
+								<apex:outputText value="{0, date, MMMM d','  yyyy}">
+									<apex:param value="{!pnaObj.SOL_Placement_Date__c}" />
+								</apex:outputText>
+							</td>
+						</tr>
+					</apex:repeat>
+			   </tbody>
+	        </table>
+    	</apex:outputPanel>
+    	
+    	<apex:outputPanel layout="none" rendered="{!If(pamWrapObj.pna_excluded != null && pamWrapObj.pna_excluded.size > 0 ,true,false)}">
+    		<h2>Excluded</h2>
+    		<table>
+	        	<thead>
+			      <tr>
+			         <th>Account Number</th>
+			         <th>Placement Date</th>
+			         <th>Excluded reason</th>
+			         <th>Excluded comments</th>
+			      </tr>
+			   </thead>
+			   <tbody>
+			   
+					<apex:repeat value="{!pamWrapObj.pna_excluded}" var="pnaObj">
+						<tr>
+							<td>{!pnaObj.Account_Number__c}</td>
+							<td>
+								<apex:outputText value="{0, date, MMMM d','  yyyy}">
+									<apex:param value="{!pnaObj.SOL_Placement_Date__c}" />
+								</apex:outputText>
+							</td>
+							<td>{!pnaObj.CCM_Excluded_Reason__c}</td>
+							<td>{!pnaObj.Excluded_Other_Comments__c}</td>
+						</tr>
+					</apex:repeat>
+			   </tbody>
+	        </table>
+    	</apex:outputPanel>
+        
+    </div>
+</apex:page>

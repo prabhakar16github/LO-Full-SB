@@ -1,0 +1,548 @@
+<apex:page standardcontroller="Call_Monitoring__c" extensions="CallMonitoringforVoilationPageController">
+   <apex:form >
+            <apex:pageMessages id="msg"/>
+              <apex:pageblock >
+                   <apex:pageblockbuttons location="top">
+                     <apex:commandButton value="Save" action="{!save}"/>
+                     <apex:commandButton value="Cancel" action="{!Cancel}"/>
+                     
+                    </apex:pageblockbuttons>
+                    
+                    <apex:outputPanel layout="block" rendered="{!IF(recordTypeName != 'CM Remediation 20180701', True, False)}">
+                    
+	                    <!--  For 1.01 and 1.02 Violation -->
+	                    <apex:pageBlockSection title="Critical Finding Violation 1.01" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01__c == 'Yes',true,false)}">
+	                          <apex:inputField value="{!cm.CF1_01_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_01__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_01_Remidated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_01_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_01_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01__c== 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_01_Remidiation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01__c== 'Yes',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.CF1_01_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01__c== 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_01_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01__c== 'Yes',true,false)}"/>
+	                    </apex:pageBlockSection>      
+	               
+	                    <apex:pageBlockSection title="Critical Finding Violation 1.02" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02__c == 'Yes',true,false)}">
+	                          <apex:inputField value="{!cm.CF1_02_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_02__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_02_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_02_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_02_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02__c== 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_02_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02__c== 'Yes',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.CF1_02_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02__c== 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_02_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02__c== 'Yes',true,false)}"/>
+	                  </apex:pageBlockSection>  
+	              
+	                    <!--  For 1.03 and 1.04 Violation-->    
+	                    <apex:pageBlockSection title="Critical Finding Violation 1.03" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_03__c == 'Yes',true,false)}">  
+	                          <apex:inputField value="{!cm.CF1_03_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_03__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_03__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_03__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_03_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_03__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_03_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.CF1_03__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_03_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_03__c== 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_03_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_03__c == 'Yes',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.CF1_03_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_03__c== 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_03_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_03__c== 'Yes',true,false)}"/>
+	                     </apex:pageBlockSection>     
+	                    <apex:pageBlockSection title="Critical Finding Violation 1.04" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04__c == 'Yes',true,false)}">  
+	                     
+	                          <apex:inputField value="{!cm.CF1_04_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_04__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_04_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_04_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_04_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04__c== 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_04_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04__c== 'Yes',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.CF1_04_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_04_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04__c == 'Yes',true,false)}"/>
+	                    </apex:pageBlockSection>
+	                     
+	                     <!--  For 1.05 Violation-->  
+	                     <apex:pageBlockSection title="Critical Finding Violation 1.05" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c == 'Yes',true,false)}">        
+	                          <apex:inputField value="{!cm.CF1_05_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_05__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c == 'Yes',true,false)}"/>                     
+	                          <apex:inputField value="{!cm.CF1_05_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_05_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_05_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c== 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_05_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c== 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.CF1_05_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c == 'Yes',true,false)}"/>
+	                          
+	                    </apex:pageBlockSection>  
+	                     <!--  For 2.01 and 2.02 Violation-->  
+	                       <apex:pageBlockSection title="Significant Finding Violations 2.01" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_01_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_01__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_01_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_01_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_01_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01__c  == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_01_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01__c == 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_01_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_01_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01__c == 'No',true,false)}"/>
+	                       </apex:pageBlockSection>
+	                    
+	                        <apex:pageBlockSection title="Significant Finding Violations 2.02" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_02__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_02_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_02__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_02__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_02__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_02_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_02__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_02_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_02__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_02_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_02__c =='No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_02_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_02__c == 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_02_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_02__c =='No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_02_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_02__c =='No',true,false)}"/>
+	                       </apex:pageBlockSection>
+	                 
+	                    <!--  For 2.03 and 2.04 Violation-->    
+	                       <apex:pageBlockSection title="Significant Finding Violations 2.03" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_03__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_03_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_03__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_03__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_03__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_03_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_03__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_03_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_03__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_03_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_03__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_03_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_03__c== 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_03_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_03__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_03_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_03__c == 'No',true,false)}"/>
+	                      </apex:pageBlockSection>    
+	
+	                       <apex:pageBlockSection title="Significant Finding Violations 2.04" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_04__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_04_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_04__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_04__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_04__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_04_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_04__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_04_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_04__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_04_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_04__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_04_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_04__c== 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_04_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_04__c =='No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_04_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_04__c =='No',true,false)}"/>
+	                       </apex:pageBlockSection> 
+	                      
+	                     <!--  For 2.05 and 2.06 Violation-->    
+	                      <apex:pageBlockSection title="Significant Finding Violations 2.05" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_05__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_05_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_05__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_05__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_05__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_05_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_05__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_05_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_05__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_05_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_05__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_05_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_05__c== 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_05_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_05__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_05_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_05__c == 'No',true,false)}"/>
+	                      </apex:pageBlockSection>
+	
+	                      <apex:pageBlockSection title="Significant Finding Violations 2.06" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_06__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_06_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_06__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_06__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_06__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_06_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_06__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_06_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_06__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_06_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_06__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_06_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_06__c== 'No',true,false)}"/>     
+	                          <apex:inputHidden value="{!cm.SF2_06_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_06__c =='No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_06_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_06__c =='No',true,false)}"/>
+	                      </apex:pageBlockSection>
+	                      
+	                      <!--  For 2.07 and 2.08 Violation-->    
+	                       <apex:pageBlockSection title="Significant Finding Violations 2.07" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_07_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_07__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_07_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_07_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_07_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_07_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07__c== 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_07_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_07_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07__c == 'No',true,false)}"/>
+	                       </apex:pageBlockSection>
+	                       
+	                       <apex:pageBlockSection title="Significant Finding Violations 2.08" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_08_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_08__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_08_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_08_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_08_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_08_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08__c== 'No',true,false)}"/>   
+	                          <apex:inputHidden value="{!cm.SF2_08_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08__c =='No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_08_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08__c =='No',true,false)}"/>
+	                       </apex:pageBlockSection>
+	                       
+	                       
+	                       <!--  For 2.09 and 2.10 Violation-->    
+	                       <apex:pageBlockSection title="Significant Finding Violations 2.09" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_09_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_09__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_09_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_09_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_09_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_09_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09__c== 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_09_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_09_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09__c == 'No',true,false)}"/>
+	                        </apex:pageBlockSection>
+	                        
+	                        <apex:pageBlockSection title="Significant Finding Violations 2.10" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_10_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_10__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_10_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_10_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_10_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10__c== 'No',true,false)}"/>  
+	                          <apex:inputField value="{!cm.SF2_10_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10__c== 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_10_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10__c =='No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_10_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10__c =='No',true,false)}"/>
+	                        
+	                        </apex:pageBlockSection>
+	                        
+	                        <!--  For 2.11 and 2.12 Violation-->    
+	                       <apex:pageBlockSection title="Significant Finding Violations 2.11" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_11_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_11__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_11_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_11_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_11_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_11_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11__c== 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_11_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_11_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11__c == 'No',true,false)}"/>
+	                       </apex:pageBlockSection>
+	                       
+	                       <apex:pageBlockSection title="Significant Finding Violations 2.12" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_12_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_12__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_12_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_12_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_12_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_12_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12__c== 'No',true,false)}"/>   
+	                          <apex:inputHidden value="{!cm.SF2_12_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12__c =='No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_12_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12__c =='No',true,false)}"/>
+	                       </apex:pageBlockSection>
+	                       <!--  For 2.13 and 2.14 Violation-->    
+	                       <apex:pageBlockSection title="Significant Finding Violations 2.13" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_13_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_13__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_13_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_13_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_13_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_13_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13__c== 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_13_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_13_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13__c == 'No',true,false)}"/>
+	                    </apex:pageBlockSection>  
+	                    <apex:pageBlockSection title="Significant Finding Violations 2.14" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_14__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_14_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_14__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_14__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_14__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_14_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_14__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_14_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_14__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_14_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_14__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_14_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_14__c== 'No',true,false)}"/>           
+	                          <apex:inputHidden value="{!cm.SF2_14_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_14__c =='No',true,false)}"/>  
+	                          <apex:inputField value="{!cm.SF2_14_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_14__c =='No',true,false)}"/>      
+	                    </apex:pageBlockSection>
+	                          <!--  For 2.15 and 2.16 Violation-->    
+	                    <apex:pageBlockSection title="Significant Finding Violations 2.15" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_15__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_15_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_15__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_15__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_15__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_15_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_15__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_15_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_15__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_15_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_15__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_15_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_15__c== 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_15_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_15__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_15_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_15__c == 'No',true,false)}"/>
+	                    </apex:pageBlockSection>  
+	                    <apex:pageBlockSection title="Significant Finding Violations 2.16" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_16_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_16__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_16_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_16_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_16_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_16_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16__c== 'No',true,false)}"/>    
+	                          <apex:inputHidden value="{!cm.SF2_16_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16__c =='No',true,false)}"/>       
+	                          <apex:inputField value="{!cm.SF2_16_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16__c =='No',true,false)}"/>             
+	                    </apex:pageBlockSection>
+	                          <!--  For 2.17 and 2.18 Violation-->    
+	                    <apex:pageBlockSection title="Significant Finding Violations 2.17" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_17_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_17__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_17_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_17_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_17_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_17_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17__c== 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_17_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_17_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17__c == 'No',true,false)}"/>
+	                    </apex:pageBlockSection>   
+	                    <apex:pageBlockSection title="Significant Finding Violations 2.18" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_18_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_18__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_18_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_18_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_18_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_18_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18__c== 'No',true,false)}"/>  
+	                          <apex:inputHidden value="{!cm.SF2_18_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18__c =='No',true,false)}"/>               
+	                          <apex:inputField value="{!cm.SF2_18_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18__c =='No',true,false)}"/>             
+	                    </apex:pageBlockSection> 
+	                       <!--  For 2.19 and 2.20 Violation-->    
+	                     <apex:pageBlockSection title="Significant Finding Violations 2.19" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_19_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_19__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_19_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_19_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_19_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_19_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19__c== 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_19_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_19_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19__c == 'No',true,false)}"/>
+	                    </apex:pageBlockSection> 
+	                    <apex:pageBlockSection title="Significant Finding Violations 2.20" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_20_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_20__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_20_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_20_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_20_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_20_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20__c== 'No',true,false)}"/>   
+	                          <apex:inputHidden value="{!cm.SF2_20_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20__c =='No',true,false)}"/>            
+	                          <apex:inputField value="{!cm.SF2_20_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20__c =='No',true,false)}"/>              
+	                    </apex:pageBlockSection>  
+	                    
+	                    
+	                       <!--  For 2.21 and 2.22 Violation-->    
+	                    <apex:pageBlockSection title="Significant Finding Violations 2.21" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_21_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_21__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_21_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_21_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_21_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_21_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21__c== 'No',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_21_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_21_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21__c == 'No',true,false)}"/>
+	                    </apex:pageBlockSection>  
+	                    <apex:pageBlockSection title="Significant Finding Violations 2.22" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22__c == 'No',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_22_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_22__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_22_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_22_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22__c == 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_22_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22__c== 'No',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_22_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22__c== 'No',true,false)}"/>      
+	                          <apex:inputHidden value="{!cm.SF2_22_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22__c =='No',true,false)}"/>  
+	                          <apex:inputField value="{!cm.SF2_22_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22__c =='No',true,false)}"/>                  
+	                    </apex:pageBlockSection>
+                    	
+                    </apex:outputPanel>
+                    
+                    
+                     <apex:outputPanel layout="block" rendered="{!IF(recordTypeName == 'CM Remediation 20180701', True, False)}">
+                     
+	                     	<apex:pageBlockSection title="Critical Finding Violation 1.01.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01_1__c == 'Yes',true,false)}">
+		                          <apex:inputField value="{!cm.CF1_01_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_01_1__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_01_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_01_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_01_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01_1__c== 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_01_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01_1__c== 'Yes',true,false)}"/>
+		                          <apex:inputHidden value="{!cm.CF1_01_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01_1__c== 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_01_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_01_1__c== 'Yes',true,false)}"/>
+		                    </apex:pageBlockSection>      
+		               
+		                    <apex:pageBlockSection title="Critical Finding Violation 1.02.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02_1__c == 'Yes',true,false)}">
+		                          <apex:inputField value="{!cm.CF1_02_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_02_1__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_02_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_02_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_02_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02_1__c== 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_02_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02_1__c== 'Yes',true,false)}"/>
+		                          <apex:inputHidden value="{!cm.CF1_02_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02_1__c== 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_02_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_02_1__c== 'Yes',true,false)}"/>
+		                  </apex:pageBlockSection>  
+		              
+		                    <!--  For 1.04 Violation-->    
+		                         
+		                    <apex:pageBlockSection title="Critical Finding Violation 1.04.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04_1__c == 'Yes',true,false)}">  
+		                     
+		                          <apex:inputField value="{!cm.CF1_04_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_04_1__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_04_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_04_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_04_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04_1__c== 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_04_1_Remedation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04_1__c== 'Yes',true,false)}"/>
+		                          <apex:inputHidden value="{!cm.CF1_04_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_04_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_04_1__c == 'Yes',true,false)}"/>
+		                    </apex:pageBlockSection>
+		                     
+		                     <!--  For 1.05 Violation-->  
+		                     <apex:pageBlockSection title="Critical Finding Violation 1.05" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c == 'Yes',true,false)}">        
+		                          <apex:inputField value="{!cm.CF1_05_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_05__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c == 'Yes',true,false)}"/>                     
+		                          <apex:inputField value="{!cm.CF1_05_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_05_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_05_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c== 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_05_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c== 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.CF1_05_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.CF1_05__c == 'Yes',true,false)}"/>
+		                          
+		                    </apex:pageBlockSection>
+		                    
+		                    <!--  For 2.01 Violation-->  
+	                       <apex:pageBlockSection title="Significant Finding Violations 2.01.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01_1__c == 'Yes',true,false)}">
+		                          <apex:inputField value="{!cm.SF2_01_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.SF2_01_1__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.SF2_01_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.SF2_01_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.SF2_01_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01_1__c  == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.SF2_01_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputHidden value="{!cm.SF2_01_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01_1__c == 'Yes',true,false)}"/>
+		                          <apex:inputField value="{!cm.SF2_01_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_01_1__c == 'Yes',true,false)}"/>
+	                       </apex:pageBlockSection>
+	                    
+	                       
+	                       
+	                       <!--  For 2.07 and 2.08 Violation-->    
+	                       <apex:pageBlockSection title="Significant Finding Violations 2.07.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07_1__c == 'Yes',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_07_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_07_1__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_07_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_07_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_07_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07_1__c== 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_07_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07_1__c== 'Yes',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_07_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_07_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_07_1__c == 'Yes',true,false)}"/>
+	                       </apex:pageBlockSection>
+	                       
+	                       <apex:pageBlockSection title="Significant Finding Violations 2.08.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08_1__c == 'Yes',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_08_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_08_1__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_08_1_Remediation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_08_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_08_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08_1__c== 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_08_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08_1__c== 'Yes',true,false)}"/>   
+	                          <apex:inputHidden value="{!cm.SF2_08_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08_1__c =='Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_08_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_08_1__c =='Yes',true,false)}"/>
+	                       </apex:pageBlockSection>
+	                       
+	                       
+	                       <!--  For 2.09 and 2.10 Violation-->    
+	                       <apex:pageBlockSection title="Significant Finding Violations 2.09.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09_1__c == 'Yes',true,false)}">
+	                          <apex:inputField value="{!cm.SF2_09_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_09_1__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_09_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_09_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_09_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09_1__c== 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_09_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09_1__c== 'Yes',true,false)}"/>
+	                          <apex:inputHidden value="{!cm.SF2_09_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09_1__c == 'Yes',true,false)}"/>
+	                          <apex:inputField value="{!cm.SF2_09_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_09_1__c == 'Yes',true,false)}"/>
+	                        </apex:pageBlockSection>
+	                        
+
+							<apex:pageBlockSection title="Significant Finding Violations 2.10.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10_1__c == 'Yes',true,false)}">
+							    <apex:inputField value="{!cm.SF2_10_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_10_1__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_10_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_10_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_10_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10_1__c== 'Yes',true,false)}"/>  
+							    <apex:inputField value="{!cm.SF2_10_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10_1__c== 'Yes',true,false)}"/>
+							    <apex:inputHidden value="{!cm.SF2_10_1_Explanatio__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10_1__c =='Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_10_1_Explanatio__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_10_1__c =='Yes',true,false)}"/>
+							
+							</apex:pageBlockSection>
+							
+							<!--  For 2.11 and 2.12 Violation-->    
+							<apex:pageBlockSection title="Significant Finding Violations 2.11.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11_1__c == 'Yes',true,false)}">
+							    <apex:inputField value="{!cm.SF2_11_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_11_1__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_11_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_11_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_11_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11_1__c== 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_11_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11_1__c== 'Yes',true,false)}"/>
+							    <apex:inputHidden value="{!cm.SF2_11_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_11_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_11_1__c == 'Yes',true,false)}"/>
+							</apex:pageBlockSection>
+							
+							<apex:pageBlockSection title="Significant Finding Violations 2.12.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12_1__c == 'Yes',true,false)}">
+							    <apex:inputField value="{!cm.SF2_12_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_12_1__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_12_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_12_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_12_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12_1__c== 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_12_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12_1__c== 'Yes',true,false)}"/>   
+							    <apex:inputHidden value="{!cm.SF2_12_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12_1__c =='Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_12_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_12_1__c =='Yes',true,false)}"/>
+							</apex:pageBlockSection>
+							<!--  For 2.13 and 2.16 Violation-->    
+							<apex:pageBlockSection title="Significant Finding Violations 2.13.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13_1__c == 'Yes',true,false)}">
+							    <apex:inputField value="{!cm.SF2_13_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_13_1__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_13_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_13_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_13_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13_1__c== 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_13_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13_1__c== 'Yes',true,false)}"/>
+							    <apex:inputHidden value="{!cm.SF2_13_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_13_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_13_1__c == 'Yes',true,false)}"/>
+							</apex:pageBlockSection>  
+							   
+							<apex:pageBlockSection title="Significant Finding Violations 2.16.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16_1__c == 'Yes',true,false)}">
+							        <apex:inputField value="{!cm.SF2_16_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_16_1__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_16_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SFX2_16_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_16_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16_1__c== 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_16_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16_1__c== 'Yes',true,false)}"/>    
+							        <apex:inputHidden value="{!cm.SF2_16_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16_1__c =='Yes',true,false)}"/>       
+							        <apex:inputField value="{!cm.SF2_16_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_16_1__c =='Yes',true,false)}"/>             
+							</apex:pageBlockSection>
+							        <!--  For 2.17 and 2.18 Violation-->    
+							<apex:pageBlockSection title="Significant Finding Violations 2.17.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17_1__c == 'Yes',true,false)}">
+							        <apex:inputField value="{!cm.SF2_17_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_17_1__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_17_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SFX2_17_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_17_1_Remediation_Steps__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17_1__c== 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_17_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17_1__c== 'Yes',true,false)}"/>
+							        <apex:inputHidden value="{!cm.SF2_17_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_17_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_17_1__c == 'Yes',true,false)}"/>
+							</apex:pageBlockSection>   
+							<apex:pageBlockSection title="Significant Finding Violations 2.18.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18_1__c == 'Yes',true,false)}">
+							        <apex:inputField value="{!cm.SF2_18_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_18_1__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_18_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_18_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_18_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18_1__c== 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_18_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18_1__c== 'Yes',true,false)}"/>  
+							        <apex:inputHidden value="{!cm.SF2_18_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18_1__c =='Yes',true,false)}"/>               
+							        <apex:inputField value="{!cm.SF2_18_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_18_1__c =='Yes',true,false)}"/>             
+							</apex:pageBlockSection> 
+							    <!--  For 2.19 and 2.20 Violation-->    
+							<apex:pageBlockSection title="Significant Finding Violations 2.19.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19_1__c == 'Yes',true,false)}">
+							    <apex:inputField value="{!cm.SF2_19_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_19_1__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_19_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_19_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_19_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19_1__c== 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_19_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19_1__c== 'Yes',true,false)}"/>
+							    <apex:inputHidden value="{!cm.SF2_19_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19_1__c == 'Yes',true,false)}"/>
+							    <apex:inputField value="{!cm.SF2_19_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_19_1__c == 'Yes',true,false)}"/>
+							</apex:pageBlockSection> 
+							<apex:pageBlockSection title="Significant Finding Violations 2.20.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20_1__c == 'Yes',true,false)}">
+							        <apex:inputField value="{!cm.SF2_20_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_20_1__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_20_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_20_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_20_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20_1__c== 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_20_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20_1__c== 'Yes',true,false)}"/>   
+							        <apex:inputHidden value="{!cm.SF2_20_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20_1__c =='Yes',true,false)}"/>            
+							        <apex:inputField value="{!cm.SF2_20_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_20_1__c =='Yes',true,false)}"/>              
+							</apex:pageBlockSection>  
+							
+							
+							    <!--  For 2.21 and 2.22 Violation-->    
+							<apex:pageBlockSection title="Significant Finding Violations 2.21.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21_1__c == 'Yes',true,false)}">
+							        <apex:inputField value="{!cm.SF2_21_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_21_1__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_21_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_21_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_21_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21_1__c== 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_21_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21_1__c== 'Yes',true,false)}"/>
+							        <apex:inputHidden value="{!cm.SF2_21_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_21_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_21_1__c == 'Yes',true,false)}"/>
+							</apex:pageBlockSection>  
+							<apex:pageBlockSection title="Significant Finding Violations 2.22.1" columns="1" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22_1__c == 'Yes',true,false)}">
+							        <apex:inputField value="{!cm.SF2_22_1_Violation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_22_1__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_22_1_Remediated__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_22_1_Remediation_Plan__c}"  rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22_1__c == 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_22_1_Remediation_Steps_Completed__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22_1__c== 'Yes',true,false)}"/>
+							        <apex:inputField value="{!cm.SF2_22_1_Remediation_Date__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22_1__c== 'Yes',true,false)}"/>      
+							        <apex:inputHidden value="{!cm.SF2_22_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22_1__c =='Yes',true,false)}"/>  
+							        <apex:inputField value="{!cm.SF2_22_1_Explanation__c}" rendered="{!If(CallMonitoringEdit != Null && cm.SF2_22_1__c =='Yes',true,false)}"/>                  
+							</apex:pageBlockSection>	                        
+		                      
+                     
+                     </apex:outputPanel>
+            
+               </apex:pageblock>
+    </apex:form>
+</apex:page>

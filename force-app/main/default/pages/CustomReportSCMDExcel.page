@@ -1,0 +1,35 @@
+<apex:page cache="false" controller="CustomReportSCMDController" contenttype="application/vnd.ms-excel#SCM - Dispute Report.xls">
+	<apex:form >
+		<apex:pageBlock title="SCMD Account Numbers">
+			<apex:pageBlockTable value="{!pamRecordsList}" var="pam"
+				border="1px solid black;">
+				<apex:column headerValue="Organization Name: Organization Name"
+					style="vertical-align: middle;">
+					<apex:outputField value="{!pam.Organization_Name__r.Name}" />
+				</apex:column>
+				<apex:column headerValue="Process Adherence Monitoring: ID"
+					style="vertical-align: middle;">
+	                {!pam.Id}
+	            </apex:column>
+				<!-- <apex:column headerValue="PCode Sent - Oral Dispute" style="vertical-align: middle;">
+	                {!pam.SCMD_PCode_Sent_Oral_Dispute__c}
+	            </apex:column> -->
+				<apex:column headerValue="Consumer Disputes Debt Orally">
+					<apex:outputField value="{!pam.SCMD_Oral_Dispute_Account_s__c}" />
+				</apex:column>
+				<!-- <apex:column headerValue="PCode Sent - Written Dispute" style="vertical-align: middle;">
+	                {!pam.SCMD_PCode_Sent_Written_Dispute__c}
+	            </apex:column> -->
+				<apex:column headerValue="Consumer Disputes Debt Writing">
+					<apex:outputField value="{!pam.SCMD_Written_Dispute_Account_s__c}" />
+				</apex:column>
+				<!-- <apex:column headerValue="PCode Sent - Mail Out Validation of Debt" style="vertical-align: middle;">
+	                {!pam.SCMD_PCodeSentMailOut_Validation_of_Debt__c}
+	            </apex:column> -->
+				<apex:column headerValue="Mail Out – Validation of Debt" style="width:50%;">
+					<apex:outputField value="{!pam.SCMD_MailOutValidation_of_Debt_Account_s__c}" />
+				</apex:column>
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>
