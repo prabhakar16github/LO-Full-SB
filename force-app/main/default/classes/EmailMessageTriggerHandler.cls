@@ -72,7 +72,6 @@ public with sharing class EmailMessageTriggerHandler{
 
 		}
 
-		System.debug('caseListToUpdate>>>>>>' + caseListToUpdate);
 		if (caseListToUpdate.isEmpty()){
 			return;
 		}
