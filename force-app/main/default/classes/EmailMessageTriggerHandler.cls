@@ -29,7 +29,6 @@ public with sharing class EmailMessageTriggerHandler{
 			}
 
 
-			System.debug('>>>>cc>>>>' + email.CcAddress);
 			if (email.CcAddress != NULL){
 				if (email.CcAddress.contains(';')){
 					emailSet.addAll(email.CcAddress.split(';'));
@@ -38,7 +37,6 @@ public with sharing class EmailMessageTriggerHandler{
 				}
 			}
 
-			System.debug('>>>>bcc>>>>' + email.BccAddress);
 			if (email.BccAddress != NULL){
 				if (email.BccAddress.contains(';')){
 					emailSet.addAll(email.BccAddress.split(';'));
@@ -52,7 +50,6 @@ public with sharing class EmailMessageTriggerHandler{
 
 		}
 
-		System.debug('emailMap>>>>>' + emailMap);
 		if (emailMap.keySet().isEmpty()){
 			return;
 		}
