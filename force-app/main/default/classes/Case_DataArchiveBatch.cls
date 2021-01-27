@@ -52,7 +52,7 @@ global class Case_DataArchiveBatch implements Database.Batchable<sobject>, Datab
     global void finish(Database.BatchableContext bc){
         if(this.deleteCount > 0 || this.failCount > 0 || !recordIdToErrorMap.isEmpty()){
             /* Calling the handler method to send the notification after archiving the data. */
-            handler.sendNotificationAfterAttachmentDelete(this.deleteCount,this.failCount,recordIdToErrorMap, 'Case Data Archive Notification');
+            //handler.sendNotificationAfterAttachmentDelete(this.deleteCount,this.failCount,recordIdToErrorMap, 'Case Data Archive Notification');
         }
     }
 }
