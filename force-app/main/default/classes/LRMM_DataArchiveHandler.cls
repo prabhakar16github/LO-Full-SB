@@ -1,11 +1,9 @@
 /*
- * @ Class Name  : LRMM_DataArchiveBatch
- * 
- * @ Description : This is the handler class LRMM_DataArchiveBatch.
- * 
- * @ Created By  : Prabhakar Joshi
- * 
- * @ Created Date: 19-Mar-2020
+ 	* @ Class Name  		: 		LRMM_DataArchiveBatch
+ 	* @ Description 		: 		This is the handler class LRMM_DataArchiveBatch.
+ 	* @ Created By         	: 		Prabhakar Joshi
+ 	* @ Created Date       	: 		19-Mar-2020
+ 	* @ Last Modified Date 	: 		27-Jan-2021	
  */
 
 public class LRMM_DataArchiveHandler{
@@ -16,7 +14,48 @@ public class LRMM_DataArchiveHandler{
 	/* Status Value */
 	public static FINAL String STATUS_CLOSED = 'Closed';
 	public static FINAL String STATUS_COMPLETED = 'Completed';
+    
+    public List<Attachment> getAttachments(){
+        List<Attachment> attList = new List<Attachment>();
+        for (String sobj : statusFieldMap.keySet()){
+            String query = 'SELECT Id,ParentId,LastModifiedDate FROM Attachment WHERE ParentId IN ';
+            query += '(SELECT Id,Name FROM ' + sobj + ' WHERE LastModifiedDate < :lastDate AND ';
+            if (sobj != 'Trial_Witness_Request__c')
+                query += statusFieldMap.get(sobj) + ' =:STATUS_CLOSED)';
+            else{
+                query += '((RecordType.Name LIKE \'%Telephonic%\' AND ' + statusFieldMap.get(sobj) + '=:STATUS_COMPLETED) OR (RecordType.Name LIKE \'%Live%\' AND ' + statusFieldMap.get(sobj) + '=:STATUS_CLOSED)))';
+            }
+            attList = Database.query(query);
+        }
+        
+        return attList;
+    }
+    
+    public Map<String,Integer> getAttachmentCountMap(){
+        Map<String, Integer> objectToAttCountMap = new Map<String, Integer>();
+        List<AggregateResult> attList = new List<AggregateResult>();
+        for (String sobj : statusFieldMap.keySet()){
+            String query = 'SELECT COUNT(Id)totalCount, Parent.Type objectAPIName FROM Attachment WHERE LastModifiedDate < :lastDate ';//
+            query += 'AND ParentId IN (SELECT Id FROM ' + sobj + ' WHERE LastModifiedDate < :lastDate AND ';
+            if (sobj != 'Trial_Witness_Request__c')
+                query += statusFieldMap.get(sobj) + ' =:STATUS_CLOSED ';
+            else{
+                query += '((RecordType.Name LIKE \'%Telephonic%\' AND ' + statusFieldMap.get(sobj) + '=:STATUS_COMPLETED) OR (RecordType.Name LIKE \'%Live%\' AND ' + statusFieldMap.get(sobj) + '=:STATUS_CLOSED)) ';
+            }
+            query += ') GROUP BY Parent.Type ';
+            attList = Database.query(query);
+        }
+        
+        for(AggregateResult agg : attList){
+            String sobjectName = Schema.getGlobalDescribe().get(String.valueOf(agg.get('objectAPIName'))).getDescribe().getLabel();
+            objectToAttCountMap.put(sobjectName, (Integer)agg.get('totalCount'));
+        }
+        return objectToAttCountMap;
+        
+    }
+    
 	/* Method to get the Parent Record Ids */
+    /*
 	public Set<Id> getParentIds(){
         Map<Id,Sobject> sobjectMap = new Map<Id,Sobject>();
 		for (String obj : statusFieldMap.keySet()){
@@ -26,6 +65,7 @@ public class LRMM_DataArchiveHandler{
 	}
 
 	/* Method to get the LRMM Records */
+    /*
 	private List<Sobject> getLRMMRecords(String sobj){
 		String query = 'SELECT Id,Name,' + statusFieldMap.get(sobj) + ' FROM ' + sobj + ' WHERE LastModifiedDate < :lastDate AND ';//
 		if (sobj != 'Trial_Witness_Request__c')

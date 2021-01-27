@@ -3,6 +3,7 @@
 	* @ Description 	: 	Handler Class for Case_DataArchiveBatch Class.
 	* @ Created By  	: 	Prabhakar Joshi
     * @ Created Date	: 	15-July-2020
+    * @ Last Modified   :   19-Jan-2021
 */
 
 public class Case_DataArchiveHandler {
@@ -11,35 +12,91 @@ public class Case_DataArchiveHandler {
     /* To hold the LC Admin Email Id to send the notification after Data Archived. */
     public static FINAL String LCAdminEmail = 'lcsalesforceadmin@mcmcg.com';
     
+    public static FINAL Set<Id> recordTypeIdSet = getCaseRecordTypeIdSet();
     /* @ Method Definition to get the list of Case records. */
     /* @ Calling from Case_DataArchiveBatch & DataArchiveReportController.*/
-    public List<Case> getCaseRecords(Integer limitSelected){
-        Set<Id> recordTypeIdSet = this.getCaseRecordTypeIdSet();
+    public List<Attachment> getAttachments(){ //Integer limitSelected
+        
         if(recordTypeIdSet.isEmpty()){
-            return new List<Case>();
+            return new List<Attachment>();
         }
         
-        List<Case> caseList = new List<Case>();
-        for(Case cs : [SELECT Id,RecordType.Name,Status,LastmodifiedDate,
-                       (SELECT Id  FROM EmailMessages WHERE LastModifiedDate < :eighteenMonthBeforeDate),
-                       (SELECT Id FROM Attachments WHERE LastModifiedDate < :eighteenMonthBeforeDate)
-                       FROM Case 
-                       WHERE Status = 'Closed' AND RecordTypeId IN : recordTypeIdSet 
-                       AND ((Data_Archived_Date__c != NULL AND Data_Archived_Date__c < :eighteenMonthBeforeDate) 
-                            OR(Data_Archived_Date__c = NULL AND LastmodifiedDate < :eighteenMonthBeforeDate))
-                       ORDER BY LastmodifiedDate
-                       LIMIT :limitSelected]){
-                           
-                           if(cs.Attachments.size() > 0 || cs.EmailMessages.size() > 0){
-                               caseList.add(cs);
-                           }
-                       }
-       return caseList;
+        List<Attachment> attList = [SELECT Id,ParentId FROM Attachment 
+                                    WHERE ParentId IN (
+                                        SELECT Id FROM Case WHERE Status = 'Closed' 
+                                        AND RecordTypeId IN : recordTypeIdSet 
+                                        AND Contact.Inactive_Contact__c = false
+                                        AND LastmodifiedDate < :eighteenMonthBeforeDate
+                                    )
+                                    AND LastModifiedDate < :eighteenMonthBeforeDate
+                                    ORDER BY LastmodifiedDate 
+                                    LIMIT 50];
+       
+        return attList;
+    }
+    
+    public Integer getAttachmentCount(){
+        
+        if(recordTypeIdSet.isEmpty()){
+            return 0;
+        }
+        Integer attCount = 0;
+        for(AggregateResult agg : [SELECT COUNT(Id) attCount FROM Attachment 
+                                   WHERE ParentId IN (
+                                       SELECT Id FROM Case WHERE Status = 'Closed' 
+                                       AND RecordTypeId IN : recordTypeIdSet 
+                                       AND Contact.Inactive_Contact__c = false
+                                       AND LastmodifiedDate < :eighteenMonthBeforeDate
+                                   )
+                                   AND LastModifiedDate < :eighteenMonthBeforeDate]){
+                                       attCount += (Integer)agg.get('attCount');
+                                   }
+        
+       
+       return attCount;
+    }
+    
+    public List<EmailMessage> getEmailMessages(){
+        
+        if(recordTypeIdSet.isEmpty()){
+            return new List<EmailMessage>();
+        }
+        
+        List<EmailMessage> emailList = [SELECT Id,ParentId FROM EmailMessage
+                                        WHERE ParentId IN (
+                                            SELECT Id FROM Case WHERE Status = 'Closed' 
+                                            AND RecordTypeId IN : recordTypeIdSet 
+                                            AND Contact.Inactive_Contact__c = false
+                                            AND LastmodifiedDate < :eighteenMonthBeforeDate
+                                        )
+                                        AND LastModifiedDate < :eighteenMonthBeforeDate
+                                        ORDER BY LastmodifiedDate 
+                                        LIMIT 100];
+        return emailList;
+    }
+    
+    public Integer getEmailMessagesCount(){
+        if(recordTypeIdSet.isEmpty()){
+            return 0;
+        }
+        Integer emailCount = 0;
+        for(AggregateResult agg : [SELECT COUNT(Id) emailCount FROM EmailMessage
+                                   WHERE ParentId IN (
+                                       SELECT Id FROM Case WHERE Status = 'Closed' 
+                                       AND RecordTypeId IN : recordTypeIdSet 
+                                       AND Contact.Inactive_Contact__c = false
+                                       AND LastmodifiedDate < :eighteenMonthBeforeDate 
+                                   )
+                                   AND LastModifiedDate < :eighteenMonthBeforeDate]){
+                                       emailCount += (Integer)agg.get('emailCount');
+                                   }
+        
+        return emailCount;
     }
     
     /* @ Method Definition to get the Record Type Ids of Case. */
     /* @ Calling from getCaseRecords method.*/
-    private Set<Id> getCaseRecordTypeIdSet(){
+    public static Set<Id> getCaseRecordTypeIdSet(){
         Set<Id> recordTypeIdSet = new Set<Id>();
         for(RecordType rt : [SELECT Id,Name,SobjectType 
                              FROM RecordType 
@@ -48,22 +105,6 @@ public class Case_DataArchiveHandler {
                                  recordTypeIdSet.add(rt.Id);
                              }
         return recordTypeIdSet;
-    }
-    
-    
-    /* @ Method Definition to to update the case records which has been processed. */
-    /* @ Calling from Case_DataArchiveBatch. */
-    public void updateCaseRecord(Set<Id> caseIdSet){
-        List<Case> caseListToUpdate = new List<Case>();
-        for(Id csId : caseIdSet){
-            Case cs = new Case();
-            cs.Id = csId;
-            cs.Data_Archived_Date__c = System.today();
-            caseListToUpdate.add(cs);
-        }
-        if(!caseListToUpdate.isEmpty()){
-            update caseListToUpdate;
-        }
     }
     
     /* @ Method definition to send the email notification with Number of deleted Attachments */
@@ -84,9 +125,10 @@ public class Case_DataArchiveHandler {
             htmlBody += '</tbody></table>';
         }
 		email.setHtmlBody(htmlBody);
-		email.toaddresses = new List<String>{LCAdminEmail};
+		email.toaddresses = new List<String>{LCAdminEmail,'prabhakar.joshi@mcmcg.com'};
         
-		if (!test.isRunningTest())
-			Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{email});
-	}
+		if (!test.isRunningTest()){
+            Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{email});
+        }
+    }
 }

@@ -55,10 +55,10 @@ public class LW_MissingAttNotificationScheduler implements Schedulable{
             email.setSubject(tw.OrganizationName__r.Firm_Id__c+' Live Witness Missing Attachments');
             
             String htmlBody = 'Dear '+tw.Owner.FirstName+'<br/><br/>Your request for a Live Witness has been approved for your upcoming hearing.  If you ';
-            htmlBody += 'are receiving this message, documentation is missing that is required in order for the witness to be fully prepared.<br/><br/> ';
+            htmlBody += 'are receiving this message, documentation is missing.<br/><br/> ';
             htmlBody += 'Please refer to the document list checkboxes within the witness request and submit any outstanding documents as soon as possible.<br/><br/>';
             htmlBody += 'Please utilize the “Question” button on the Live Witness record to create a case if you have any questions.<br/><br/>';
-            htmlBody += 'Thank you in advance for your prompt response.<br/><br/>';
+            htmlBody += 'Thank you in advance for your prompt response.<br/><br/>Warm Regards,<br/>Live Witness Team';
             
             email.setHtmlBody(htmlBody);
             if(!orgWideEmail.isEmpty())

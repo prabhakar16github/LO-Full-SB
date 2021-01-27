@@ -1,4 +1,4 @@
-<apex:page standardController="Business_Record_Affidavit__c" extensions="RelatedCADForLRMMObjController" applyBodyTag="false">
+<apex:page standardController="Business_Record_Affidavit__c" extensions="RelatedCADForLRMMObjController" applyBodyTag="false" lightningStylesheets="true">
     <body style="background: none !important;">
         <apex:outputPanel layout="block" rendered="{!childCads.size>0}">
             <script>

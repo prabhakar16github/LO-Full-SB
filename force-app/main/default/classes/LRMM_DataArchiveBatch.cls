@@ -1,11 +1,9 @@
 /* 
- * @ Class Name  : LRMM_DataArchiveBatch
- * 
- * @ Description : This class is for archive the LRMM Objects Data.
- * 
- * @ Created By  : Prabhakar Joshi
- * 
- * @ Created Date: 19-Mar-2020
+ 	* @ Class Name  			: 		LRMM_DataArchiveBatch
+ 	* @ Description 			: 		This class is for archive the LRMM Objects Data.
+ 	* @ Created By  			: 		Prabhakar Joshi
+ 	* @ Created Date			: 		19-Mar-2020
+ 	* @ Last Modified Date 		: 		27-Jan-2021
  */
 
 global class LRMM_DataArchiveBatch implements Database.Batchable<sobject>, Database.Stateful{
@@ -20,15 +18,21 @@ global class LRMM_DataArchiveBatch implements Database.Batchable<sobject>, Datab
         this.recordIdToErrorMap = new Map<Id,String>();
 	}
 
-    global Database.QueryLocator start(Database.batchableContext bc){
-        
+    global Iterable<sobject> start(Database.batchableContext bc){
+        return handler.getAttachments();
+        /*
         Date lastDate = LRMM_DataArchiveHandler.lastDate;
         Set<Id> parentIdSet = handler.getParentIds();
         String query = 'SELECT Id,ParentId,LastModifiedDate FROM Attachment WHERE ParentId IN :parentIdSet AND LastModifiedDate < :lastDate ORDER BY LastModifiedDate ';
         return Database.getQueryLocator(query);
+		*/
+        
+        
     }
 
     global void execute(Database.BatchableContext bc, List<Sobject> recordList){
+        System.debug('>>>recordList'+recordList.size());
+        /*
         if (recordList.size() > 0){
             List<Database.DeleteResult> result = Database.delete(recordList, false);
             for(Database.DeleteResult dr : result){
@@ -42,9 +46,10 @@ global class LRMM_DataArchiveBatch implements Database.Batchable<sobject>, Datab
                 }
             }
         }
+		*/
     }
 
-	global void finish(Database.BatchableContext bc){
-		handler.sendNotificationAfterAttachmentDelete(this.deleteCount,this.failCount,recordIdToErrorMap, 'LRMM Attachement Data Archive Notification');
+	global void finish(Database.BatchableContext bc){ 
+		//handler.sendNotificationAfterAttachmentDelete(this.deleteCount,this.failCount,recordIdToErrorMap, 'LRMM Attachement Data Archive Notification');
 	}
 }

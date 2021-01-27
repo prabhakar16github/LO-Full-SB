@@ -46,7 +46,7 @@ public class PAMTriggerHelper{
     /********************************* added on 10-01-2020 by Prabhakar Joshi After Update Trigger ****************************/
     public static void afterUpdate(List<Process_Adherence_Monitoring__c> triggerNew,Map<Id,Process_Adherence_Monitoring__c> oldMap){
         /***** added on 10-01-2020 by Prabhakar Joshi for hit the DM external gateway URL to send the PAM record to DM ****/
-        sendDataToDM(triggerNew,oldMap);
+        //sendDataToDM(triggerNew,oldMap);
     }
     
     private static void sendDataToDM(List<Process_Adherence_Monitoring__c> triggerNew,Map<Id,Process_Adherence_Monitoring__c> oldMap){

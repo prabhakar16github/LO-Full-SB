@@ -29,7 +29,6 @@ public class CallMonitoringTriggerHandler {
         
     }
     
-    
     /* @ Definition of the Method to Prevent the duplicate Call Monitoring records with combination of same Firm+ Month+year. 
 	   @ Calling from before insert and before Update. */
     private void preventDuplicateCMRecords(List<Call_Monitoring__c> triggerNew,Map<Id,Call_Monitoring__c> oldMap){

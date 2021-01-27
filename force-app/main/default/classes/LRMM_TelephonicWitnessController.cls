@@ -35,6 +35,5 @@ public class LRMM_TelephonicWitnessController {
         tw.RecordTypeId = rectype[0].Id;
         tw.TW_Consumer_Account_Records__c = cadList[0].Id;
         return tw;         
-    }
-    
+    }   
 }

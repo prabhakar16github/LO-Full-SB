@@ -1,4 +1,6 @@
-<apex:page controller="LRMM_QuestionController" tabStyle="{!IF(selectedObject<>null,selectedObject,"Consumer_Account_Details__c")}">
+<apex:page controller="LRMM_QuestionController" tabStyle="{!IF(selectedObject<>null,selectedObject,"Consumer_Account_Details__c")}"
+           lightningStylesheets="true">
+    
     <apex:form >
         <apex:actionstatus id="counterStatus">
             <apex:facet name="start">
@@ -11,11 +13,12 @@
             </apex:facet>
         </apex:actionstatus>
         <apex:pageBlock title="New Case">
-            <apex:pageMessages id="errorMessage"></apex:pageMessages>
-            <apex:pageblockButtons >
-                <apex:commandButton value="Save" action="{!saveCase}"/>
+            
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Save" action="{!saveCase}" />
                 <apex:commandButton value="Cancel" action="/{!sObjLRMM.id}" immediate="true"/>
-            </apex:pageblockButtons>
+            </apex:pageBlockButtons>
+           <apex:pageMessages id="errorMessage"></apex:pageMessages>
             
             <apex:pageBlockSection title="Case Information" collapsible="false">
                 <apex:outputField value="{!caseObj.AccountId}"/>
@@ -25,7 +28,7 @@
                 <apex:outputField value="{!caseObj.MCM_Account__c}"/>
             </apex:pageBlockSection>
             
-            <apex:pageBlockSection title="Case Details" id="questionSection" columns="1">
+            <apex:pageBlockSection title="Case Details" id="questionSection" columns="2">
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Question Short Description"/>
                     <apex:inputField value="{!caseObj.Subject}"/>
@@ -36,7 +39,7 @@
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSection>
             
-            <apex:pageBlockSection title="System Information" columns="1" collapsible="false">
+            <apex:pageBlockSection title="System Information" columns="2" collapsible="false">
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="{!recordLabel}"/>
                     <apex:outputLink target="_blank" value="/{!sObjLRMM.id}">{!sObjLRMM['Name']}</apex:outputLink>

@@ -19,8 +19,9 @@ public class LW_Re_Request_Controller {
         /*  Constructor*/
         public LW_Re_Request_Controller(){
             recordId = ApexPages.currentPage().getParameters().get('recordId');
-            oldRecord = getData(recordId).oldRecord;
-            newRecord = getData(recordId).newRecord;
+            DataWrapper dw = getData(recordId);
+            oldRecord = dw.oldRecord;
+            newRecord = dw.newRecord;
         }
     
     /* Method to get the current record and new record.  */
@@ -34,7 +35,9 @@ public class LW_Re_Request_Controller {
             dw.oldRecord = oldRecordList[0];
             dw.newRecord = oldRecordList[0].clone(false,false,false,false);
             dw.newRecord.Re_Requested_Record__c = true;
-            
+            if(dw.oldRecord.Status__c == 'Scheduled'){
+                dw.newRecord.Status__c = 'Re-Schedule Required';
+            }
             if(dw.newRecord.Trial_Witness_Name__c != NULL){
                 dw.newRecord.Trial_Witness_Name__c = NULL;
             }
@@ -106,7 +109,16 @@ public class LW_Re_Request_Controller {
 
         try{
             insert newRecordToSave;
-            
+            List<Attachment> newAttList = new List<Attachment>();
+            for(Attachment att : [SELECT Body,ParentId,Name FROM Attachment WHERE ParentId = :oldRecordId]){
+                Attachment attNew = new Attachment();
+                attNew = att.clone(false,false,false,false);
+                attNew.ParentId = newRecordToSave.Id;
+                newAttList.add(attNew);
+            }
+            if(!newAttList.isEmpty()){
+                insert newAttList;
+            }
             Trial_Witness_Request__c oldRecToUpdate = new Trial_Witness_Request__c();
             oldRecToUpdate.Id = oldRecordId;
             oldRecToUpdate.Re_Request_Submitted__c = true;

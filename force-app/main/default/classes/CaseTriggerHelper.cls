@@ -361,9 +361,139 @@ public class CaseTriggerHelper{
         String fromDate = String.valueOf(System.today().addDays(-1)).split(' ')[0];
         for(Case cs : triggerNew){
             if(cs.Subcategories__c == 'Scripts - PSNM/RSNM'){
-                DM_NoMedia_Integration.getData(fromDate);
+                //DM_NoMedia_Integration.getData(fromDate);
             }
         }
     }
+    
+    /* @ Method definition to update the status to closed and send the notification. */
+    /* @ Calling on before update event from Case trigger. */
+    /* @ Added on 14-Sept-2020 by Prabhakar Joshi.*/
+    public static void updateStatusClosed(List<Case> caseNewList, Map<Id, Case> caseOldMap){
+        
+        Map<Id,Case> CaseMap = new Map<Id,Case>();
+        for(Case cs : caseNewList){
+            if(isDataValid(cs)){
+                cs.Status = 'Closed';
+                
+                CaseMap.put(cs.Id,cs);
+            }
+        }
+        
+        if(CaseMap.keySet().isEmpty()){
+            return;
+        }
+
+        List<User> userList = [SELECT Id,FirstName,LastName,Title,CompanyName,Phone,Extension 
+                               FROM User 
+                               WHERE Id =:UserInfo.getUserId() 
+                               LIMIT 1];
+        
+        String userTitle = userList[0].Title != NULL ? userList[0].Title : '';
+        String userCompany = userList[0].CompanyName != NULL ? userList[0].CompanyName : '';
+        String userPhone = userList[0].Phone != NULL ? userList[0].Phone : '';
+        String userExt = userList[0].Extension != NULL ? userList[0].Extension : '';
+
+        List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
+        for(Id csId : CaseMap.keySet()){
+            String FTR_DESC = CaseMap.get(csId) != NULL ? CaseMap.get(csId).Outcome_Description__c != NULL ? CaseMap.get(csId).Outcome_Description__c : '' : '';
+            String FTR_VAL = CaseMap.get(csId) != NULL ? CaseMap.get(csId).Outcome_FTR__c != NULL ?  CaseMap.get(csId).Outcome_FTR__c : '' : '';
+            
+            Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+            email.setSubject('Request Closed: #'+ CaseMap.get(csId).CaseNumber + ':' +CaseMap.get(csId).Subject);
+             
+            String htmlBody = 'Hello,<br/><br/>The above inquiry has been closed with the following request ';
+            htmlBody += 'outcome : <br/><br/><b>'+FTR_DESC+'</b> '+FTR_VAL+'<br/><br/>';
+            htmlBody += 'Please contact me with any further questions or concerns. The original request is below for reference.<br/><br/>';
+            htmlBody += 'Thank you,<br/><br/>';
+            htmlBody += userList[0].FirstName+' '+userList[0].LastName+'<br/>';
+            htmlBody += userTitle+'<br/>'+userCompany+'<br/>'+userPhone+' '+userExt+'<br/>Ref # ( '+CaseMap.get(csId).New_Thread_ID__c+' ) '; //
+            htmlBody += '<font color="red"><i>DO NOT DELETE REF #</i></font><br/><br/>~~~~~~~~~~~~<br/>Original Email Request<br/><br/>Email Subject : '+CaseMap.get(csId).Subject;
+            htmlBody += '<br/><br/>Email Body : '+CaseMap.get(csId).Description;
+           
+            email.setHtmlBody(htmlBody);
+            if(CaseMap.get(csId).ContactEmail == NULL){
+                CaseMap.get(csId).addError('Contact Email is blank.');
+                return;
+            }
+            List<String> emailList = new List<String>{CaseMap.get(csId).ContactEmail};
+            if(CaseMap.get(csId).Additional_Email__c != NULL){
+                if(CaseMap.get(csId).Additional_Email__c.contains(';')){
+                    emailList.addAll(CaseMap.get(csId).Additional_Email__c.split(';'));
+                }else{
+                    emailList.add(CaseMap.get(csId).Additional_Email__c);
+                }
+                
+            }
+            
+            email.setToAddresses(emailList);
+            emails.add(email);
+        }
+        if(!Test.isRunningTest())
+            Messaging.sendEmail(emails);
+    }
+
+    /* @ private method definition to check the data is valid or not. */
+    /* @ Calling from 'updateStatusClosed' method. */
+    /* @ Added on 14-Sept-2020 by Prabhakar Joshi.*/
+    private static Boolean isDataValid(Case cs){
+        Set<Id> recordTypeIdSet = getRecordTypeIdSet();
+        List<String> outcomeFTRValues = getOutcomeFTRValue();
+
+        Boolean isValid = false;
+        if(!cs.Turn_Off_Auto_response__c 
+           && !cs.Invalid_Request__c 
+           && !recordTypeIdSet.contains(cs.recordTypeId) 
+           && cs.status != 'Closed'
+           && (cs.Outcome_Description__c != NULL 
+                || (cs.Outcome_FTR__c != NULL 
+                    && outcomeFTRValues.contains(cs.Outcome_FTR__c)))){
+               isValid = true;
+           }
+        
+        return isValid;
+
+    }
+    
+    /* @ private method definition to get the valid picklist values of OutcomeFTR field. */
+    /* @ Calling from 'isDataValid' method. */
+    /* @ Added on 17-Sept-2020 by Prabhakar Joshi.*/
+    private static List<String> getOutcomeFTRValue(){
+        List<String> values = new List<String>();
+
+        Set<String> skipValues = new Set<String>{'CALC Complete','Follow-up To Close','VAC Complete','SOJ Complete'};
+        
+            for(Schema.PicklistEntry ple : Case.Outcome_FTR__c.getDescribe().getPicklistValues()){
+                if(skipValues.contains(ple.getValue())){
+                    continue;
+                }
+                values.add(ple.getValue());
+            }
+
+        return values;
+    }
+
+    /* @ private method definition to get the recordTypeIds which needs to skip. */
+    /* @ Calling from 'isDataValid' method. */
+    /* @ Added on 17-Sept-2020 by Prabhakar Joshi. */
+    private static Set<Id> getRecordTypeIdSet(){
+        Set<Id> recordTypeIdSet = new Set<Id>();
+
+        Map<String,Schema.RecordTypeInfo> rtMap = Schema.SObjectType.Case.getRecordTypeInfosByName(); 
+        recordTypeIdSet.add(rtMap.get('Legal Review').getRecordTypeId());
+        recordTypeIdSet.add(rtMap.get('LR Affidavit').getRecordTypeId());
+        recordTypeIdSet.add(rtMap.get('Judgment').getRecordTypeId());
+        recordTypeIdSet.add(rtMap.get('Operations - AA').getRecordTypeId());
+        recordTypeIdSet.add(rtMap.get('Accounting - AA').getRecordTypeId());
+        recordTypeIdSet.add(rtMap.get('Operations - CAO').getRecordTypeId());
+        recordTypeIdSet.add(rtMap.get('Trial Witness - Telephonic').getRecordTypeId());
+        recordTypeIdSet.add(rtMap.get('Trial Witness - Live').getRecordTypeId());
+        recordTypeIdSet.add(rtMap.get('CDM: External Vendor Projects').getRecordTypeId());
+        recordTypeIdSet.add(rtMap.get('CDM: Internal Client Projects').getRecordTypeId());
+        recordTypeIdSet.add(rtMap.get('Operations - PAM').getRecordTypeId());
+
+        return recordTypeIdSet;
+    }
+
     
 }

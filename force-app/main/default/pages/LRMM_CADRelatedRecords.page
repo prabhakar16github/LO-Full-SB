@@ -1,5 +1,5 @@
 <apex:page controller="LRMM_CADRelatedRecordsController"
-	tabStyle="{!IF(selectedObject<>null,selectedObject,"Consumer_Account_Details__c")}">
+	tabStyle="{!IF(selectedObject<>null,selectedObject,"Consumer_Account_Details__c")}" lightningStylesheets="true">
 	<apex:form >
 		<apex:actionstatus id="counterStatus">
 			<apex:facet name="start">
@@ -18,7 +18,7 @@
 		<apex:pageBlock title="{!objectLabel} Edit" mode="edit"
 			id="pageBlockId">
 
-			<apex:pageblockButtons >
+			<apex:pageblockButtons location="bottom">
 				<apex:commandButton value="Save" action="{!saveRecord}"
 					rerender="pageBlockId" status="counterStatus" />
 				<apex:commandButton value="Cancel" immediate="true"

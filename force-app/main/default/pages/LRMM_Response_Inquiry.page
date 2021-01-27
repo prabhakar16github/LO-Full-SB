@@ -1,4 +1,5 @@
-<apex:page controller="LRMM_Response_InquiryController" tabStyle="{!IF(selectedObject<>null,selectedObject,"Consumer_Account_Details__c")}">
+<apex:page controller="LRMM_Response_InquiryController" tabStyle="{!IF(selectedObject<>null,selectedObject,"Consumer_Account_Details__c")}"
+         lightningStylesheets="true" >
     <apex:form >
         <apex:actionstatus id="counterStatus">
             <apex:facet name="start">
@@ -14,7 +15,7 @@
         <apex:actionFunction name="changeAttSize" action="{!changeAttachmentSize}" status="counterStatus"/>
         <apex:pageBlock title="New Case">
             <apex:pageMessages id="errorMessage"></apex:pageMessages>
-            <apex:pageblockButtons >
+            <apex:pageblockButtons location="bottom" >
                 <apex:commandButton value="Save" action="{!saveCase}"/>
                 <apex:commandButton value="Cancel" action="/{!sObjLRMM.id}"/>
             </apex:pageblockButtons>
@@ -26,7 +27,7 @@
                 <apex:outputField value="{!caseObj.MCM_Account__c}"/>
             </apex:pageBlockSection>
             
-            <apex:pageBlockSection title="Case Details" id="questionSection">
+            <apex:pageBlockSection title="Case Details" id="questionSection" columns="2">
                 <apex:outputPanel style="margin-left:18%;">
                     <apex:outputLabel value="Response"/>
                     <apex:inputCheckbox value="{!isResponse}" style="margin-right:10%;" onchange="changeLabel(); return false;"/>
@@ -39,7 +40,7 @@
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSection>
             
-            <apex:pageBlockSection title="System Information" columns="1" collapsible="false">
+            <apex:pageBlockSection title="System Information" columns="2" >
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="{!recordLabel}"/>
                     <apex:outputLink target="_blank" value="/{!sObjLRMM.id}">{!sObjLRMM['Name']}</apex:outputLink>
@@ -50,7 +51,7 @@
                 </apex:pageBlockSectionItem>
             </apex:pageBlockSection>
             
-            <apex:pageBlockSection title="Attachments" columns="1" collapsible="false">
+            <apex:pageBlockSection title="Attachments" columns="2" >
                 <apex:pageBlockSectionItem >
                     <apex:outputLabel value="Number of Attachments"/>
                     <apex:selectList value="{!totalAttachments}" size="1" onchange="changeAttSize();">

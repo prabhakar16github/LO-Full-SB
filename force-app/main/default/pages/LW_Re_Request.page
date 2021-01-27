@@ -1,48 +1,63 @@
-<!--********************************************** 
-* Page Name   : LW_Re_Request
-* Description : VF Page Calling from Re-Request Button in Live Witness record.
-* Created By  : Prabhakar Joshi
-* Created Date: 1-July-2020
-* *************************************************-->
+<!--
+	* @ Page Name   	: 	LW_Re_Request
+	* @ Description 	: 	VF Page Calling from Re-Request Button in Live Witness record.
+	* @ Created By  	: 	Prabhakar Joshi
+	* @ Created Date	: 	1-July-2020
+-->
 <apex:page id="pg" title="{!oldRecord.Name}" controller="LW_Re_Request_Controller" tabStyle="Trial_Witness_Request__c">
     
     <apex:form id="frm">
         
         <apex:pageBlock id="pb" title="{!oldRecord.Name} : Trial Witness Request Clone">
+            <apex:actionstatus id="sts">
+                <apex:facet name="start">
+                    <div class="waitingSearchDiv" id="el_loading" style="background-color: black; height: 100%; opacity: 0.65; width: 100%;">
+                        <div class="waitingHolder" style="margin-left: 25%; position: fixed;">
+                            <img class="waitingImage" src="/img/loading.gif" title="Please Wait..." /> 
+                            <span class="waitingDescription">Loading...</span>
+                        </div>
+                    </div>
+                </apex:facet>
+            </apex:actionstatus>
+            
+            <apex:pageMessages ></apex:pageMessages>
+            <apex:actionFunction name="handleChange" reRender="pb" status="sts" />
             <apex:pageBlockSection title="General Live Witness Information" columns="2" id="GeneralLWInfo_Sec"  >
                 <apex:outputField value="{!newRecord.LW_Matter_Name__c}" id="LW_Matter_Name__c"  />
                 <apex:outputField value="{!newRecord.State_Filed_State_Profile__c}" id="State_Filed_State_Profile__c"/>
                 <apex:outputField value="{!newRecord.OrganizationName__c}" id="OrganizationName__c"/>
                 <apex:outputField value="{!newRecord.County_Filed__c}" id="County_Filed__c"/>
-                <apex:inputField value="{!newRecord.Appearance_Type__c}" id="Appearance_Type__c" styleClass="blankField" />
+                <apex:inputField value="{!newRecord.Appearance_Type__c}" id="Appearance_Type__c" />
                 <apex:outputField value="{!newRecord.Court_File__c}" id="Court_File__c"/>
                 <apex:outputField value="{!newRecord.Account_Number__c}" id="Account_Number__c"/>
                 <apex:outputField value="{!newRecord.County_Court_Name__c}" id="County_Court_Name__c"/>
                 <apex:outputField value="{!newRecord.Original_Creditor__c}" id="Original_Creditor__c"/>
-                <apex:inputField value="{!newRecord.Judge_Name__c}" id="Judge_Name__c" styleClass="blankField"/>
+                <apex:inputField value="{!newRecord.Judge_Name__c}" id="Judge_Name__c"/>
                 <apex:outputField value="{!newRecord.Defendant_Name__c}" id="Defendant_Name__c"/>
-                <apex:inputField value="{!newRecord.Prior_Experience_with_Judge__c}" id="Prior_Experience_with_Judge__c" styleClass="blankField"/>
-                <apex:inputField value="{!newRecord.Date_of_Appearance__c}" id="Date_of_Appearance__c" styleClass="blankField"/>
-                <apex:outputField value="{!newRecord.If_Prior_Experience_with_Judge_Comments__c}" id="If_Prior_Experience_with_Judge_Comments__c"/>
-                <apex:inputField value="{!newRecord.Time_of_Appearance__c}" id="Time_of_Appearance__c" styleClass="blankField"/>
+                <apex:inputField value="{!newRecord.Prior_Experience_with_Judge__c}" id="Prior_Experience_with_Judge__c" onchange="handleChange(); return false;" />
+                
+                <apex:inputField value="{!newRecord.Date_of_Appearance__c}" id="Date_of_Appearance__c"/>
+                <apex:inputField value="{!newRecord.If_Prior_Experience_with_Judge_Comments__c}" id="If_Prior_Experience_with_Judge_Comments__c" rendered="{!newRecord.Prior_Experience_with_Judge__c == 'Yes'}" />
+                <apex:outputField value="{!newRecord.If_Prior_Experience_with_Judge_Comments__c}" id="If_Prior_Experience_with_Judge_Comments__c_out" rendered="{!newRecord.Prior_Experience_with_Judge__c != 'Yes'}"/>
+                <apex:inputField value="{!newRecord.Time_of_Appearance__c}" id="Time_of_Appearance__c"/>
                 <!--<apex:inputField value="{!Trial_Witness_Request__c.State_Filed_State_Profile__c}" id="State_Filed_State_Profile__c"/>-->
                 <apex:outputField value="{!newRecord.Suit_Balance__c}" id="Suit_Balance__c"/>
-                <apex:inputField value="{!newRecord.AM_PM__c}" id="AM_PM__c" styleClass="blankField"/>
-                <apex:inputField value="{!newRecord.Days_Appearance_Is_Expected_To_Last__c}" id="Days_Appearance_Is_Expected_To_Last__c" styleClass="blankField"/>
+                <apex:outputField value="{!newRecord.AM_PM__c}" id="AM_PM__c"/>
+                <apex:inputField value="{!newRecord.Days_Appearance_Is_Expected_To_Last__c}" id="Days_Appearance_Is_Expected_To_Last__c"/>
                 <apex:outputField value="{!newRecord.Time_Zone__c}" id="Time_Zone__c" />
                 <apex:outputField value="{!newRecord.LW_Settlement_Authority_Needed__c}" id="LW_Settlement_Authority_Needed__c"/>
             </apex:pageBlockSection>
             <apex:pageBlockSection id="OpposingCounsel_Sec" title="Assigned Attorney and Opposing Counsel" columns="2">
-                <apex:outputField value="{!newRecord.Assigned_Attorney__c}" id="Assigned_Attorney__c"/>
-                <apex:outputField value="{!newRecord.Pro_Se__c}" id="Pro_Se__c"/>
-                <apex:outputField value="{!newRecord.Assigned_Attorney_Email__c}" id="Assigned_Attorney_Email__c"/>
-                <apex:outputField value="{!newRecord.Opposing_Counsel__c}" id="Opposing_Counsel__c"/>
-                <apex:outputField value="{!newRecord.Assigned_Attorney_Cell_Phone__c}" id="Assigned_Attorney_Cell_Phone__c"/>
-                <apex:outputField value="{!newRecord.Opposing_Counsel_Firm_Name__c}" id="Opposing_Counsel_Firm_Name__c"/>
-                <apex:outputField value="{!newRecord.Assigned_Attorney_Direct_Line__c}" id="Assigned_Attorney_Direct_Line__c"/>
-                <apex:outputField value="{!newRecord.Opposing_Counsel_Email__c}" id="Opposing_Counsel_Email__c"/>
-                <apex:outputField value="{!newRecord.Opposing_Counsel_Phone__c}" id="Opposing_Counsel_Phone__c"/>
-                <apex:outputField value="{!newRecord.Opposing_Counsel_Comments__c}" id="Opposing_Counsel_Comments__c"/>
+                <apex:inputField value="{!newRecord.Assigned_Attorney__c}" id="Assigned_Attorney__c"/>
+                <apex:inputField value="{!newRecord.Pro_Se__c}" id="Pro_Se__c"/>
+                <apex:inputField value="{!newRecord.Assigned_Attorney_Email__c}" id="Assigned_Attorney_Email__c"/>
+                <apex:inputField value="{!newRecord.Opposing_Counsel__c}" id="Opposing_Counsel__c"/>
+                <apex:inputField value="{!newRecord.Assigned_Attorney_Cell_Phone__c}" id="Assigned_Attorney_Cell_Phone__c"/>
+                <apex:inputField value="{!newRecord.Opposing_Counsel_Firm_Name__c}" id="Opposing_Counsel_Firm_Name__c"/>
+                <apex:inputField value="{!newRecord.Assigned_Attorney_Direct_Line__c}" id="Assigned_Attorney_Direct_Line__c"/>
+                <apex:inputField value="{!newRecord.Opposing_Counsel_Email__c}" id="Opposing_Counsel_Email__c"/>
+                <apex:inputField value="{!newRecord.Opposing_Counsel_Phone__c}" id="Opposing_Counsel_Phone__c"/>
+                <apex:inputField value="{!newRecord.Opposing_Counsel_Comments__c}" id="Opposing_Counsel_Comments__c"/>
             </apex:pageBlockSection>
             
             
@@ -135,7 +150,7 @@
                 
             </apex:pageBlockSection>
             <apex:pageBlockButtons >
-                <apex:commandButton value="Save" action="{!SaveNew}" />
+                <apex:commandButton value="Save" action="{!SaveNew}"/>
                 <apex:commandButton value="Cancel" onclick="closeWindow();"/>
             </apex:pageBlockButtons>
         </apex:pageBlock>
@@ -146,5 +161,7 @@
     function closeWindow(){
         window.close();
     }
+    
+   
     </script>
 </apex:page>

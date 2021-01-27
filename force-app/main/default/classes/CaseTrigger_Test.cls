@@ -415,4 +415,30 @@ static testmethod void SCUM_ScriptsTest1(){
         c1.subject='CA20 ss ss  ss';
         insert c1;
     }
+    
+    @isTest
+    static void testStatusClosed(){
+        Account acc = new Account();
+        acc.Name = 'test';
+        insert acc;
+
+        Contact con = new Contact();
+        con.AccountId = acc.Id;
+        con.lastName = 'test';
+        con.Email = 'test@abc.com';
+        insert con;
+
+        Case cs = new Case();
+        cs.subject='';
+        cs.Outcome_Description__c = 'testing';
+        cs.Outcome_FTR__c = 'Completed.';
+        cs.Turn_Off_Auto_response__c = false;
+        cs.Invalid_Request__c = false;
+        cs.contactId = con.Id;
+        cs.RecordTypeId = Schema.SObjectType.case.getRecordTypeInfosByName().get('Operations').getRecordTypeId();
+        cs.Additional_Email__c = 'xyz@test.com';
+       insert cs;
+        cs.Status = 'New';
+        update cs;
+    } 
 }

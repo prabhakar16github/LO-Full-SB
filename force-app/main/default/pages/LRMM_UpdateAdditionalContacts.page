@@ -1,4 +1,6 @@
-<apex:page controller="LRMM_UpdateAdditionalContactsCtrl" title="Update Additional Contacts" tabStyle="{!IF(selectedObject<>null,selectedObject,"Consumer_Account_Details__c")}">
+<apex:page controller="LRMM_UpdateAdditionalContactsCtrl" title="Update Additional Contacts" tabStyle="{!IF(selectedObject<>null,selectedObject,"Consumer_Account_Details__c")}"
+         >
+    <apex:slds />
     <apex:form >
         <apex:actionstatus id="counterStatus">
             <apex:facet name="start">
@@ -20,7 +22,7 @@
                 <apex:commandButton value="Save" status="counterStatus" rerender="sectionId,errorMessage" action="{!saveDetails}"/>
                 <apex:commandButton value="Cancel" action="/{!sObjLRMM.id}"/>
             </apex:pageBlockButtons>
-            <apex:pageBlockSection title="Update Additional Contacts" collapsible="false" columns="1" id="sectionId">
+            <apex:pageBlockSection title="Update Additional Contacts" collapsible="false" columns="2" id="sectionId">
                 <apex:outputPanel dir="block">
                     <table>
                         <tr style="font-weight:700;">

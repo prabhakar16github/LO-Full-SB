@@ -277,10 +277,10 @@ public class LRMM_CADRelatedRecordsController{
             fieldsSectionMap.put('Step I',new List<String>{'Settlement_Attempted__c','LW_Witness_Subpoenaed__c','Last_Settlement_Offer_by__c',
                                     'LW_Subpoenaed_Witness_Name__c','Settlement_Offer_Type__c','Blank','Settlement_Offer_Amount__c','Discovery_Status__c',
                                     'Settlement_Chance_Prior_to_Hearing__c','Blank','Post_Judgment_Collectability__c','Chance_Of_Success_if_We_Appear__c',
-                                    'Settlement_Attempted_Comments__c','Blank','Blank','Potential_Issues_or_Limitations__c','Counterclaim__c','Blank',
-                                    'Allegations__c','Subject_Matter_to_be_Covered__c','Factual_Basis_of_Allegations__c','Blank','Brief_History__c',
-                                    'Other_Considerations__c','Hardship__c','Blank','Hardship_Documents_Attached__c','Blank','Hardship_Solution__c','Blank',
-                                    'Dispute__c','Blank','Dispute_Documents_Attached__c','Blank','Dispute_Solution__c'});
+                                    'Settlement_Attempted_Comments__c','Potential_Issues_or_Limitations__c','Counterclaim__c',
+                                    'Subject_Matter_to_be_Covered__c','Blank',
+                                    'Other_Considerations__c','Hardship__c','Blank','Hardship_Solution__c','Blank',
+                                    'Dispute__c','Blank','Dispute_Solution__c'});
             
             fieldsSectionMap.put(objectLabel + ' Information',new List<String>{'Witness_Determination__c','Original_Creditor_Witness_Needed__c', 'Status__c'});
         }else if(selectedObject == 'Purchase_and_Sales_Agreement__c'){

@@ -1,4 +1,5 @@
-<apex:page standardController="Appeal__c" extensions="LRMM_PopulateResolutionController" >
+<apex:page standardController="Appeal__c" extensions="LRMM_PopulateResolutionController" lightningStylesheets="true">
+    <apex:slds />
     <apex:form >
         <apex:pageMessages id="errorSec"></apex:pageMessages>
         

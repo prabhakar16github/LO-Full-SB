@@ -3,6 +3,7 @@
     * @ Description 	:	Controller Class for DataArchiveReport VF Page
     * @ Created By  	: 	Prabhakar Joshi
     * @ Created Date	: 	1-Apr-2020
+    * @ Last Modified   :   16-Nov-2020
 */
 public class DataArchiveReportController{
     /* To check that AttachmentTrigger is Inactive or not. */
@@ -82,7 +83,7 @@ public class DataArchiveReportController{
         } else if (tabName == 'PAM_Tab'){
             chartData = fetch_PAM_ChartData();
             dataType = 'PAM';
-        } else if (tabName == 'Case_Tab'){
+        } else if (tabName == 'CS_Tab'){
             chartData = fetch_Case_ChartData();
             dataType = 'Case';
         }
@@ -93,8 +94,10 @@ public class DataArchiveReportController{
     private List<PieData> fetchLRMMChartData(){
         LRMM_DataArchiveHandler handler = new LRMM_DataArchiveHandler();
         List<PieData> data = new List<PieData>();
+        /*
         Date lastDate = LRMM_DataArchiveHandler.lastDate;
         Set<Id> parentIdSet = handler.getParentIds();
+        
         if (parentIdSet.size() > 0){
             Map<String, Integer> objectToAttCountMap = new Map<String, Integer>();
             for (AggregateResult att : [SELECT COUNT(Id)totalCount, Parent.Type objectAPIName
@@ -111,8 +114,15 @@ public class DataArchiveReportController{
                     totalArchiveData += objectToAttCountMap.get(obj);
                 }
             }
+        }*/
+        
+        Map<String,Integer> dataMap = handler.getAttachmentCountMap();
+        for (String obj : dataMap.keySet()){
+            data.add(new PieData(obj + ' : ' + dataMap.get(obj), dataMap.get(obj)));
+            totalArchiveData += dataMap.get(obj);
         }
-        return data;
+            
+       return data;
     }
     
     /* @ Method to get the Call Monitoring Chart Data */
@@ -178,25 +188,14 @@ public class DataArchiveReportController{
     /* @ Method to get the Case Chart Data */
     /* @ Added on 8-July-2020. */
     private List<PieData> fetch_Case_ChartData(){
-        if(String.isBlank(selectedLimit)){
-            return new List<PieData>();
-        }
         
         Case_DataArchiveHandler handler = new Case_DataArchiveHandler();
         
-        Integer limitSelected = Integer.valueOf(selectedLimit);
         List<PieData> Case_Archive_data = new List<PieData>();
         Map<String,Integer> objToCountMap = new Map<String,Integer>();
-        Integer attCount = 0;
-        Integer emailCount = 0;
         
-        for(Case cs : handler.getCaseRecords(limitSelected)){
-            emailCount  += cs.EmailMessages.size();
-            attCount +=  cs.Attachments.size();
-        }
-        
-        objToCountMap.put('EmailMessages',emailCount);
-        objToCountMap.put('Attachment',attCount);
+        objToCountMap.put('EmailMessages',handler.getEmailMessagesCount());
+        objToCountMap.put('Attachment',handler.getAttachmentCount());
         
         for(String obj : objToCountMap.keySet()){
             if(objToCountMap.get(obj) > 0){
@@ -207,38 +206,29 @@ public class DataArchiveReportController{
         return Case_Archive_data;
     }
     
-    
-    /* @ Method to Set the limit values Picklist on the Page. */
-    /* @ Added on 10-July-2020. */
-    public List<SelectOption> getItems(){
-        List<SelectOption> options = new List<SelectOption>();
-        options.add(new SelectOption('','Select One'));
-        options.add(new SelectOption('10000','10000'));
-        options.add(new SelectOption('20000','20000'));
-        options.add(new SelectOption('30000','30000'));
-        options.add(new SelectOption('40000','40000'));
-        
-        return options;
-
-    }
-    
     /* @ Remote Action calling from JAVA Script to invoke the batch class which is Archiving the data. */
     @RemoteAction
-    public static Id archiveData(String activeTab,String limitSelected){
-        Integer batchSize = Integer.valueOf(label.Data_Archive_Batch_Size) <= 2000 ? Integer.valueOf(label.Data_Archive_Batch_Size) : 2000;
-        Id batchJobId;
-        if (activeTab == 'LRMM_Tab'){
-            batchJobId = Database.executeBatch(new LRMM_DataArchiveBatch(), batchSize);
-        } else if (activeTab == 'CM_Tab'){
-            batchJobId = Database.executeBatch(new CM_DataArchiveBatch(), batchSize);
-        } else if (activeTab == 'PAM_Tab'){
-            batchJobId = Database.executeBatch(new IR_DataArchiveBatch(), batchSize);
-        } else if (activeTab == 'Case_Tab' && String.isNotBlank(limitSelected)){
-            batchJobId = Database.executeBatch(new Case_DataArchiveBatch(limitSelected), batchSize);
+    public static Id archiveData(String activeTab){
+        if(!toggleAttachmentTrigger()){
+            Integer batchSize = Integer.valueOf(label.Data_Archive_Batch_Size) <= 2000 ? Integer.valueOf(label.Data_Archive_Batch_Size) : 2000;
+            Id batchJobId;
+            if (activeTab == 'LRMM_Tab'){
+                batchJobId = Database.executeBatch(new LRMM_DataArchiveBatch(), batchSize);
+            } else if (activeTab == 'CM_Tab'){
+                batchJobId = Database.executeBatch(new CM_DataArchiveBatch(), batchSize);
+            } else if (activeTab == 'PAM_Tab'){
+                batchJobId = Database.executeBatch(new IR_DataArchiveBatch(), batchSize);
+            } else if (activeTab == 'CS_Tab' ){//&& String.isNotBlank(limitSelected)
+                batchJobId = Database.executeBatch(new Case_DataArchiveBatch(), batchSize);//limitSelected
+            }
+        
+            return batchJobId;
+        }else{
+            
+            return NULL;
         }
-       
-        return batchJobId;
     }
+    
     
     /* @ Remote Action calling from JAVA Script to get the batch job processing update. */
     @RemoteAction
@@ -253,6 +243,27 @@ public class DataArchiveReportController{
         String jobStatus = jobList[0].Status;
         Integer processPer = jobList[0].TotalJobItems > 0 ? ((jobList[0].JobItemsProcessed * 100) / jobList[0].TotalJobItems) : 0;
         return new BatchProcessWrapper(processPer, jobStatus);
+    }
+
+    /** Remote Action to Active/Inactive AttachmentTrigger. */
+    /** Calling from archiveData method and VF page. */
+    /** Added on 18-Nov-2020 */
+    @RemoteAction
+    public static Boolean toggleAttachmentTrigger(){
+        Boolean isTriggerActive = Trigger_Setting__c.getValues('AttachmentTrigger').Active__c;
+        Trigger_Setting__c setting = Trigger_Setting__c.getInstance('AttachmentTrigger');
+        setting.Active__c = !isTriggerActive;
+        update setting;
+        return setting.Active__c;
+    }
+    
+    /** Remote Action to abort the batch job. */
+    /** Calling from Abort button in VF page. */
+    /** Added on 20-Jan-2021 */
+    @RemoteAction
+    public static Boolean abortJob(String jobId){
+        System.abortJob(jobId);
+        return toggleAttachmentTrigger();
     }
     
     /* Wrapper class for batch job detail. */
