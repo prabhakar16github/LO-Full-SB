@@ -15,7 +15,7 @@ public class Case_DataArchiveHandler {
     public static FINAL Set<Id> recordTypeIdSet = getCaseRecordTypeIdSet();
     /* @ Method Definition to get the list of Case records. */
     /* @ Calling from Case_DataArchiveBatch & DataArchiveReportController.*/
-    public List<Attachment> getAttachments(){ //Integer limitSelected
+    public List<Attachment> getAttachments(){
         
         if(recordTypeIdSet.isEmpty()){
             return new List<Attachment>();

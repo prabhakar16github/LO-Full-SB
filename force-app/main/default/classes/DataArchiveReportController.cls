@@ -94,27 +94,6 @@ public class DataArchiveReportController{
     private List<PieData> fetchLRMMChartData(){
         LRMM_DataArchiveHandler handler = new LRMM_DataArchiveHandler();
         List<PieData> data = new List<PieData>();
-        /*
-        Date lastDate = LRMM_DataArchiveHandler.lastDate;
-        Set<Id> parentIdSet = handler.getParentIds();
-        
-        if (parentIdSet.size() > 0){
-            Map<String, Integer> objectToAttCountMap = new Map<String, Integer>();
-            for (AggregateResult att : [SELECT COUNT(Id)totalCount, Parent.Type objectAPIName
-                                        FROM Attachment
-                                        WHERE ParentId IN :parentIdSet AND LastModifiedDate < :lastDate
-                                        GROUP BY Parent.Type]){
-                                            String sobjectName = Schema.getGlobalDescribe().get(String.valueOf(att.get('objectAPIName'))).getDescribe().getLabel();
-                                            objectToAttCountMap.put(sobjectName, (Integer)att.get('totalCount'));
-                                            
-                                        }
-            if (objectToAttCountMap.keySet().size() > 0){
-                for (String obj : objectToAttCountMap.keySet()){
-                    data.add(new PieData(obj + ' : ' + objectToAttCountMap.get(obj), objectToAttCountMap.get(obj)));
-                    totalArchiveData += objectToAttCountMap.get(obj);
-                }
-            }
-        }*/
         
         Map<String,Integer> dataMap = handler.getAttachmentCountMap();
         for (String obj : dataMap.keySet()){
