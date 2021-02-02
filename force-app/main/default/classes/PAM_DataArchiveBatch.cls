@@ -1,14 +1,13 @@
 /*
-    * @ Class Name  	: 	Case_DataArchiveBatch
-    * @ Description 	: 	Batch Class for Archive the Email Messages & Attachments of Case Object.
-    * @ Created By  	: 	Prabhakar Joshi
-    * @ Created Date	: 	14-July-2020
-    * @ Last Modified   :   20-Jan-2021
-*/
-
-global class Case_DataArchiveBatch implements Database.Batchable<sobject>, Database.Stateful{
+ * @ Class Name      :     PAM_DataArchiveBatch
+ * @ Description     :     Batch Class for PAM Data Archive Process.
+ * @ Created By      :     Prabhakar Joshi
+ * @ Created Date    :     2-Feb-2021
+ * @ Last Modified   :     2-Feb-2021
+ */
+global class PAM_DataArchiveBatch implements Database.Batchable<sobject>, Database.Stateful{
     /* To Create a instance of the Handler Class. */
-    Case_DataArchiveHandler handler = new Case_DataArchiveHandler();
+    PAM_DataArchiveHandler handler = new PAM_DataArchiveHandler();
     /* To hold the count of total deleted records. */
     Integer deleteCount;
     /* To hold the count of total failed records. */
@@ -17,23 +16,19 @@ global class Case_DataArchiveBatch implements Database.Batchable<sobject>, Datab
     Map<Id,String> recordIdToErrorMap;
     
     /* @ Consturctor */
-    public Case_DataArchiveBatch(){//String selectedLimit
+    public PAM_DataArchiveBatch(){
         this.deleteCount = 0;
         this.failCount = 0;
         this.recordIdToErrorMap = new Map<Id,String>();
     }
     
     global Iterable<sobject> start(Database.BatchableContext bc){
-        
-        Map<Id,Sobject> objMap = new Map<Id,Sobject>();
-        objMap.putAll(handler.getCaseAttachments());
-        //objMap.putAll(handler.getEmailMessages());
-        return objMap.values();
+        return handler.getPAMAttachments();
     }
     
     
     global void execute(Database.BatchableContext bc, List<Sobject> recordList){
-        
+        System.debug('recordList>>>>>>>>'+recordList.size());
         /*
         List<Database.DeleteResult> result = Database.delete(recordList, false);
         for(Database.DeleteResult dr : result){

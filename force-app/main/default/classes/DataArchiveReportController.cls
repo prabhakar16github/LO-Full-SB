@@ -1,9 +1,9 @@
 /*
  * @ Class Name      :     DataArchiveReportController
- * @ Description     :    Controller Class for DataArchiveReport VF Page
+ * @ Description     :     Controller Class for DataArchiveReport VF Page
  * @ Created By      :     Prabhakar Joshi
  * @ Created Date    :     1-Apr-2020
- * @ Last Modified   :   16-Nov-2020
+ * @ Last Modified   :     16-Nov-2020
  */
 public class DataArchiveReportController{
 	/* To set the current tab name */
@@ -106,16 +106,16 @@ public class DataArchiveReportController{
 	/* @ Method to get the Case Chart Data */
 	/* @ Added on 8-July-2020. */
 	private List<PieData> fetch_Case_ChartData(){
-        Case_DataArchiveHandler handler = new Case_DataArchiveHandler();
-        return this.setDataForChart(handler.getCaseDataCountMap());
+		Case_DataArchiveHandler handler = new Case_DataArchiveHandler();
+		return this.setDataForChart(handler.getCaseDataCountMap());
 	}
 
 	private List<PieData> setDataForChart(Map<String, Integer> dataMap){
-        List<PieData> dataForChart = new List<PieData>();
+		List<PieData> dataForChart = new List<PieData>();
 		for (String obj : dataMap.keySet()){
-            dataForChart.add(new PieData(obj + ' : ' + dataMap.get(obj), dataMap.get(obj)));
+			dataForChart.add(new PieData(obj + ' : ' + dataMap.get(obj), dataMap.get(obj)));
 			totalArchiveData += dataMap.get(obj);
-        }
+		}
 		return dataForChart;
 	}
 
@@ -130,10 +130,9 @@ public class DataArchiveReportController{
 			} else if (activeTab == 'CM_Tab'){
 				batchJobId = Database.executeBatch(new CM_DataArchiveBatch(), batchSize);
 			} else if (activeTab == 'PAM_Tab'){
-				batchJobId = Database.executeBatch(new IR_DataArchiveBatch(), batchSize);
+				batchJobId = Database.executeBatch(new PAM_DataArchiveBatch(), batchSize);
 			} else if (activeTab == 'CS_Tab'){
-				//&& String.isNotBlank(limitSelected)
-				batchJobId = Database.executeBatch(new Case_DataArchiveBatch(), batchSize);//limitSelected
+				batchJobId = Database.executeBatch(new Case_DataArchiveBatch(), batchSize);
 			}
 
 			return batchJobId;
@@ -174,9 +173,8 @@ public class DataArchiveReportController{
 	/** Calling from Abort button in VF page. */
 	/** Added on 20-Jan-2021 */
 	@RemoteAction
-	public static Boolean abortJob(String jobId){
+	public static void abortJob(String jobId){
 		System.abortJob(jobId);
-		return toggleAttachmentTrigger();
 	}
 
 	/* Wrapper class for batch job detail. */

@@ -3,7 +3,7 @@
     * @ Description     :   Vf Page to show the number of records needs to be Archive.
     * @ Created By      :   Prabhakar Joshi
     * @ Created Date    :   1-Apr-2020
-    * @ Last Modified   :   16-Nov-2020
+    * @ Last Modified   :   2-Feb-2021
 @-->
 
 <apex:page controller="DataArchiveReportController" showHeader="true" sidebar="false" id="pg" lightningStylesheets="true"
@@ -37,15 +37,9 @@
     </style>
     <apex:form id="frm">
         <!--@ Action Function to get the chart data according to selected Tab and calling from JS. @-->
-        <apex:actionFunction name="getData" action="{!init}" rerender="tabContentPNL" status="sts">
+        <apex:actionFunction name="getData" action="{!init}" rerender="tabContentPNL,batchProcessPNL" status="sts">
             <!--@ To hold the salected Tab name and passing to controller as a parameter. @-->
             <apex:param assignTo="{!tabName}" name="tabName" value="" />
-        </apex:actionFunction>
-        
-        <!--@ Action Function to get the selected Limit value from Case Tab @-->
-        <apex:actionFunction name="selectLimit" action="{!init}" rerender="tabContentPNL" status="sts">
-            <!--@ To hold the salected limit value and passing to controller as a parameter. @-->
-            <apex:param assignTo="{!selectedLimit}" name="selectedLimit" value="" />
         </apex:actionFunction>
         
         <!--@ Action status to show the spinner @-->
@@ -114,40 +108,41 @@
                         
                     </apex:outputPanel>
                     <!--@ End @-->
-                    
-                    
+
+                    <apex:outputPanel id="batchProcessPNL">
                     <!--@ Progress Bar Section @-->
-                    <div id="progressBarDiv" style="width:60%;margin:auto;" class="slds-progress-bar slds-hide slds-progress-bar_circular" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5" role="progressbar">
-                        
-                        <span id="progressBarValue" style="width:0%;" class="slds-progress-bar__value">
-                            
-                        </span>
-                    </div>
-                    
-                    <div id="processStatusDiv" class="slds-hide">
-                        
-                    </div>
-                    <div id="abortBtnDiv" class="slds-hide">
-                        <apex:commandButton id="abortBtn" value="Abort" onclick="abortBatchJob(this.id);return false;" styleClass="slds-button slds-button_destructive slds-m-around_small" />
-                    </div>
-                    
-                    <div id="progressRing" class="slds-progress-ring slds-progress-ring_complete slds-m-around_small slds-hide">
-                        <div class="slds-progress-ring__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
-                            <svg viewBox="-1 -1 2 2">
-                                <circle class="slds-progress-ring__path" id="slds-progress-ring-path-39" cx="0" cy="0" r="1"></circle>
-                            </svg>
-                        </div>
-                        <div class="slds-progress-ring__content">
-                            <span class="slds-icon_container slds-icon-utility-check" title="Complete">
-                                <svg class="slds-icon" aria-hidden="true">
-                                    
-                                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#check')}" />
-                                </svg>
-                                <span class="slds-assistive-text">Complete</span>
+                        <div id="progressBarDiv" style="width:60%;margin:auto;" class="slds-progress-bar slds-hide slds-progress-bar_circular" aria-valuemin="0" aria-valuemax="100" aria-valuenow="5" role="progressbar">
+                                
+                            <span id="progressBarValue" style="width:0%;" class="slds-progress-bar__value">
+                                
                             </span>
                         </div>
-                    </div>
-                    <!--@ End @-->
+                        
+                        <div id="processStatusDiv" class="slds-hide">
+                            
+                        </div>
+                        <div id="abortBtnDiv" class="slds-hide">
+                            <apex:commandButton id="abortBtn" value="Abort" onclick="abortBatchJob(this.id);return false;" styleClass="slds-button slds-button_destructive slds-m-around_small" />
+                        </div>
+                        
+                        <div id="progressRing" class="slds-progress-ring slds-progress-ring_complete slds-m-around_small slds-hide">
+                            <div class="slds-progress-ring__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                                <svg viewBox="-1 -1 2 2">
+                                    <circle class="slds-progress-ring__path" id="slds-progress-ring-path-39" cx="0" cy="0" r="1"></circle>
+                                </svg>
+                            </div>
+                            <div class="slds-progress-ring__content">
+                                <span class="slds-icon_container slds-icon-utility-check" title="Complete">
+                                    <svg class="slds-icon" aria-hidden="true">
+                                        
+                                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/utility-sprite/svg/symbols.svg#check')}" />
+                                    </svg>
+                                    <span class="slds-assistive-text">Complete</span>
+                                </span>
+                            </div>
+                        </div>
+                <!--@ End @-->
+                    </apex:outputPanel>
                 </div>
             </div>
         </apex:outputPanel>

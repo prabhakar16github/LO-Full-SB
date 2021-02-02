@@ -19,15 +19,7 @@ global class LRMM_DataArchiveBatch implements Database.Batchable<sobject>, Datab
 	}
 
     global Iterable<sobject> start(Database.batchableContext bc){
-        return handler.getAttachments();
-        /*
-        Date lastDate = LRMM_DataArchiveHandler.lastDate;
-        Set<Id> parentIdSet = handler.getParentIds();
-        String query = 'SELECT Id,ParentId,LastModifiedDate FROM Attachment WHERE ParentId IN :parentIdSet AND LastModifiedDate < :lastDate ORDER BY LastModifiedDate ';
-        return Database.getQueryLocator(query);
-		*/
-        
-        
+        return handler.getLRMMAttachments();
     }
 
     global void execute(Database.BatchableContext bc, List<Sobject> recordList){

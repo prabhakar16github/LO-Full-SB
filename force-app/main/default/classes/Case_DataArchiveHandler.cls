@@ -3,7 +3,7 @@
  * @ Description     :     Handler Class for Case_DataArchiveBatch Class.
  * @ Created By      :     Prabhakar Joshi
  * @ Created Date    :     15-July-2020
- * @ Last Modified   :   19-Jan-2021
+ * @ Last Modified   :     19-Jan-2021
  */
 public class Case_DataArchiveHandler{
 	/* To hold the date of 18 months before */
@@ -14,7 +14,7 @@ public class Case_DataArchiveHandler{
 
 	/* @ Method Definition to get the list of Case records. */
 	/* @ Calling from Case_DataArchiveBatch & DataArchiveReportController.*/
-	public List<Attachment> getAttachments(){
+	public List<Attachment> getCaseAttachments(){
 
 		if (recordTypeIdSet.isEmpty()){
 			return new List<Attachment>();
