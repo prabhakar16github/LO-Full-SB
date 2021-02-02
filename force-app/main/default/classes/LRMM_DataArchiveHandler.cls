@@ -19,7 +19,7 @@ public class LRMM_DataArchiveHandler{
         List<Attachment> attList = new List<Attachment>();
         for (String sobj : statusFieldMap.keySet()){
             String query = 'SELECT Id,ParentId,LastModifiedDate FROM Attachment WHERE ParentId IN ';
-            query += '(SELECT Id,Name FROM ' + sobj + ' WHERE LastModifiedDate < :lastDate AND ';
+            query += '(SELECT Id FROM ' + sobj + ' WHERE LastModifiedDate < :lastDate AND ';
             if (sobj != 'Trial_Witness_Request__c')
                 query += statusFieldMap.get(sobj) + ' =:STATUS_CLOSED)';
             else{
@@ -31,7 +31,7 @@ public class LRMM_DataArchiveHandler{
         return attList;
     }
     
-    public Map<String,Integer> getAttachmentCountMap(){
+    public Map<String,Integer> getLRMMDataCountMap(){
         Map<String, Integer> objectToAttCountMap = new Map<String, Integer>();
         List<AggregateResult> attList = new List<AggregateResult>();
         for (String sobj : statusFieldMap.keySet()){
