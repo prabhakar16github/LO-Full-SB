@@ -28,6 +28,10 @@ public class DataArchiveReportController{
 
 	/* To hold the LC Admin Email Id to send the notification after Data Archived. */
 	public static FINAL String LCAdminEmail = 'lcsalesforceadmin@mcmcg.com';
+
+	/** To set the limit of data to be Archive using custom label. */
+	public static FINAL Integer ARCHIVE_DATA_LIMIT = Integer.valueOf(Label.ArchiveDataLimit) > 40000 ? 40000 : Integer.valueOf(Label.ArchiveDataLimit);
+	
 	/* Constructor */
 	public DataArchiveReportController(){
 		totalAttachmentData = 0;

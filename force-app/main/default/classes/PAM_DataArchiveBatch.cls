@@ -20,16 +20,14 @@ global class PAM_DataArchiveBatch implements Database.Batchable<sobject>, Databa
         this.deleteCount = 0;
         this.failCount = 0;
         this.recordIdToErrorMap = new Map<Id,String>();
-    }
+    }/** END */
     
     global Iterable<sobject> start(Database.BatchableContext bc){
         return handler.getPAMAttachments();
-    }
+    }/** END */
     
     
     global void execute(Database.BatchableContext bc, List<Sobject> recordList){
-        System.debug('recordList>>>>>>>>'+recordList.size());
-        /*
         List<Database.DeleteResult> result = Database.delete(recordList, false);
         for(Database.DeleteResult dr : result){
             if(dr.isSuccess()){
@@ -41,10 +39,10 @@ global class PAM_DataArchiveBatch implements Database.Batchable<sobject>, Databa
                 }
             }
         }
-*/
-    }
+    }/** END */
     
     global void finish(Database.BatchableContext bc){
+        /** Calling method to send the notification after data archived. */
         DataArchiveReportController.sendNotificationAfterDataArchive(this.deleteCount,this.failCount,recordIdToErrorMap, 'PAM Data Archive Notification');
-    }
+    }/** END */
 }

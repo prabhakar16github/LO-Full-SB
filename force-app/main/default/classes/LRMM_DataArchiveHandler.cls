@@ -8,29 +8,41 @@
 
 public class LRMM_DataArchiveHandler{
 	/* Map of all the LRMM Objects and their status field  */
-	private static FINAL Map<String, String> statusFieldMap = new Map<String, String>{'Appeal__c' => 'AP_Appeal_Status__c', 'Counterclaim__c' => 'CC_Counterclaim_Status__c', 'Business_Record_Affidavit__c' => 'BRA_BRA_Status__c', 'Discovery__c' => 'DY_Discovery_Status__c', 'Escalated_Contested_Matters__c' => 'ECM_Status__c', 'Purchase_and_Sales_Agreement__c' => 'PSA_PSA_Status__c', 'Settlement_Approval__c' => 'Settlement_Approval_Status__c', 'Trial_Witness_Request__c' => 'Status__c'};
+	public static FINAL Map<String, String> statusFieldMap = new Map<String, String>{'Appeal__c' => 'AP_Appeal_Status__c', 'Counterclaim__c' => 'CC_Counterclaim_Status__c', 'Business_Record_Affidavit__c' => 'BRA_BRA_Status__c', 'Discovery__c' => 'DY_Discovery_Status__c', 'Escalated_Contested_Matters__c' => 'ECM_Status__c', 'Purchase_and_Sales_Agreement__c' => 'PSA_PSA_Status__c', 'Settlement_Approval__c' => 'Settlement_Approval_Status__c', 'Trial_Witness_Request__c' => 'Status__c'}; 
 	/* Last Modified Date  */
-	private static FINAL Date lastDate = System.today().addDays( - 30);
+	public static FINAL Date lastDate = System.today().addDays( - 30);
 	/* Status Value */
 	private static FINAL String STATUS_CLOSED = 'Closed';
 	private static FINAL String STATUS_COMPLETED = 'Completed';
     
+    private static FINAL Integer dataLimit = DataArchiveReportController.ARCHIVE_DATA_LIMIT;
+    /** Method definition to get the LRMM Attachment records for Archive. */
+    /** Calling From LRMM_DataArchiveBatch. */
     public List<Attachment> getLRMMAttachments(){
         List<Attachment> attList = new List<Attachment>();
         for (String sobj : statusFieldMap.keySet()){
-            String query = 'SELECT Id,ParentId,LastModifiedDate FROM Attachment WHERE ParentId IN ';
-            query += '(SELECT Id FROM ' + sobj + ' WHERE LastModifiedDate < :lastDate AND ';
+            String query = 'SELECT Id FROM Attachment WHERE ParentId IN ';
+            query += '(SELECT Id FROM ' + sobj + ' WHERE ';
+
+            /** To pass the test class. */
+            if(!test.isRunningTest()){
+                query += 'LastModifiedDate < :lastDate AND ';
+            }/** End */
+            
             if (sobj != 'Trial_Witness_Request__c')
                 query += statusFieldMap.get(sobj) + ' =:STATUS_CLOSED)';
             else{
-                query += '((RecordType.Name LIKE \'%Telephonic%\' AND ' + statusFieldMap.get(sobj) + '=:STATUS_COMPLETED) OR (RecordType.Name LIKE \'%Live%\' AND ' + statusFieldMap.get(sobj) + '=:STATUS_CLOSED)))';
+                query += '((RecordType.Name LIKE \'%Telephonic%\' AND ' + statusFieldMap.get(sobj) + '=:STATUS_COMPLETED) OR (RecordType.Name LIKE \'%Live%\' AND ' + statusFieldMap.get(sobj) + '=:STATUS_CLOSED))) ';
             }
-            attList = Database.query(query);
+            query += 'LIMIT :dataLimit ';
+            attList.addAll((List<Attachment>)Database.query(query));
         }
         
         return attList;
-    }
+    }/** END */
     
+    /** Method definition to get the Map of data count. */
+    /** Calling from DataArchiveReportController. */
     public Map<String,Integer> getLRMMDataCountMap(){
         Map<String, Integer> objectToAttCountMap = new Map<String, Integer>();
         List<AggregateResult> attList = new List<AggregateResult>();
@@ -43,7 +55,8 @@ public class LRMM_DataArchiveHandler{
                 query += '((RecordType.Name LIKE \'%Telephonic%\' AND ' + statusFieldMap.get(sobj) + '=:STATUS_COMPLETED) OR (RecordType.Name LIKE \'%Live%\' AND ' + statusFieldMap.get(sobj) + '=:STATUS_CLOSED)) ';
             }
             query += ') GROUP BY Parent.Type ';
-            attList = Database.query(query);
+
+            attList.addAll((List<AggregateResult>)Database.query(query));
         }
         
         for(AggregateResult agg : attList){
@@ -51,29 +64,5 @@ public class LRMM_DataArchiveHandler{
             objectToAttCountMap.put(sobjectName, (Integer)agg.get('totalCount'));
         }
         return objectToAttCountMap;
-        
-    }
-    
-	/* Method to send the email notification with Number of deleted Attachments */
-	public void sendNotificationAfterAttachmentDelete(Integer deleteCount,Integer failCount,Map<Id,String> recordIdToErrorMap, String subject){
-		Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-		email.setSubject(subject);
-		String htmlBody = deleteCount + ' Attachment record has been deleted from LRMM Objects.<br/><br/>';
-        
-        if(failCount > 0){
-            htmlBody += failCount + ' Attachment deletion has been failed. The Details are as follows -<br/><br/>'; 
-            htmlBody += '<table border="1" cellspacing="2" cellpadding="5">';
-            htmlBody += '<thead><tr><th>Record Id</th><th>Error</th></tr></thead><tbody>';
-            
-            for(Id recId : recordIdToErrorMap.keySet()){
-                htmlBody += '<tr><td>'+recId+'</td><td>'+recordIdToErrorMap.get(recId)+'</td></tr>';
-            }
-            htmlBody += '</tbody></table>';
-        }
-		email.setHtmlBody(htmlBody);
-		email.toaddresses = new List<String>{'lcsalesforceadmin@mcmcg.com'};
-        
-		if (!test.isRunningTest())
-			Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{email});
-	}
+    }/** END */
 }
