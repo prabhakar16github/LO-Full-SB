@@ -8,8 +8,7 @@
 public class Case_DataArchiveHandler{
 	/* To hold the date of 18 months before */
 	public static FINAL Date eighteenMonthBeforeDate = System.today().addMonths(-18);
-	/* To hold the LC Admin Email Id to send the notification after Data Archived. */
-	public static FINAL String LCAdminEmail = 'lcsalesforceadmin@mcmcg.com';
+	
 	public static FINAL Set<Id> recordTypeIdSet = getCaseRecordTypeIdSet();
 
 	/* @ Method Definition to get the list of Case records. */
@@ -90,7 +89,7 @@ public class Case_DataArchiveHandler{
 
 	/* @ Method definition to send the email notification with Number of deleted Attachments */
 	/* @ Calling from Case_DataArchiveBatch. */
-	public void sendNotificationAfterAttachmentDelete(Integer deleteCount, Integer failCount, Map<Id, String> recordIdToErrorMap, String subject){
+	public void sendNotificationAfterDataArchive(Integer deleteCount, Integer failCount, Map<Id, String> recordIdToErrorMap, String subject){
 		Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
 		email.setSubject(subject);
 		String htmlBody = deleteCount + ' Attachment / EmailMessage record has been deleted from Case Records.<br/><br/>';
@@ -106,7 +105,7 @@ public class Case_DataArchiveHandler{
 			htmlBody += '</tbody></table>';
 		}
 		email.setHtmlBody(htmlBody);
-		email.toaddresses = new List<String>{LCAdminEmail, 'prabhakar.joshi@mcmcg.com'};
+		email.toaddresses = new List<String>{DataArchiveReportController.LCAdminEmail, 'prabhakar.joshi@mcmcg.com'};
 
 		if (!test.isRunningTest()){
 			Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{email});

@@ -26,6 +26,8 @@ public class DataArchiveReportController{
 	/* To hold the date of 12 months before */
 	private Date oneYearBeforeDate = System.today().addMonths(-12);
 
+	/* To hold the LC Admin Email Id to send the notification after Data Archived. */
+	public static FINAL String LCAdminEmail = 'lcsalesforceadmin@mcmcg.com';
 	/* Constructor */
 	public DataArchiveReportController(){
 		totalAttachmentData = 0;
@@ -61,12 +63,14 @@ public class DataArchiveReportController{
 	}
 
 	/* @ Method to get the LRMM Chart Data */
+	/** Last Modified By - Prabhakar Joshi on 2-Feb-2021. */
 	private List<PieData> fetchLRMMChartData(){
 		LRMM_DataArchiveHandler handler = new LRMM_DataArchiveHandler();
 		return this.setDataForChart(handler.getLRMMDataCountMap());
 	}
 
 	/* @ Method to get the Call Monitoring Chart Data */
+	/** Need to optimize the code. */
 	private List<PieData> fetchCallMonitoringChartData(){
 		List<PieData> CM_Att_data = new List<PieData>();
 		Set<Id> cmIdSet = new Set<Id>();
@@ -105,6 +109,7 @@ public class DataArchiveReportController{
 
 	/* @ Method to get the Case Chart Data */
 	/* @ Added on 8-July-2020. */
+	/** Last Modified By - Prabhakar Joshi on 2-Feb-2021. */
 	private List<PieData> fetch_Case_ChartData(){
 		Case_DataArchiveHandler handler = new Case_DataArchiveHandler();
 		return this.setDataForChart(handler.getCaseDataCountMap());
@@ -175,6 +180,31 @@ public class DataArchiveReportController{
 	@RemoteAction
 	public static void abortJob(String jobId){
 		System.abortJob(jobId);
+	}
+
+	/* @ Method definition to send the email notification with Number of deleted Attachments */
+	/* @ Calling from Case_DataArchiveBatch. */
+	public static void sendNotificationAfterDataArchive(Integer deleteCount, Integer failCount, Map<Id, String> recordIdToErrorMap, String subject){
+		Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+		email.setSubject(subject);
+		String htmlBody = deleteCount + ' Attachment record has been deleted from '+subject.split(' ')[0]+' Records.<br/><br/>';
+
+		if (failCount > 0){
+			htmlBody += failCount + ' Attachment deletion has been failed. The Details are as follows -<br/><br/>';
+			htmlBody += '<table border="1" cellspacing="2" cellpadding="5">';
+			htmlBody += '<thead><tr><th>Record Id</th><th>Error</th></tr></thead><tbody>';
+
+			for (Id recId : recordIdToErrorMap.keySet()){
+				htmlBody += '<tr><td>' + recId + '</td><td>' + recordIdToErrorMap.get(recId)+'</td></tr>';
+			}
+			htmlBody += '</tbody></table>';
+		}
+		email.setHtmlBody(htmlBody);
+		email.toaddresses = new List<String>{ 'prabhakarjoshi199@gmail.com' };//LCAdminEmail,'prabhakar.joshi@mcmcg.com'
+
+		if (!test.isRunningTest()){
+			Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{email});
+		}
 	}
 
 	/* Wrapper class for batch job detail. */

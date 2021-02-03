@@ -42,6 +42,6 @@ global class LRMM_DataArchiveBatch implements Database.Batchable<sobject>, Datab
     }
 
 	global void finish(Database.BatchableContext bc){ 
-		//handler.sendNotificationAfterAttachmentDelete(this.deleteCount,this.failCount,recordIdToErrorMap, 'LRMM Attachement Data Archive Notification');
+		DataArchiveReportController.sendNotificationAfterDataArchive(this.deleteCount,this.failCount,recordIdToErrorMap, 'LRMM Data Archive Notification');
 	}
 }
