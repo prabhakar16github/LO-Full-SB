@@ -17,7 +17,7 @@ global class Case_DataArchiveBatch implements Database.Batchable<sobject>, Datab
     Map<Id,String> recordIdToErrorMap;
     
     /* @ Constructor */
-    public Case_DataArchiveBatch(){//String selectedLimit
+    public Case_DataArchiveBatch(){
         this.deleteCount = 0;
         this.failCount = 0;
         this.recordIdToErrorMap = new Map<Id,String>();
