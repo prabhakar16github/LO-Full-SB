@@ -15,11 +15,17 @@ public class DataArchiveReportController{
 	/* To set the  count of data for Archive */
 	public Integer totalArchiveData{ get;private  set; }
 
+	/** To set the count of EmailMessages from Archive on Case Tab. */
+	public Integer archiveEmailCount{ get; private set; }
+
 	/* To set the data of current tab */
 	public String dataType{ get;private  set; }
 
 	/* To Set the Count of Total Attachments in the Org */
 	public Integer totalAttachmentData{ get;private  set; }
+
+	/* To Set the Count of Total EmailMessages in the Org */
+	public Integer totalEmailCount{ get;private  set; }
 
 	/* To hold the date of 6 months before */
 	private Date sixMonthBeforeDate = System.today().addMonths(-6);
@@ -34,7 +40,9 @@ public class DataArchiveReportController{
 	
 	/* Constructor */
 	public DataArchiveReportController(){
+		totalEmailCount = 0;
 		totalAttachmentData = 0;
+		
 		tabName = 'LRMM_Tab';
 		dataType = 'LRMM';
 
@@ -49,6 +57,7 @@ public class DataArchiveReportController{
 	public void init(){
 
 		totalArchiveData = 0;
+		archiveEmailCount = 0;
 		chartData = new List<PieData>();
 
 		if (tabName == 'LRMM_Tab'){
@@ -121,13 +130,27 @@ public class DataArchiveReportController{
 
 	private List<PieData> setDataForChart(Map<String, Integer> dataMap){
 		List<PieData> dataForChart = new List<PieData>();
-		for (String obj : dataMap.keySet()){
-			Integer dataCount = dataMap.get(obj);
-			if(dataCount > 0){
-				dataForChart.add(new PieData(obj + ' : ' + dataCount, dataCount));
-				totalArchiveData += dataMap.get(obj);
+		if(tabName == 'CS_Tab'){
+			for (AggregateResult agg : [SELECT count(Id)totalEmailCount
+										FROM EmailMessage]){
+											totalEmailCount = (Integer)agg.get('totalEmailCount');
+			}
+			 
+			totalArchiveData = dataMap.get('Attachment');
+			archiveEmailCount = dataMap.get('EmailMessage');
+			dataForChart.add(new PieData('Attachment : ' + totalArchiveData, totalArchiveData));
+			dataForChart.add(new PieData('EmailMessage : ' + archiveEmailCount, archiveEmailCount));
+			
+		}else{
+			for (String obj : dataMap.keySet()){
+				Integer dataCount = dataMap.get(obj);
+				if(dataCount > 0){
+					dataForChart.add(new PieData(obj + ' : ' + dataCount, dataCount));
+					totalArchiveData += dataMap.get(obj);
+				}
 			}
 		}
+		
 		return dataForChart;
 	}
 
@@ -207,7 +230,7 @@ public class DataArchiveReportController{
 			htmlBody += '</tbody></table>';
 		}
 		email.setHtmlBody(htmlBody);
-		email.toaddresses = new List<String>{ 'prabhakarjoshi199@gmail.com' };//LCAdminEmail,'prabhakar.joshi@mcmcg.com'
+		email.toaddresses = new List<String>{ LCAdminEmail };
 
 		if (!test.isRunningTest()){
 			Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{email});

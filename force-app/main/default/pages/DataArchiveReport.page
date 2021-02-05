@@ -95,9 +95,14 @@
                             
                         </apex:chart>
                         <div style="font-weight:bold;padding:10px;">
-                            <span>Total {!dataType} Archive Attachments : {!totalArchiveData}
-                                <br/>
-                                <br/> Total Attachments : {!totalAttachmentData}
+                            <span>
+                                <apex:outputLabel rendered="{!dataType == 'Case'}">
+                                    Archive EmailMessages : {!archiveEmailCount}<br/>
+                                    Total EmailMessages : {!totalEmailCount}
+                                </apex:outputLabel> 
+                            </span><br/><br/>
+                            <span >Archive Attachments : {!totalArchiveData}<br/>
+                                Total Attachments : {!totalAttachmentData}
                             </span>
                             
                         </div>

@@ -91,7 +91,7 @@ public class Case_DataArchiveHandler{
 			htmlBody += '</tbody></table>';
 		}
 		email.setHtmlBody(htmlBody);
-		email.toaddresses = new List<String>{DataArchiveReportController.LCAdminEmail, 'prabhakar.joshi@mcmcg.com'};
+		email.toaddresses = new List<String>{DataArchiveReportController.LCAdminEmail};
 
 		if (!test.isRunningTest()){
 			Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{email});
