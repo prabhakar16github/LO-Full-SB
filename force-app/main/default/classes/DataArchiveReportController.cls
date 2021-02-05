@@ -122,8 +122,11 @@ public class DataArchiveReportController{
 	private List<PieData> setDataForChart(Map<String, Integer> dataMap){
 		List<PieData> dataForChart = new List<PieData>();
 		for (String obj : dataMap.keySet()){
-			dataForChart.add(new PieData(obj + ' : ' + dataMap.get(obj), dataMap.get(obj)));
-			totalArchiveData += dataMap.get(obj);
+			Integer dataCount = dataMap.get(obj);
+			if(dataCount > 0){
+				dataForChart.add(new PieData(obj + ' : ' + dataCount, dataCount));
+				totalArchiveData += dataMap.get(obj);
+			}
 		}
 		return dataForChart;
 	}
