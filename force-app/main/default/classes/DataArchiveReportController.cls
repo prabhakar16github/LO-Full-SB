@@ -38,8 +38,11 @@ public class DataArchiveReportController{
 	/** To set the limit of data to be Archive using custom label. */
 	public static FINAL Integer ARCHIVE_DATA_LIMIT = Integer.valueOf(Label.ArchiveDataLimit) > 40000 ? 40000 : Integer.valueOf(Label.ArchiveDataLimit);
 	
+	/** To hold the number of records that will archive at one time. */
+	public String infoMsg{ get;private set; }
 	/* Constructor */
 	public DataArchiveReportController(){
+		infoMsg = ARCHIVE_DATA_LIMIT+' records will be archive at one time. Change the limit from custom label ArchiveDataLimit. Max - 40000';
 		totalEmailCount = 0;
 		totalAttachmentData = 0;
 		
