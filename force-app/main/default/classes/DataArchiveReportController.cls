@@ -29,6 +29,7 @@ public class DataArchiveReportController{
 
 	/* To hold the date of 6 months before */
 	private Date sixMonthBeforeDate = System.today().addMonths(-6);
+
 	/* To hold the date of 12 months before */
 	private Date oneYearBeforeDate = System.today().addMonths(-12);
 
@@ -40,6 +41,7 @@ public class DataArchiveReportController{
 	
 	/** To hold the number of records that will archive at one time. */
 	public String infoMsg{ get;private set; }
+	
 	/* Constructor */
 	public DataArchiveReportController(){
 		infoMsg = ARCHIVE_DATA_LIMIT+' records will be archive at one time. Change the limit from custom label ArchiveDataLimit. Max - 40000';
@@ -149,7 +151,7 @@ public class DataArchiveReportController{
 				Integer dataCount = dataMap.get(obj);
 				if(dataCount > 0){
 					dataForChart.add(new PieData(obj + ' : ' + dataCount, dataCount));
-					totalArchiveData += dataMap.get(obj);
+					totalArchiveData += dataCount;
 				}
 			}
 		}
