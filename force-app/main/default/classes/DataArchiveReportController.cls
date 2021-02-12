@@ -143,9 +143,12 @@ public class DataArchiveReportController{
 			 
 			totalArchiveData = dataMap.get('Attachment');
 			archiveEmailCount = dataMap.get('EmailMessage');
-			dataForChart.add(new PieData('Attachment : ' + totalArchiveData, totalArchiveData));
-			dataForChart.add(new PieData('EmailMessage : ' + archiveEmailCount, archiveEmailCount));
-			
+			if(totalArchiveData > 0){
+				dataForChart.add(new PieData('Attachment : ' + totalArchiveData, totalArchiveData));
+			}
+			if(archiveEmailCount > 0){
+				dataForChart.add(new PieData('EmailMessage : ' + archiveEmailCount, archiveEmailCount));
+			}
 		}else{
 			for (String obj : dataMap.keySet()){
 				Integer dataCount = dataMap.get(obj);

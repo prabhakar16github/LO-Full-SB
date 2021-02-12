@@ -36,7 +36,7 @@
        
     </style>
     <apex:form id="frm">
-        <marquee behavior="alternate" direction="left"><apex:pageMessage severity="Info" summary="{!infoMsg}" strength="1"/></marquee>
+        <apex:pageMessage severity="Info" summary="{!infoMsg}" strength="1"/>
         
         <!--@ Action Function to get the chart data according to selected Tab and calling from JS. @-->
         <apex:actionFunction name="getData" action="{!init}" rerender="tabContentPNL,batchProcessPNL" status="sts">
